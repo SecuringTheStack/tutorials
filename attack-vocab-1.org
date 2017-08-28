@@ -1,5 +1,5 @@
 #+TITLE: Attack Vocabulary
-#+DATE: Part 2: Passive Attacks
+#+DATE: Part 1
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:3
 #+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
@@ -20,20 +20,25 @@
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 * Attack Vocabulary
-+ Level: BEGINNER
++ Level: Beginner
 + Foundation for many other tutorials
 ** Vulnerability
-+ To be considered a vulnerability, an attacker needs to have the ability to
-  1. Access a flaw within the system
-  2. Exploit the flaw
+#+ATTR_REVEAL: :frag (appear)
++ To be considered a vulnerability, an attacker needs:
+  #+ATTR_REVEAL: :frag (appear)
+  1. Access to a flaw within the system
+  2. The ability to exploit the flaw
 + Key difference between security talent
   + Understanding when 1 and 2 are a pair
+#+REVEAL: split
 + Vulnerability vs. Risk
+  #+ATTR_REVEAL: :frag (appear)
   + Not the same thing!
   + Risk
-    + The potential for sizable loss
+    + The potential for a sizable loss
+      + "Sizable" is based on your use case
   + Ex: A vulnerable system with no business value
-    + No risk, so who cares.
+    + No risk, so who cares!
 ** Payload
 - Transportation Context
   + "Payload" refers to the part of the load (delivery) that pays for the transportation
