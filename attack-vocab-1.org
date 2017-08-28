@@ -68,17 +68,17 @@
         + The receiver must reassemble the packets according to a sequencing
           number
           + Internet Protocol (IP) header's 'Fragment Offset' field
-#+REVEAL: split
-#+ATTR_REVEAL: :frag (appear)
-+ Teardrop Attack
-  + Attacker sends multiple packets with overlapping sequence numbers
-  + The victim OS/app can't reassemble
-+ What is the payload?
+  #+REVEAL: split
   #+ATTR_REVEAL: :frag (appear)
-  + Mangled packets
-+ Takeaways
-  + Everything can be tampered with
-  + Untrusted input
+  + Teardrop Attack
+    + Attacker sends multiple packets with overlapping sequence numbers
+    + The victim OS/app can't reassemble
+  + What is the payload?
+    #+ATTR_REVEAL: :frag (appear)
+    + Mangled packets
+  + Takeaways
+    + Everything can be tampered with
+    + Untrusted input
 ** Exploit
 + Is the container that houses the payload
 + Does the prep work for the payload's execution
