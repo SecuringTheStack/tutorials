@@ -81,16 +81,19 @@
   + Untrusted input
 ** Exploit
 + Is the container that houses the payload
-  + It's the "truck" that delivers the payload
 + Does the prep work for the payload's execution
-  + Ex: The exploit creates a shell on the victims computer so the payload can be executed
+  + Ex: The exploit instantiates a shell on the victim's computer so the payload can be executed
 ** Attack Vector
 + Physics /Vector/
   + Magnitude
   + Direction
   + Can be visualized as a line
 + Security /Attack Vector/
-  + The method that the exploit uses to propagate itself
+  + The method that the exploit uses to:
+    + Infect a computer
+    + Spread
+   # HERE
+  + The method that is used to propagate the exploit
     + Ex: Email
 + Physics Analogy
   + Visualize a line between the exploit and the target/s
