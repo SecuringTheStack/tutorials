@@ -21,6 +21,8 @@
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 * Attack Vocabulary
 + Level: Beginner
+  + If trying to get a InfoSec job, this should be priority #1
+  + [[https://www.sans.org/security-resources/glossary-of-terms/][SANS Glossary Of Terms]]
 + Foundation for many other tutorials
 ** Vulnerability
 #+ATTR_REVEAL: :frag (appear)
@@ -28,8 +30,6 @@
   #+ATTR_REVEAL: :frag (appear)
   1. Access to a flaw within the system
   2. The ability to exploit the flaw
-+ Key difference between security talent
-  + Understanding when 1 and 2 are a pair
 #+REVEAL: split
 + Vulnerability vs. Risk
   #+ATTR_REVEAL: :frag (appear)
@@ -42,7 +42,7 @@
 ** Payload
 #+ATTR_REVEAL: :frag (appear)
 - Transportation Context
-  + "Payload" refers to the part of the load that pays for the transportation
+  + "Payload" refers to the part of the load that pays for the job
     + Load = Deliverable
     + It's not the truck, the truck's fuel, etc.
 - Security Context
@@ -72,36 +72,35 @@
   #+ATTR_REVEAL: :frag (appear)
   + Teardrop Attack
     + Attacker sends multiple packets with overlapping sequence numbers
-    + The victim OS/app can't reassemble
+    + The victim's OS/app can't reassemble
   + What is the payload?
     #+ATTR_REVEAL: :frag (appear)
     + Mangled packets
   + Takeaways
     + Everything can be tampered with
-    + Untrusted input
+    + Practically everything is untrusted input
 ** Exploit
+#+ATTR_REVEAL: :frag (appear)
 + Is the container that houses the payload
 + Does the prep work for the payload's execution
   + Ex: The exploit instantiates a shell on the victim's computer so the payload can be executed
 ** Attack Vector
+#+ATTR_REVEAL: :frag (appear)
 + Physics /Vector/
   + Magnitude
   + Direction
   + Can be visualized as a line
 + Security /Attack Vector/
-  + The method that the exploit uses to:
-    + Infect a computer
-    + Spread
-   # HERE
-  + The method that is used to propagate the exploit
-    + Ex: Email
+  + The method that is used to deliver the exploit
+    + Ex: Email Attachment
 + Physics Analogy
-  + Visualize a line between the exploit and the target/s
+  + Visualize a line (vector) between the exploit and the target/s
     + How does an exploit get to the target/s?
       + This is the attack vector
 ** Attack Surface
-+ For a given vulnerability, where can an attack take place?
-  + Ex: Ports, Software Version, Physical Proximity
-+ Wikipedia Definition
+#+ATTR_REVEAL: :frag (appear)
++ For a given vulnerability, where can a attack take place?
+  + Ex: Ports, Software version, Physical access to the device
++ [[https://en.wikipedia.org/wiki/Vector_(malware)][Wikipedia Definition]]
   + The attack surface is the sum of the different points (the /attack vectors/)
     where an attacker can try to enter data to (or extract data from) a given environment
