@@ -1,0 +1,86 @@
+#+TITLE: Attack Vocabulary
+#+DATE: Part 2: Passive Attacks
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:3
+#+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
+#+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:"c"
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h5>%d<h5>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: file:///Users/zachroof/repos/reveal.js
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: moon
+#+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
+#+REVEAL_PLUGINS: notes
+# YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
+# YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
+* Attack Vocabulary
++ Level: BEGINNER
++ Foundation for many other tutorials
+** Vulnerability
++ To be considered a vulnerability, an attacker needs to have the ability to
+  1. Access a flaw within the system
+  2. Exploit the flaw
++ Key difference between security talent
+  + Understanding when 1 and 2 are a pair
++ Vulnerability vs. Risk
+  + Not the same thing!
+  + Risk
+    + The potential for sizable loss
+  + Ex: A vulnerable system with no business value
+    + No risk, so who cares.
+** Payload
+- Transportation Context
+  + "Payload" refers to the part of the load (delivery) that pays for the transportation
+    + It's not the truck, the truck's fuel, etc.
+- Security Context
+  + The code/data that does the malicious action
+  + It's the main deliverable
+    + Similar to the transportation context
+#+REVEAL: split
+- Code-based Payload Ex:
+  + Keylogger
+- Data-based Payload Ex:
+  + Denial-Of-Service (DoS) Teardrop Attack
+  + Background
+    + Network Packets
+      + Not guaranteed to get to the destination in the correct order
+      + Given this, the receiver must reassemble the packets according to a
+        sequencing number
+        + Internet Protocol (IP) header's 'Fragment Offset' field
+#+REVEAL: split
++ Teardrop Attack
+  + Attacker sends multiple packets with overlapping sequence numbers
+  + The victim OS/app can't reassemble
++ What is the payload?
+  + Mangled packets
++ Takeaways
+  + Everything can be tampered with
+  + Untrusted input
+** Exploit
++ Is the container that houses the payload
++ Does the prep work for the payload's execution
+  + Ex: The exploit creates a shell on the victims computer so the payload can be executed
+** Attack Vector
++ Physics /Vector/
+  + Magnitude
+  + Direction
+  + Can be visualized as a line
++ Security /Attack Vector/
+  + The method that the exploit uses to propagate itself
+    + Ex: Email
++ Physics Analogy
+  + Visualize a line between the exploit and the target/s
+    + How does an exploit get to the target/s?
+      + This is the attack vector
+** Attack Surface
++ For a given vulnerability, where can an attack take place?
+  + Ex: Ports, Software Version, Physical Proximity
++ Wikipedia Definition
+  + The attack surface is the sum of the different points (the /attack vectors/)
+    where an attacker can try to enter data to (or extract data from) a given environment
