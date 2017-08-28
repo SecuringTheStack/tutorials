@@ -19,7 +19,7 @@
 #+REVEAL_PLUGINS: notes
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
-* Attack Vocabulary
+* Attack Vocabulary (Part 1)
 + Level: Beginner
   + If trying to get a InfoSec job, this should be priority #1
   + [[https://www.sans.org/security-resources/glossary-of-terms/][SANS Glossary Of Terms]]
