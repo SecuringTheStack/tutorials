@@ -40,35 +40,48 @@
   + Ex: A vulnerable system with no business value
     + No risk, so who cares!
 ** Payload
+#+ATTR_REVEAL: :frag (appear)
 - Transportation Context
-  + "Payload" refers to the part of the load (delivery) that pays for the transportation
+  + "Payload" refers to the part of the load that pays for the transportation
+    + Load = Deliverable
     + It's not the truck, the truck's fuel, etc.
 - Security Context
   + The code/data that does the malicious action
   + It's the main deliverable
     + Similar to the transportation context
 #+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
 - Code-based Payload Ex:
   + Keylogger
-- Data-based Payload Ex:
-  + Denial-Of-Service (DoS) Teardrop Attack
-  + Background
-    + Network Packets
-      + Not guaranteed to get to the destination in the correct order
-      + Given this, the receiver must reassemble the packets according to a
-        sequencing number
-        + Internet Protocol (IP) header's 'Fragment Offset' field
 #+REVEAL: split
+- Data-based Payload Ex:
+  #+ATTR_REVEAL: :frag (appear)
+  + Denial-Of-Service (DoS) Teardrop Attack
+  + Prep Knowledge
+    #+ATTR_REVEAL: :frag (appear)
+    + Denial-Of-Service
+      + Attacker tries to make a service/machine unavailable
+        + /Denying the service/ to others
+    + Teardrop Attack
+      + Network Packets
+        + Not guaranteed to get to the destination in the correct order
+        + The receiver must reassemble the packets according to a sequencing
+          number
+          + Internet Protocol (IP) header's 'Fragment Offset' field
+#+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
 + Teardrop Attack
   + Attacker sends multiple packets with overlapping sequence numbers
   + The victim OS/app can't reassemble
 + What is the payload?
+  #+ATTR_REVEAL: :frag (appear)
   + Mangled packets
 + Takeaways
   + Everything can be tampered with
   + Untrusted input
 ** Exploit
 + Is the container that houses the payload
+  + It's the "truck" that delivers the payload
 + Does the prep work for the payload's execution
   + Ex: The exploit creates a shell on the victims computer so the payload can be executed
 ** Attack Vector
