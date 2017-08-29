@@ -99,7 +99,7 @@
       + This is the attack vector
 ** Attack Surface
 #+ATTR_REVEAL: :frag (appear)
-+ For a given vulnerability, where can a attack take place?
++ For a given vulnerability, where can an attack take place?
   + Ex: Ports, Software version, Physical access to the device
 + [[https://en.wikipedia.org/wiki/Vector_(malware)][Wikipedia Definition]]
   + The attack surface is the sum of the different points (the /attack vectors/)
