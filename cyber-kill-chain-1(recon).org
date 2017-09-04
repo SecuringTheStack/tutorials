@@ -19,34 +19,62 @@
 #+REVEAL_PLUGINS: notes
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
+# TODO FT:Security-Controls, nmap
 * Cyber Kill Chain
 + Level: BEGINNER
-** Kill Chain
-+ Military process for attacking an opponent
-  + Lockheed Martin adapted this concept for cyberattacks
-** Cyber Kill Chain
-# TODO FT:Security-Controls, nmap
-+ "Typical" stages of a Cyberattack
-  + I slightly modified definitions to make them more broad
-  + Each stage can be mitigated by a set of controls
-    + Controls are countermeasures
-    + Towards the end of this series, we'll discuss controls
++ Kill Chain
+  + Military process for attacking an opponent
+  + Lockheed Martin adapted concept for cyberattacks
++ Cyber Kill Chain
+  + "Typical" stages of a Cyberattack
+    + I slightly modified definitions to make them more broad
+    + Each stage can be mitigated by a set of controls
+      + Controls are countermeasures
+        + Towards the end of this series, we'll discuss controls
+
+** Recap Attack Ex.
+- Example will blend last week's tutorial with Cyber Kill Chain
+  - Recap Attack Ex:
+    - The Attacker sent a malicious pdf to the victim via a spoofed email.
+      Through a Remote Code Execution (RCE) Adobe Reader vulnerability, the
+      attacker established a reverse shell and controlled the victim's computer
+    - We'll work backwards to untangle the steps within the attack sequence
+
 ** Cyber Kill Chain Steps
-1. Reconnaissance
-   - Attacker researches target
-2. Weaponization
+*** 1. Reconnaissance
+- Attacker sets goal and researches target
+- Recap Attack Ex:
+  - Attacker sends a malicious pdf to the victim via a spoofed email. Through a Remote Code
+    Execution (RCE) Adobe Reader vulnerability, the attacker can establish
+    a reverse shell and control the victim's computer
+- Q: What was the attacker's goal?
+  - A: Data exfiltration
+#+REVEAL: split
+- Recap Attack Ex:
+  - Attacker sends a malicious pdf to the victim via a spoofed email. Through a Remote Code
+    Execution (RCE) Adobe Reader vulnerability, the attacker can establish
+    a reverse shell and control the victim's computer
+- Q: For the example to work, what would the attacker need to find?
+  - A: Within the network, the attacker finds...
+    - A vulnerable email server
+    - Unblocked port for SSH access
+    - A vulnerable version of Adobe Reader
+    - For RCE - Evasion from any AV
+*** 2. Weaponization
    - Attacker creates/finds exploit based on reconnaissance
+   - Recap Attack Ex:
+     - Attacker finds a Meta
    - Attacker enbeds payload
-3. Delivery
+*** 3. Delivery
    - Attacker transmits exploit to target through attack vector (e.g., via e-mail attachment)
-4. Exploitation
+*** 4. Exploitation
    - Exploit is executed, which takes advantage of a vulnerability
      - Prepping for the payload.  Vulnerability allows the payload
-5. Installation
+*** 5. Installation
    - Exploit installs access point (e.g., "backdoor") usable by attacker
-6. Command and Control
+*** 6. Command and Control
    - Malware enables attacker to have persistent access to target network.
-7. Actions on Objective: Attacker takes action to achieve their goals, such as
+*** 7. Actions on Objective: Attacker takes action to achieve their goals, such as
    data exfiltration, data destruction, or encryption for ransom.
 *** Reconnaissance
 1. Attacker sets "Attack Goal"
