@@ -55,44 +55,59 @@
   - Pretending to be the CEO of VictCo, the attacker sends a malicious pdf to an
     employee via a spoofed email. Through a Adobe Reader vulnerability, the
     attacker establishes a reverse shell and gains full control of the victim's computer
-- Q: What was the attacker's goal?
-  - A: Data exfiltration
 #+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
 - Ex: PDF Attack
-  - Attacker sends a malicious pdf to the victim via a spoofed email. Through a Remote Code
-    Execution (RCE) Adobe Reader vulnerability, the attacker can establish
-    a reverse shell and control the victim's computer
-- Q: For the example to work, what would the attacker need to find?
+  - Pretending to be the CEO of VictCo, the attacker sends a malicious pdf to an
+    employee via a spoofed email. Through a Adobe Reader vulnerability, the
+    attacker establishes a reverse shell and gains full control of the victim's computer
+- Q: For the attack to work, what would the attacker need to find?
+  - Essential Cybersecurity skill is working backwards
   - A: Within the network, the attacker finds...
     - A vulnerable email server
     - Unblocked port for SSH access
       - Host and Network Levels
+      - Ingress/Egress
     - A vulnerable version of Adobe Reader
-    - For RCE - Evasion from any AV
+    - Employee Information
+      - LinkedIn, Facebook, etc.
+
 *** 2. Weaponization
+#+ATTR_REVEAL: :frag (appear)
 - Attacker creates/finds exploit based on reconnaissance
-- Ex: PDF Attack
-  - Attacker sends a malicious pdf to the victim via a spoofed email. Through a Remote Code
-    Execution (RCE) Adobe Reader vulnerability, the attacker can establish
-    a reverse shell and control the victim's computer
 - Q: What is inside the exploit?
   - A: Payload
+#+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
+- Ex: PDF Attack
+  - Pretending to be the CEO of VictCo, the attacker sends a malicious pdf to an
+    employee via a spoofed email. Through a Adobe Reader vulnerability, the
+    attacker establishes a reverse shell and gains full control of the victim's computer
 - Q: What is the Payload?
-  - A: The reverse shell code
+  - A: The code that establishes the reverse shell
 *** 3. Delivery
-- Attacker transmits exploit to target
+- Attacker transmits the exploit to the target
 - Q: This is achieved through a ____?
   - A: Attack vector
-- Q: What is the attack vector?
+- Q: What is the primary attack vector?
   - A: E-mail attachment
 *** 4. Exploitation
 - Exploit is executed, which takes advantage of the vulnerability
+#+REVEAL: split
 - Q: What does the exploit do?
   - Prepping the environment for payload execution
 *** 5. Installation
 - Exploit installs payload
-  - Remote Shell
+- Q: What type of vulnerability exists within Adobe Reader?
+  - Ex: PDF Attack
+    - Pretending to be the CEO of VictCo, the attacker sends a malicious pdf to an
+      employee via a spoofed email. Through a Adobe Reader vulnerability, the
+      attacker establishes a reverse shell and gains full control of the victim's computer
+  - Hint: What must be true for the reverse shell to occur?
+  - A: Remote Code Execution (RCE) Vulnerability
 *** 6. Command and Control
-- Payload enables attacker to have persistent access to target network.
+- Payload enables the attacker to have persistent access to the victim
+- Once foothold as been established the process can easily repeat/morph
+  - Ex: Pivoting to other systems on the network
 *** 7. Actions on Objective
-- Attacker takes action to achieve their goals, such as data exfiltration, data destruction, or encryption for ransom.
+- Attacker takes action to achieve goals
