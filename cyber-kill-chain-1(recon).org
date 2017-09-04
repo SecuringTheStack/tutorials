@@ -21,7 +21,8 @@
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
 * Cyber Kill Chain
-+ Level: BEGINNER
+#+ATTR_REVEAL: :frag (appear)
++ Level: Beginner
 + Kill Chain
   + Military process for attacking an opponent
   + Lockheed Martin adapted concept for cyberattacks
@@ -32,9 +33,9 @@
       + Controls are countermeasures
         + Towards the end of this series, we'll discuss controls
 
-** Recap Attack Ex.
-- Example will blend last week's tutorial with Cyber Kill Chain
-  - Recap Attack Ex:
+** Ex: PDF Attack
+- Example will review last week's vocabulary within Cyber Kill Chain context
+  - Ex: PDF Attack
     - The Attacker sent a malicious pdf to the victim via a spoofed email.
       Through a Remote Code Execution (RCE) Adobe Reader vulnerability, the
       attacker established a reverse shell and controlled the victim's computer
@@ -42,17 +43,22 @@
 
 ** Cyber Kill Chain Steps
 *** 1. Reconnaissance
+#+ATTR_REVEAL: :frag (appear)
 - Attacker sets goal and researches target
   - Primary goals include:
-    - Data exfiltration, Ext, Encryption For Ransom
-- Recap Attack Ex:
-  - Attacker sends a malicious pdf to the victim via a spoofed email. Through a Remote Code
-    Execution (RCE) Adobe Reader vulnerability, the attacker can establish
-    a reverse shell and control the victim's computer
+    - Data exfiltration
+    - Defacement
+      - "Hacktivists": Hacking for a political or social cause
+    - Extortion
+      - Ransomware
+- Ex: PDF Attack
+  - Pretending to be the CEO of VictCo, the attacker sends a malicious pdf to an
+    employee via a spoofed email. Through a Adobe Reader vulnerability, the
+    attacker establishes a reverse shell and gains full control of the victim's computer
 - Q: What was the attacker's goal?
   - A: Data exfiltration
 #+REVEAL: split
-- Recap Attack Ex:
+- Ex: PDF Attack
   - Attacker sends a malicious pdf to the victim via a spoofed email. Through a Remote Code
     Execution (RCE) Adobe Reader vulnerability, the attacker can establish
     a reverse shell and control the victim's computer
@@ -65,7 +71,7 @@
     - For RCE - Evasion from any AV
 *** 2. Weaponization
 - Attacker creates/finds exploit based on reconnaissance
-- Recap Attack Ex:
+- Ex: PDF Attack
   - Attacker sends a malicious pdf to the victim via a spoofed email. Through a Remote Code
     Execution (RCE) Adobe Reader vulnerability, the attacker can establish
     a reverse shell and control the victim's computer
@@ -81,6 +87,7 @@
   - A: E-mail attachment
 *** 4. Exploitation
 - Exploit is executed, which takes advantage of the vulnerability
+- Q: What does the exploit do?
   - Prepping the environment for payload execution
 *** 5. Installation
 - Exploit installs payload
