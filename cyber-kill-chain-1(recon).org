@@ -27,29 +27,27 @@
 ** Cyber Kill Chain
 # TODO FT:Security-Controls, nmap
 + "Typical" stages of a Cyberattack
+  + I slightly modified definitions to make them more broad
   + Each stage can be mitigated by a set of controls
     + Controls are countermeasures
     + Towards the end of this series, we'll discuss controls
 ** Cyber Kill Chain Steps
 1. Reconnaissance
-   1. Attacker selects target, researches it, and attempts to identify
-      vulnerabilities.
+   - Attacker researches target
 2. Weaponization
-   1. Attacker creates remote access malware weapon, such as a virus or worm,
-      tailored to one or more vulnerabilities. Delivery: Attacker transmits weapon to target (e.g., via e-mail
-attachments, websites or USB drives) Exploitation: Malware weapon's program code
-triggers, which takes action on target network to exploit vulnerability.
-Installation: Malware weapon installs access point (e.g., "backdoor") usable by
-intruder. Command and Control: Malware enables intruder to have "hands on the
-keyboard" persistent access to target network. Actions on Objective: Attacker
-takes action to achieve their goals, such as data exfiltration, data
-destruction, or encryption for ransom.
-1. Reconnaissance
-   1. Port Scanning
-2. Weaponization
-   1. Coupling exploit with backdoor into deliverable payload
+   - Attacker creates/finds exploit based on reconnaissance
+   - Attacker enbeds payload
 3. Delivery
-   1. Delivering weapo
+   - Attacker transmits exploit to target through attack vector (e.g., via e-mail attachment)
+4. Exploitation
+   - Exploit is executed, which takes advantage of a vulnerability
+     - Prepping for the payload.  Vulnerability allows the payload
+5. Installation
+   - Exploit installs access point (e.g., "backdoor") usable by attacker
+6. Command and Control
+   - Malware enables attacker to have persistent access to target network.
+7. Actions on Objective: Attacker takes action to achieve their goals, such as
+   data exfiltration, data destruction, or encryption for ransom.
 *** Reconnaissance
 1. Attacker sets "Attack Goal"
    * Common Goals
