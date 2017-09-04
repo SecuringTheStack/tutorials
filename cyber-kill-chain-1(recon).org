@@ -1,0 +1,143 @@
+#+TITLE: Cyber Kill Chain
+#+DATE: Part 1: Reconnaissance
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:3
+#+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
+#+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:"c"
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h5>%d<h5>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: file:///Users/zachroof/repos/reveal.js
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: moon
+#+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
+#+REVEAL_PLUGINS: notes
+# YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
+# YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
+* Cyber Kill Chain
++ Level: BEGINNER
+** Kill Chain
++ Process for attacking an opponent
+  + Term comes from the military
+  + Lockheed Martin adapted this concept for cyberattacks
+** Cyber Kill Chain
+# TODO FT:Security-Controls, nmap
++ Stages of a Cyberattack
+  + Each stage can be mitigated by a set of controls
+    + Controls are countermeasures
+** Cyber Kill Chain Steps
+# TODO Put in steps, links to key terms.  Also note how I made the framework
+# more generic
+*** Reconnaissance
+1. Attacker sets "Attack Goal"
+   * Common Goals
+     1. Change Application State
+        + Disable coupon limits
+     2. Data Exfiltration
+     3. Defacement
+        + DoS, "You've been pwned!", etc.
+   * Within this tutorial, we'll assume the goal is Data Exfiltration
+2. Attacker researches target given the goal
+   1. Find IP Ranges of targets
+      1. Censys.io
+         1. Searches
+            1. Hosts on the Public IPv4 Address Space
+               1. If website, can search entire HTTPS response
+            2. X.509 Certificates
+         2. Example Searches
+            1. location.country_code: US and tags: scada
+               1. Industrial Control Systems within the US
+            2. not 443.https.tls.validation.browser_trusted: true
+               1. Websites that have erroneous certificates
+            3. location.country_code: US and protocols: ("23/telnet" or "21/ftp")
+               1. Telnet and FTP Servers in the US
+         3. Ex: hackthissite.org censys.io search
+            1. Look for vulnerabilities/attack vectors
+               1. Any self-signed certs?
+                  1. Lower security dev environment where one can pivot into
+                     privileged servers
+               2. git servers?
+                  1. Intellectual Property, wiki on-boarding information, etc.
+               3. smtp servers?
+                  1. Social Engineering Attacks via fake emails
+                     1. Social Engineering = Human Minipulation
+                        1. https://www.amazon.com/Social-Engineering-Art-Human-Hacking/dp/0470639539
+            2. Note "198.148.81.0/24" subnet.  Invoke new search.
+            3. Note git.hackthissite.org
+      2. nmap
+         1. Network Mapper
+         2. Nmap uses raw IP packets to determine
+            1. Hosts on a network
+            2. What OS version and services are being leveraged on a given host
+            3. What type of packet filters/firewalls are in use
+            4. Dozens of other characteristics
+         3. Ex: hackthissite.org CONT.
+            1. Rescan hackthissite.org's CIDRs found within censys.io
+            2. nmap -A -T4 -p- -vv git.hackthissite.org
+               1. -vv
+                  1. verbosity
+                  2. Allows us to see port status
+                     1. Open, Filtered, Closed
+               2. -A
+                  1. Enable OS detection, version detection, script scanning, and traceroute
+               3. -T4
+                  1. How quickly nmap will probe
+                  2. -T paranoid(0)|sneaky(1)|polite(2)|normal(3)|aggressive(4)|insane(5)
+                     1. Slower probes increase IDS evasion
+* [[https://nmap.org/book/man-bypass-firewalls-ids.html][Firewall/IDS Evasion and Spoofing]]
+<2017-09-03 Sun 09:20>
+# HERE In information gathering stage, lets hunt for IPs that can act as decoys.
+# This can have the sysadmin focus on another area.  Another option could be to
+# use competitors IPs.
+ The -f option causes the requested scan (including ping scans) to use tiny
+ fragmented IP packets. The
+ idea is to split up the TCP header over several packets to make it harder for packet filters, intrusion
+ detection systems, and other annoyances to detect what you are doing. Be careful with this! Some
+-D <decoy1>[,<decoy2>][,ME][,...] (Cloak a scan with decoys)
+
+ Causes a decoy scan to be performed, which makes it appear to the remote host that the host(s) you
+ specify as decoys are scanning the target network too. Thus their IDS might report 5–10 port scans from
+ unique IP addresses, but they won't know which IP was scanning them and which were innocent decoys.
+ Separate each decoy host with commas, and you can optionally use ME as one of the decoys to
+ represent the position for your real IP address. If you put ME in the sixth position or later, some common
+ port scan detectors (such as Solar Designer's excellent Scanlogd) are unlikely to show your IP address at
+ all. If you don't use ME, Nmap will put you in a random position. You can also use RND to generate a
+ random, non-reserved IP address, or RND:<number> to generate <number> addresses.
+ Note that the hosts you use as decoys should be up or you might accidentally SYN flood your targets.
+ Also it will be pretty easy to determine which host is scanning if only one is actually up on the network.
+ You might want to use IP addresses instead of names (so the decoy networks don't see you in their
+ nameserver logs). Right now random IP address generation is only supported with IPv4
+-S <IP_Address> (Spoof source address)
+
+ In some circumstances, Nmap may not be able to determine your source address (Nmap will tell you if
+ this is the case). In this situation, use -S with the IP address of the interface you wish to send packets
+ through.
+
+ Another possible use of this flag is to spoof the scan to make the targets think that someone else is
+ scanning them. Imagine a company being repeatedly port scanned by a competitor! The -e option and -Pn
+ are generally required for this sort of usage. Note that you usually won't receive reply packets back (they
+ will be addressed to the IP you are spoofing), so Nmap won't produce useful reports.
+--spoof-mac <MAC address, prefix, or vendor name> (Spoof MAC address)
+         4. Finds an ftp server without any authentication
+            1. The admins mistakenly thought the server was only accessible via VPN
+               1. No defense-in-depth
+            2. Good attack vector
+      3. Eve fingerprints server via NMAP
+      4. Searches [[https://www.exploit-db.com/google-hacking-database/][Google Hacking Database (GHDB)]] to find additional information
+         1. inurl:victim.com filetype:pdf intitle:on-boarding
+            1. Look for titles that may reveal credentials or other sensitive information
+         2. Finds a on-boarding document
+         3. The document gives a link to a version of Adobe Reader that employees must download
+            1. v11.0.2
+      5. Social Recon
+      6. Finds a [[https://www.rapid7.com/db/modules/exploit/windows/browser/adobe_toolbutton][Metasploit module]] for Adobe Reader v11.0.2
+      7. Research the [[https://www.cvedetails.com/cve/cve-2013-3346][CVE]] that the module exploits
+      8. Reflection
+         1. Does the given vulnerability support the attack goal?
+         2. Given the vulnerability, do we have access to a suitable attack vector?
+         3. If yes, proceed.
