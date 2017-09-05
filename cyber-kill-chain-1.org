@@ -1,0 +1,112 @@
+#+TITLE: Cyber Kill Chain
+#+DATE: Part 1: General Introduction
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:3
+#+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
+#+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:"c"
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h5>%d<h5>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: file:///Users/zachroof/repos/reveal.js
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: moon
+#+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
+#+REVEAL_PLUGINS: notes
+# YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
+# YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
+# TODO FT:Security-Controls, nmap
+* Cyber Kill Chain
+#+ATTR_REVEAL: :frag (appear)
++ Level: Beginner
++ Kill Chain
+  + Military process for attacking an opponent
+  + Lockheed Martin adapted concept for cyberattacks
++ Cyber Kill Chain
+  + "Typical" stages of a Cyberattack
+    + I slightly modified definitions to make them more broad
+    + Each stage can be mitigated by a set of controls
+      + Controls are countermeasures
+
+** Ex: PDF Attack
+- Example will review last week's vocabulary within Cyber Kill Chain context
+- Ex: PDF Attack
+  - Pretending to be the CEO of VictCo, the attacker sent a malicious pdf to an
+    employee via a spoofed email. Through a Adobe Reader vulnerability, the
+    attacker establishes a reverse shell and gains full control of the victim's computer
+  - While learning the Cyber Kill Chain, we'll work backwards to untangle the steps within the attack sequence
+
+** Cyber Kill Chain Steps
+*** 1. Reconnaissance
+- Attacker sets goal and researches target
+  #+ATTR_REVEAL: :frag (appear)
+  - Primary goals include:
+    #+ATTR_REVEAL: :frag (appear)
+    - Data exfiltration
+    - Defacement
+      - "Hacktivists"
+        - Hacking for a political or social cause
+    - Extortion
+      - Ransomware
+#+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
+- Ex: PDF Attack
+  - Pretending to be the CEO of VictCo, the attacker sent a malicious pdf to an
+    employee via a spoofed email. Through a Adobe Reader vulnerability, the
+    attacker establishes a reverse shell and gains full control of the victim's computer
+- Q: For the attack to work, what would the attacker need to find?
+  - Essential Cybersecurity skill is working backwards
+#+REVEAL: split
+- A: Within the network, the attacker finds...
+  #+ATTR_REVEAL: :frag (appear)
+  - A vulnerable email server
+  - Unblocked port for SSH access
+    - Host and Network Levels
+    - Ingress/Egress
+  - A vulnerable version of Adobe Reader
+  - Employee Information
+    - LinkedIn, Facebook, etc.
+
+*** 2. Weaponization
+#+ATTR_REVEAL: :frag (appear)
+- Attacker creates/finds exploit based on reconnaissance
+- Q: What is inside the exploit?
+  - A: Payload
+#+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
+- Ex: PDF Attack
+  - Pretending to be the CEO of VictCo, the attacker sends a malicious pdf to an
+    employee via a spoofed email. Through a Adobe Reader vulnerability, the
+    attacker establishes a reverse shell and gains full control of the victim's computer
+- Q: What is the Payload?
+  - A: The code that establishes the reverse shell
+*** 3. Delivery
+- Attacker transmits the exploit to the target
+- Q: This is achieved through a ____?
+  - A: Attack vector
+- Q: What is the primary attack vector?
+  - A: E-mail attachment
+*** 4. Exploitation
+- Exploit is executed, which takes advantage of the vulnerability
+#+REVEAL: split
+- Q: What does the exploit do?
+  - Prepping the environment for payload execution
+*** 5. Installation
+- Exploit installs payload
+- Q: What type of vulnerability exists within Adobe Reader?
+  - Ex: PDF Attack
+    - Pretending to be the CEO of VictCo, the attacker sends a malicious pdf to an
+      employee via a spoofed email. Through a Adobe Reader vulnerability, the
+      attacker establishes a reverse shell and gains full control of the victim's computer
+  - Hint: What must be true for the reverse shell to occur?
+  - A: Remote Code Execution (RCE) Vulnerability
+*** 6. Command and Control
+- Payload enables the attacker to have persistent access to the victim
+- Once foothold as been established the process can easily repeat/morph
+  - Ex: Pivoting to other systems on the network
+*** 7. Actions on Objective
+- Attacker takes action to achieve goals
