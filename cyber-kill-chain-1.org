@@ -27,23 +27,25 @@
   + Military process for attacking an opponent
   + Lockheed Martin adapted concept for cyberattacks
 + Cyber Kill Chain
-  + "Typical" stages of a Cyberattack
-    + I slightly modified definitions to make them more broad
+  + "Typical" stages of a cyberattack
     + Each stage can be mitigated by a set of controls
       + Controls are countermeasures
 
 ** Ex: PDF Attack
-- Example will review last week's vocabulary within Cyber Kill Chain context
+- Example will help us review last week's [[https://github.com/zachroof/sts-tutorials/blob/master/attack-vocab-1.org][vocabulary]] within Cyber Kill Chain context
 - Ex: PDF Attack
   - Pretending to be the CEO of VictCo, the attacker sent a malicious pdf to a new
     employee via a spoofed email. Through a Adobe Reader vulnerability, the
-    attacker establishes a reverse shell and gains full control of the victim's computer
-  - While learning the Cyber Kill Chain, we'll work backwards to untangle the steps within the attack sequence
+    attacker established a reverse shell and gained full control of the victim's computer
 
 ** Cyber Kill Chain Steps
 *** 1. Reconnaissance
 - Attacker sets goal and researches target
   #+ATTR_REVEAL: :frag (appear)
+  - Goals are heavily intertwined with skill level and motivations
+    - Understanding these areas is key to defending against Reconnaissance
+  - Skill Levels
+    - Organized Attackers
   - Primary goals include:
     #+ATTR_REVEAL: :frag (appear)
     - Data exfiltration
@@ -57,7 +59,7 @@
 - Ex: PDF Attack
   - Pretending to be the CEO of VictCo, the attacker sent a malicious pdf to a new
     employee via a spoofed email. Through a Adobe Reader vulnerability, the
-    attacker establishes a reverse shell and gains full control of the victim's computer
+    attacker established a reverse shell and gained full control of the victim's computer
 - Q: For the attack to work, what would the attacker need to find?
   - Essential Cybersecurity skill is working backwards
 #+REVEAL: split
@@ -88,10 +90,10 @@
 - Ex: PDF Attack
   - Pretending to be the CEO of VictCo, the attacker sent a malicious pdf to a new
     employee via a spoofed email. Through a Adobe Reader vulnerability, the
-    attacker establishes a reverse shell and gains full control of the victim's computer
+    attacker established a reverse shell and gained full control of the victim's computer
 - Q: What is the Payload?
   #+ATTR_REVEAL: :frag (appear)
-  - A: The code that establishes the reverse shell
+  - A: The code that established the reverse shell
 *** 3. Delivery
 #+ATTR_REVEAL: :frag (appear)
 - Attacker transmits the exploit to the target
@@ -115,7 +117,7 @@
 - Ex: PDF Attack
   - Pretending to be the CEO of VictCo, the attacker sent a malicious pdf to a new
     employee via a spoofed email. Through a Adobe Reader vulnerability, the
-    attacker establishes a reverse shell and gains full control of the victim's computer
+    attacker established a reverse shell and gained full control of the victim's computer
 - Q: What type of vulnerability exists within Adobe Reader?
   #+ATTR_REVEAL: :frag (appear)
   - Hint: What must be true for the reverse shell to occur?
