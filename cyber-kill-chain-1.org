@@ -42,18 +42,40 @@
 *** 1. Reconnaissance
 - Attacker sets goal and researches target
   #+ATTR_REVEAL: :frag (appear)
-  - Goals are heavily intertwined with skill level and motivations
+  - Goals are heavily intertwined with skill level, motivations
     - Understanding these areas is key to defending against Reconnaissance
-  - Skill Levels
-    - Organized Attackers
-  - Primary goals include:
+  - Primary goals
     #+ATTR_REVEAL: :frag (appear)
     - Data exfiltration
     - Defacement
-      - "Hacktivists"
-        - Hacking for a political or social cause
+      - DoS, taunting, etc.
     - Extortion
       - Ransomware
+  - Goals stem from motivations
+  - Motivations
+    - Political
+    - Economic
+    - Socio-cultural
+      - Philiosphical, humanitarian, ego gratification, fun
+  - Certain motivations attract different skill levels
+  - Skill Levels
+    - Organized Attackers
+      - Tend to be highly funded and/or skilled
+      - Include:
+        - Nation States
+          - Common motivation: Political
+        - Terrorists
+          - Common motivation: Political
+        - [[  https://en.wikipedia.org/wiki/List_of_hacker_groups][Hacker groups]]
+          - Common motivations: Political, Economic, Socio-cultural
+    - Hacker
+      - Benign explorers, malicious intruders
+      - Common Motivation: Economic, Socio-cultural
+    - Amateur
+      - "Script Kiddie"
+      - Lack finances/talent
+        - Inflicts damage by more common exploits
+      - Common motivation: Socio-cultural
 #+REVEAL: split
 #+ATTR_REVEAL: :frag (appear)
 - Ex: PDF Attack
