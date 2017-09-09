@@ -20,7 +20,7 @@
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
-* Cyber Kill Chain
+* Cyber Kill Chain: Reconnaissance
 #+ATTR_REVEAL: :frag (appear)
 + Level: Beginner
 + Kill Chain
