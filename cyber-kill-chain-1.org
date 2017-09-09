@@ -1,5 +1,5 @@
 #+TITLE: Cyber Kill Chain
-#+DATE: Part 1: General Introduction
+#+DATE: Part 1: Reconnaissance
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:3
 #+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
@@ -45,7 +45,7 @@
   #+ATTR_REVEAL: :frag (appear)
   - Goals are heavily related to motivations and skill level
     #+ATTR_REVEAL: :frag (appear)
-    - Understanding how these areas relate to eachother helps...
+    - Understanding how these areas relate to each other helps...
       #+ATTR_REVEAL: :frag (appear)
       1. Prevent research in the Reconnaissance Stage
          - If you know where an attacker might look, you have a significant advantage
@@ -53,7 +53,7 @@
       2. Mitigate active attacks
          - "X has attacked the network and gotten Y. Do they want anything else?"
 #+REVEAL: split
-- Common attack attack goals of the Reconnaissance Stage
+- Common attack goals within the Reconnaissance Stage
   #+ATTR_REVEAL: :frag (appear)
   - Data exfiltration
     - Ex: Credit card numbers, intellectual property
@@ -64,42 +64,45 @@
 #+REVEAL: split
 #+ATTR_REVEAL: :frag (appear)
 - Motives are the foundation of goals
-- Attack Motives
+- Attack motives
   #+ATTR_REVEAL: :frag (appear)
   - Ideological
-    - Ex: Idealogical, humanitarian
+    - Ex: Political, humanitarian
   - Financial
   - Personal
     - Ego, curiosity
-- Certain motives attract different skill groups
+- Certain motives attract different skill sets
 #+REVEAL: split
 #+ATTR_REVEAL: :frag (appear)
-- Skill Groups
+- Skill Sets
   #+ATTR_REVEAL: :frag (appear)
-  1. Organized Attackers
+  1. Expert Hackers
     #+ATTR_REVEAL: :frag (appear)
-     - Average skill level: High
-       - Often have financial resources for training, technology, etc.
-     - Include:
+     - Often have financial resources for training, technology, etc.
+     - Due to skills, are usually interested in "high reward" targets
+     - Usually comprised within groups that are created by:
+       #+ATTR_REVEAL: :frag (appear)
        - Nation States
-         - Common attack motive: Idealogical
+         - Common attack motive: Ideological
        - Terrorists
-         - Common attack motive: Idealogical
-       - [[https://en.wikipedia.org/wiki/List_of_hacker_groups][Hacker Groups]]
-         - Common attack motives: Idealogical, Economic
-  #+REVEAL: split
-  #+ATTR_REVEAL: :frag (appear)
-  2. [@2] Individual Hacker
-     - Average skill level: Medium
+         - Common attack motive: Ideological
+       - Misc. Personal Relationships
+         - Common attack motives: Ideological, Economic
+         - [[https://en.wikipedia.org/wiki/List_of_hacker_groups][Hacker Groups]]
+#+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
+  2. [@2] "Average" Hacker
+     - Usually acting alone
      - "Benign" explorers, malicious intruders
      - Common attack motive: Economic
   3. Amateur
      - "Script Kiddie"
-     - Average skill level: Low
      - Lack finances/talent
        - Inflicts damage by common exploits
      - Common attack motive: Personal
+
 #+REVEAL: split
+**** Questions
 #+ATTR_REVEAL: :frag (appear)
 - Ex: PDF Attack
   - Pretending to be the owner of VictCo Travel Agency, the attacker sent a malicious pdf to
@@ -107,44 +110,81 @@
     vulnerability, the attacker established a reverse shell and gained full
     control of the victim's computer
 
-- Q: What is the probable skill group (and motivation) of this attack?
+- Q: What is the probable skill level behind this attack?
+  #+ATTR_REVEAL: :frag (appear)
   - Essential Cybersecurity skill is working backwards
-  - A: Individual hacker with a financial motive
-    - Skill Group
-      - Organized Attackers?
+#+REVEAL: split
+  - A: Average
+    - Rationale
+      - Expert Hackers?
         - 25 employee organization too small
       - Amateur?
         - Script Kiddie probably doesn't understand reverse shells
-    - Motive
-      - Idealogical?
+
+#+REVEAL: split
+- Ex: PDF Attack
+  - Pretending to be the owner of VictCo Travel Agency, the attacker sent a malicious pdf to
+    one of the 25 employees via a spoofed email. Through a Adobe Reader
+    vulnerability, the attacker established a reverse shell and gained full
+    control of the victim's computer
+
+- Q: What is the probable motive of this attack?
+  #+ATTR_REVEAL: :frag (appear)
+  - A: Financial
+    - Rationale
+      - Ideological?
         - No, VictCo is a travel agency
-      - Defacement?
-        - The attack would be larger than 1 out of 25 employees
+      - Personal?
+        - No, low visibility attack
 
-- Q: Given the attack (and the attacker skill level), what recon was needed?
+#+REVEAL: split
+- Ex: PDF Attack
+  - Pretending to be the owner of VictCo Travel Agency, the attacker sent a malicious pdf to
+    one of the 25 employees via a spoofed email. Through a Adobe Reader
+    vulnerability, the attacker established a reverse shell and gained full
+    control of the victim's computer
 
-  - Threat actor has medium leve ability
+- Q: Given the attacker's skill level, what recon was needed?
 #+REVEAL: split
 #+ATTR_REVEAL: :frag (appear)
-- A: The attacker needs to find:
+- A: The attacker needed to find:
   #+ATTR_REVEAL: :frag (appear)
   - A vulnerable email server
   - Network connectivity for SSH access
-    - Q: Where could this be blocked?
+    - Q: Where could this be blocked/filtered?
       #+ATTR_REVEAL: :frag (appear)
       - A: Host and Network Levels
       - A: Ingress/Egress Ports
   - A vulnerable version of Adobe Reader
   - Employee Information
     - LinkedIn, Facebook, etc.
-- Q: Given the attacker's financial motivation, what recon might of occurred
-  that isn't immediately obvious?
-- A: AV versions to tailor payload evasion: Ransomware, keylogger evasion.
-HERE: Potential Question for another stage: How would you defend against this
-attack? Backup all info because of ransomware threat
+
 - Q: What is the technical term for these findings?
   #+ATTR_REVEAL: :frag (appear)
   - A: Attack Surface
+
+#+REVEAL: split
+- Ex: PDF Attack
+  - Pretending to be the owner of VictCo Travel Agency, the attacker sent a malicious pdf to
+    one of the 25 employees via a spoofed email. Through a Adobe Reader
+    vulnerability, the attacker established a reverse shell and gained full
+    control of the victim's computer
+
+- Q: Given the attacker's financial motivation, what recon might of occurred
+  that we don't know about?
+#+REVEAL: split
+#+ATTR_REVEAL: :frag (appear)
+- A: Looking for signs of what type of AntiVirus (AV) is enabled for payload
+  evasion
+  #+ATTR_REVEAL: :frag (appear)
+  - Potential Payloads
+    - Keylogger, Ransomware
+  - AV Recon
+    - Monitoring network traffic for AV updates
+    - Public on-boarding documents for new employees
+    - Going to various AV vendor websites and trying password resets with
+      employee email addresses
+      - If it displays, "Check your email" you know the employee registered
 *** 2. Weaponization
 #+ATTR_REVEAL: :frag (appear)
 - Attacker creates/finds exploit based on reconnaissance
