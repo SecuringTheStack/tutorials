@@ -1,0 +1,88 @@
+#+TITLE: Cyber Kill Chain
+#+DATE: Part 1: Reconnaissance
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:3
+#+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
+#+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:"c"
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h5>%d<h5>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: file:///Users/zachroof/repos/reveal.js
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: moon
+#+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
+#+REVEAL_PLUGINS: notes
+# YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
+# YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
+# TODO FT:Security-Controls, nmap
+* Cyber Kill Chain: Reconnaissance
+#+ATTR_REVEAL: :frag (appear)
++ Level: Beginner
++ Attacker researches target given the goal
+  1. Find IP Ranges of targets
+     1. Shodan.io
+     2. Censys.io
+        1. Searches
+           1. Hosts on the Public IPv4 Address Space
+              1. If website, can search entire HTTPS response
+           2. X.509 Certificates
+        2. Example Searches
+           1. location.country_code: US and tags: scada
+              1. Industrial Control Systems within the US
+           2. not 443.https.tls.validation.browser_trusted: true
+              1. Websites that have erroneous certificates
+           3. location.country_code: US and protocols: ("23/telnet" or "21/ftp")
+              1. Telnet and FTP Servers in the US
+        3. Ex: hackthissite.org censys.io search
+           1. Look for vulnerabilities/attack vectors
+              1. What ports are open
+                 1. Look for Honey Pots
+                    1. Unrealistic open ports
+                       1. Number and Service
+                       2. Would a host really have mySQL and Mongo on it?
+              2.
+              3. Vulnerable Ciphers
+              4. Location
+                 1. Can signify DEV/PROD environments
+              5. Hosting Providers
+                 1. Most are in AWS but 1 is in Azure?
+                    1. Azure might be a temporary environment
+                       1. Pivot point
+              6. DNS
+                 1. Hacks I can be you
+                 2. Naming Conventions
+                 3. prod.hackthissite.org
+                    1. what about dev.hackthissite.org
+                 4. Azure/AWS
+                    1. AWS S3
+                       1. https://BUCKET_NAME.s3.amazonaws.com
+                       2. Examples to try
+                          1. https://hackthissite.s3.amazonaws.com
+                          2. https://hack-this-site.s3.amazonaws.com
+                          3. https://dev-hackthissite.s3.amazonaws.com
+                 5. Network Topology
+                    1. Traditional 3-tier architecture
+                       1. Browser --> API Server --> Database
+                          1. Potential Attack Vectors
+                             1. Too much trust between API and Database
+                    2. Modern Cloud
+                       1. Browser could be making direct calls to Database
+                          1. Investigate client-side code
+                 6. Lower security dev environment where one can pivot into
+                    privileged servers
+              7. Network Topology
+              8. Any self-signed certs?
+              9. git servers?
+                 1. Intellectual Property, wiki on-boarding information, etc.
+              10. smtp servers?
+                  1. Social Engineering Attacks via fake emails
+                     1. Social Engineering = Human Minipulation
+                        1. https://www.amazon.com/Social-Engineering-Art-Human-Hacking/dp/0470639539
+           2. Note "198.148.81.0/24" subnet.  Invoke new search.
+           3. Note git.hackthissite.org
+     3. Censys.io
