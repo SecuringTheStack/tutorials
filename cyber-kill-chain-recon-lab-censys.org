@@ -27,18 +27,19 @@
   1. Find IP Ranges of targets
      1. Shodan.io
      2. Censys.io
-        1. Searches
+        1. Through zmap/zgrab
+        2. Searches
            1. Hosts on the Public IPv4 Address Space
               1. If website, can search entire HTTPS response
            2. X.509 Certificates
-        2. Example Searches
+        3. Example Searches
            1. location.country_code: US and tags: scada
               1. Industrial Control Systems within the US
            2. not 443.https.tls.validation.browser_trusted: true
               1. Websites that have erroneous certificates
            3. location.country_code: US and protocols: ("23/telnet" or "21/ftp")
               1. Telnet and FTP Servers in the US
-        3. Ex: hackthissite.org censys.io search
+        4. Ex: hackthissite.org censys.io search
            1. Look for vulnerabilities/attack vectors
               1. What ports are open
                  1. Look for Honey Pots
@@ -47,17 +48,51 @@
                        2. Would a host really have mySQL and Mongo on it?
               2.
               3. Vulnerable Ciphers
-              4. Location
+              4. Customer Environments that are on seperate servers?
+                 1. Legacy systems the might not be updated as frequently
+                 2. Virtual Hosting
+                    1. Most customer pages usually resolve to 1 server group
+              5. Location
                  1. Can signify DEV/PROD environments
-              5. Hosting Providers
+                    1. Which one is DEV?
+                       1. Multi-location company with engineering headquarters in florida
+                          1. Found this via website
+                          2. DEV environment is likely to be in east region
+                 2. Satellite locations will probably have looser security
+              6. Hosting Providers
                  1. Most are in AWS but 1 is in Azure?
                     1. Azure might be a temporary environment
                        1. Pivot point
-              6. DNS
+
+              7. Webserver
+                 1. Google Hacking
+                 2. waybackmachine
+                 3. Find virtual hosts
+                    1. Companies usually publish their customers.  If a given
+                       company isn't on the main server with all of the vhosts,
+                       it might be a one off environment that's more vulnerable
+                    2. Bing: "IP:*" syntax with "OR" for range
+              8. VPN or gateway in DNS
+                 1. Great pivot point
+                 2. gw as well
+              9. DHCP Server
+                 1. When performing internal testing, first enumerate your local
+                    subnet, and you can often extrapolate from there to other
+                    subnets by modifying the address slightly. Also, a look a
+                    the routing table of an internal host can be particularly
+                    telling. Below are a number of techniques which can be used.
+
+DHCP servers can be a potential source of not just local information, but also
+remote IP range and details of important hosts. Most DHCP servers will provide a
+local IP gateway address as well as the address of DNS and WINS servers. In
+Windows based networks, DNS servers tend to be Active Directory domain
+controllers, and thus targets of interest.
+              9. DNS
                  1. Hacks I can be you
                  2. Naming Conventions
                  3. prod.hackthissite.org
                     1. what about dev.hackthissite.org
+                       1. UAT, test, stage, staging, dev
                  4. Azure/AWS
                     1. AWS S3
                        1. https://BUCKET_NAME.s3.amazonaws.com
@@ -75,11 +110,11 @@
                           1. Investigate client-side code
                  6. Lower security dev environment where one can pivot into
                     privileged servers
-              7. Network Topology
-              8. Any self-signed certs?
-              9. git servers?
-                 1. Intellectual Property, wiki on-boarding information, etc.
-              10. smtp servers?
+              10. Network Topology
+              11. Any self-signed certs?
+              12. git servers?
+                  1. Intellectual Property, wiki on-boarding information, etc.
+              13. smtp servers?
                   1. Social Engineering Attacks via fake emails
                      1. Social Engineering = Human Minipulation
                         1. https://www.amazon.com/Social-Engineering-Art-Human-Hacking/dp/0470639539
