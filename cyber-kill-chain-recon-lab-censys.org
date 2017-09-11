@@ -63,8 +63,26 @@
                  1. Most are in AWS but 1 is in Azure?
                     1. Azure might be a temporary environment
                        1. Pivot point
+                 2. Cloudflare?
+                 3. CloudFail - Unmask server IP addresses hidden behind
+                    Cloudflare by searching old database records and detecting
+                    misconfigured DNS.
+              7. Printers?
 
-              7. Webserver
+                 1. Printer Exploitation Toolkit (PRET) - Tool for printer
+                    security testing capable of IP and USB connectivity,
+                    fuzzing, and exploitation of PostScript, PJL, and PCL
+                    printer language features.
+
+                    1. Capture print jobs
+
+              8. Routers?
+
+                 1. https://github.com/reverse-shell/routersploit
+
+                    1. Routers are often not upgraded
+
+              9. Webserver
                  1. Google Hacking
                  2. waybackmachine
                  3. Find virtual hosts
@@ -72,22 +90,22 @@
                        company isn't on the main server with all of the vhosts,
                        it might be a one off environment that's more vulnerable
                     2. Bing: "IP:*" syntax with "OR" for range
-              8. VPN or gateway in DNS
-                 1. Great pivot point
-                 2. gw as well
-              9. DHCP Server
-                 1. When performing internal testing, first enumerate your local
-                    subnet, and you can often extrapolate from there to other
-                    subnets by modifying the address slightly. Also, a look a
-                    the routing table of an internal host can be particularly
-                    telling. Below are a number of techniques which can be used.
+              10. VPN or gateway in DNS
+                  1. Great pivot point
+                  2. gw as well
+              11. DHCP Server
+                  1. When performing internal testing, first enumerate your local
+                     subnet, and you can often extrapolate from there to other
+                     subnets by modifying the address slightly. Also, a look a
+                     the routing table of an internal host can be particularly
+                     telling. Below are a number of techniques which can be used.
 
 DHCP servers can be a potential source of not just local information, but also
 remote IP range and details of important hosts. Most DHCP servers will provide a
 local IP gateway address as well as the address of DNS and WINS servers. In
 Windows based networks, DNS servers tend to be Active Directory domain
 controllers, and thus targets of interest.
-              9. DNS
+              1. DNS
                  1. Hacks I can be you
                  2. Naming Conventions
                  3. prod.hackthissite.org
@@ -110,14 +128,16 @@ controllers, and thus targets of interest.
                           1. Investigate client-side code
                  6. Lower security dev environment where one can pivot into
                     privileged servers
-              10. Network Topology
-              11. Any self-signed certs?
-              12. git servers?
-                  1. Intellectual Property, wiki on-boarding information, etc.
-              13. smtp servers?
-                  1. Social Engineering Attacks via fake emails
-                     1. Social Engineering = Human Minipulation
-                        1. https://www.amazon.com/Social-Engineering-Art-Human-Hacking/dp/0470639539
-           2. Note "198.148.81.0/24" subnet.  Invoke new search.
-           3. Note git.hackthissite.org
-     3. Censys.io
+              2. Network Topology
+              3. Any self-signed certs?
+              4. logging servers
+                 1. XSS and juicy info/ session tokens, etc
+              5. git servers?
+                 1. Intellectual Property, wiki on-boarding information, etc.
+              6. smtp servers?
+                 1. Social Engineering Attacks via fake emails
+                    1. Social Engineering = Human Minipulation
+                       1. https://www.amazon.com/Social-Engineering-Art-Human-Hacking/dp/0470639539
+              7. Note "198.148.81.0/24" subnet.  Invoke new search.
+              8. Note git.hackthissite.org
+              9. Censys.io
