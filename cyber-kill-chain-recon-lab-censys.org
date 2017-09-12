@@ -25,21 +25,37 @@
 + Level: Beginner
 + Attacker researches target given the goal
   1. Find IP Ranges of targets
-     1. Shodan.io
-     2. Censys.io
-        1. Through zmap/zgrab
-        2. Searches
+     1. Censys.io
+        1. Background
+           1. Maintained by computer scientists at
+              1. University Of Michigan
+              2. University of Illinois Urbana-Champaign
+           2. Supports full-text searches on protocol metadata
+              1. Ex: 443.https.cipher
+           3. Created by/for researchers
+              1. Public has rate restricted accessjk
+           4. Built with
+              1.[[https://github.com/zmap/ztag][ztag]]
+              1. [[https://www.zmap.io/][zmap]]
+                 1. Maps the network
+                 2. On a computer with a gigabit connection, can scan the entire
+                    public IPv4 address space in under 45 minutes
+              2.[[https://github.com/zmap/zgrab][zgrab]]
+              1. Connects to hosts found in zmap and collects metadata/banners
+           5. Does a daily zmap/zgrab scan of the internet
+        2. Through zmap/zgrab
+        3. Searches
            1. Hosts on the Public IPv4 Address Space
               1. If website, can search entire HTTPS response
            2. X.509 Certificates
-        3. Example Searches
+        4. Example Searches
            1. location.country_code: US and tags: scada
               1. Industrial Control Systems within the US
            2. not 443.https.tls.validation.browser_trusted: true
               1. Websites that have erroneous certificates
            3. location.country_code: US and protocols: ("23/telnet" or "21/ftp")
               1. Telnet and FTP Servers in the US
-        4. Ex: hackthissite.org censys.io search
+        5. Ex: hackthissite.org censys.io search
            1. Look for vulnerabilities/attack vectors
               1. What ports are open
                  1. Look for Honey Pots
