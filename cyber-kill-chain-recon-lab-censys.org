@@ -30,23 +30,40 @@
            1. Maintained by computer scientists at
               1. University Of Michigan
               2. University of Illinois Urbana-Champaign
-           2. Supports full-text searches on protocol metadata
-              1. Ex: 443.https.cipher
-           3. Created by/for researchers
-              1. Public has rate restricted accessjk
-           4. Built with
-              1.[[https://github.com/zmap/ztag][ztag]]
+           2. Crawls the entire public IPv4 space and allows you to full-text
+              search the results
+              1. This full-text search includes
+                 1. HTTP Body
+                 2. Headers
+                 3. Certs
+           3. Notable Programs That Censys Leverages
               1. [[https://www.zmap.io/][zmap]]
                  1. Maps the network
                  2. On a computer with a gigabit connection, can scan the entire
                     public IPv4 address space in under 45 minutes
               2.[[https://github.com/zmap/zgrab][zgrab]]
               1. Connects to hosts found in zmap and collects metadata/banners
-           5. Does a daily zmap/zgrab scan of the internet
+              2. Censys supports
+                 1. protocol
+           4. Supports full-text searches on protocol metadata that's retrieved
+              1. Ex: 443.https.cipher
+           5. Created by/for researchers
+              1. Public has rate restricted accessjk
+           6. Does a daily zmap/zgrab scan of the internet
+           7. Scans
+              1. https://censys.io/data
+              2. Shows scheduled scans
+              3. Primary Datasets
+                 1. IPv4 Address Space
+                 2. Alexa Top Million Domains
+                 3. X.509 Certificates
+           8. Other Notable Scans
+              1. https://censys.io/data/443-https-heartbleed-full_ipv4
+https://groups.google.com/a/censys.io/forum/#!topic/discussion/DGJndylhoGg
         2. Through zmap/zgrab
         3. Searches
            1. Hosts on the Public IPv4 Address Space
-              1. If website, can search entire HTTPS response
+ 1. If website, can search entire HTTPS response
            2. X.509 Certificates
         4. Example Searches
            1. location.country_code: US and tags: scada
