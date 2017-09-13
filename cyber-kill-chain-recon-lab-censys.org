@@ -57,12 +57,22 @@
                           2. "guest"
                           3. an email
                              1. There might be regex validation
+                       3. Ex TODO: protocols: "21/ftp" AND regex of target domain
                  2. SSH
                     1. Multiple methods of authentication, including passwords
                     2. Brute force attack via passwords
+                    3. TODO: Give defense SSH lecture: https://security.stackexchange.com/questions/110706/am-i-experiencing-a-brute-force-attack
                  3. Telnet
-                    1. Passwords sent in the clear
+                    1. Still seen in embedded sytems, industrial control
+                       systems
+                    2. Problems
+                       1. No encryption
+                       2. Sometimes no auth
+                       3. Many vulnerabilities in the telnet daemon
+                    3. Hint at other misconfigurations
+                    4. Ex Search: https://censys.io/ipv4?q=protocols%3A+%2223%2Ftelnet%22
                  4. SMTP/SMTPS
+                    1. DNS Sp
                  5. DNS
                  6. HTTP/HTTPS
                  7. Siemens S7
