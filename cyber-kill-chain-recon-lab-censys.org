@@ -35,17 +35,31 @@
                  search the results
            3. Data Overview
               1. Primary Datasets
-                 1. IPv4 Address Space
-                 2. Alexa Top Million Domains
-                 3. X.509 Certificates
+                 1) Daily frequency
+                 2) IPv4 Address Space
+                 3) Alexa Top Million Domains
+                 4) X.509 Certificates
               2. Download/Scan Information
                  1. https://censys.io/data
-           4.
-           5. Crawls the entire public IPv4 space and allows you to full-text
+           4. IPv4 Address Dataset
+           5. Crawl the entire public IPv4 space and allows you to full-text
               search the results
+# NOTE: Do a quick example of hackthissite
               1. This singular, full-text search includes
                  1. FTP
+                    1. Misconfigured to allow "anonymous ftp"
+                       1. Usernames
+                          1. anonymous
+                          2. ftp
+                          3. guest
+                       2. Password
+                          1. Type anything
+                          2. "guest"
+                          3. an email
+                             1. There might be regex validation
                  2. SSH
+                    1. Multiple methods of authentication, including passwords
+                    2. Brute force attack via passwords
                  3. Telnet
                     1. Passwords sent in the clear
                  4. SMTP/SMTPS
@@ -65,14 +79,14 @@
                  2. Vulnerable to heartbleed
 
               3. Scan frequency
-           6. Notable Programs That Censys Leverages
-              1. [[https://www.zmap.io/][zmap]]
-                 1. Maps the network
-                 2. On a computer with a gigabit connection, can scan the entire
-                    public IPv4 address space in under 45 minutes
-              2. [[https://github.com/zmap/zgrab][zgrab]]
-                 1. Connects to hosts found in zmap and collects metadata/banners
-           7. We collect data about IPv4 hosts through weekly ZMap scans for
+              4. Notable Programs That Censys Leverages
+                 1. [[https://www.zmap.io/][zmap]]
+                    1. Maps the network
+                    2. On a computer with a gigabit connection, can scan the entire
+                       public IPv4 address space in under 45 minutes
+                 2. [[https://github.com/zmap/zgrab][zgrab]]
+                    1. Connects to hosts found in zmap and collects metadata/banners
+              5. We collect data about IPv4 hosts through weekly ZMap scans for
               FTP, SSH, Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS,
               SMTPS, MODBUS, IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and
               BACnet. This data is aggregated by ip, port, and protocol to
