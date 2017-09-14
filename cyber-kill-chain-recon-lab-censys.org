@@ -57,7 +57,9 @@
                           2. "guest"
                           3. an email
                              1. There might be regex validation
-                       3. Ex TODO: protocols: "21/ftp" AND regex of target domain
+                       3. Ex TODO: protocols: "21/ftp" AND regex of target
+                          domain.  Learn intersting search queries while
+                          learning about each area
                  2. SSH
                     1. Multiple methods of authentication, including passwords
                     2. Brute force attack via passwords
@@ -71,19 +73,37 @@
                        3. Many vulnerabilities in the telnet daemon
                     3. Hint at other misconfigurations
                     4. Ex Search: https://censys.io/ipv4?q=protocols%3A+%2223%2Ftelnet%22
-                 4. SMTP/SMTPS
-                    1. DNS Sp
+                 4. Email
+                    1. Protocols Supported
+                       1. SMTP/SMTPS
+                       2. IMAP/IMAPS
+                       3. POP3/POP3S
+                    2. Attacks
+                       1. Injection (https://www.owasp.org/index.php/Testing_for_IMAP/SMTP_Injection
+                       2. Spoofing
+                          1. Social Engineering
+                       3. Directory Harvest Attack
+                          1. Email/Mailing list harvesting
                  5. DNS
+                    1. Internal
+                       1. Redirect all system updates to attacker server
+                    2. External
+                       1. Redirect customers to your site
                  6. HTTP/HTTPS
-                 7. Siemens S7
-                 8. POP3/POP3S
-                 9. IMAP/IMAPS
-                 10. MODBUS
-                 11. UPnP
-                 12. Niagara Fox
-                 13. CWMP
-                 14. DNP3
-                 15. BACnet
+                    1. XSS, website attack vectors
+                 7. UPnP
+                    1. Universal Plug and Play
+                    2. Set of networking protocols
+                    3. Allows devices to automatically discover each other and establish connections
+                    4. Can be seen in: IoT, printers, IP Cameras, TVs, Routers
+                    5. By default, no authentication
+                 8. Industrial Control Systems
+                    1. Siemens S7
+                    2. MODBUS
+                    3. Niagara Fox
+                 9. CWMP
+                 10. DNP3
+                 11. BACnet
               2. Data is annotated with useful information
                  1. OS Type
                  2. Vulnerable to heartbleed
