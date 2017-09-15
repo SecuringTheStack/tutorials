@@ -22,6 +22,8 @@
 # TODO FT:Security-Controls, nmap
 * Cyber Kill Chain: Reconnaissance
 #+ATTR_REVEAL: :frag (appear)
++ Todo
+  + Track how hackthissite has been patched over time?
 + Level: Beginner
 + Attacker researches target given the goal
   1. Find IP Ranges of targets
@@ -33,17 +35,56 @@
            2. Notable feature
               1. Crawls the entire public IPv4 space and allows you to full-text
                  search the results
+              2. Downloadable [[https://censys.io/data][raw data]]
+              3. Public [[https://censys.io/api][REST API]]
            3. Data Overview
-              1. Primary Datasets
-                 1) Daily frequency
-                 2) IPv4 Address Space
-                 3) Alexa Top Million Domains
-                 4) X.509 Certificates
+              1. Primary Datasets (with Daily updates)
+                 1. IPv4 Address Space
+                 2. Alexa Top Million Domains
+                 3. X.509 Certificates
               2. Download/Scan Information
                  1. https://censys.io/data
-           4. IPv4 Address Dataset
-           5. Crawl the entire public IPv4 space and allows you to full-text
+        2. IPv4 Address Dataset
+           1. Crawl the entire public IPv4 space and allows you to full-text
               search the results
+           2. Search Syntax
+To facilitate complex questions that can't be expressed in a single search, we also allow researchers to run SQL
+queries against the raw datasets and historical snapshots. [[[https://censys.io/overview#][more information]]]
+IPv4
+23.0.0.0/8 or 8.8.8.0/24                 Search
+
+IPv4
+location.country_code: DE and protocols: ("23/telnet" or "21/ftp") Search
+
+By default, Censys performs full-text searches. For example, searching for [[https://censys.io/ipv4?q=Dell][Dell]] will find any hosts where the
+word Dell appears in the record—it won't limit the search to Dell manufactured devices. However, this is
+possible by querying specific fields using the follow syntax:
+Censys records are structured and allow querying specific fields. For example, you can search for all hosts with
+a specific HTTP status code with the following query: [[https://censys.io/ipv4?q=80.http.get.status_code%253A%2520200][80.http.get.status_code: 200]]. You can view a list of
+You can compose multiple statements using the terms and, or, not, and parentheses. For example, [[https://censys.io/ipv4?q=(%2522Schneider%2520Electric%2522%2520or%2520Dell)%2520and%252023.20.0.0%252F14][("Schneider]]
+[[https://censys.io/ipv4?q=(%2522Schneider%2520Electric%2522%2520or%2520Dell)%2520and%252023.20.0.0%252F14][Electric" or Dell) and 23.20.0.0/14]]. By default, all included terms are optional (i.e., executed as an or
+statement).
+You can search for IP addresses using CIDR notation (e.g., [[https://censys.io/ipv4?q=23.20.0.0%252F14][ip:23.20.0.0/14]]) or by specifying a range of
+addresses: [[https://censys.io/ipv4?q=ip%253A%255B23.20.0.0%2520TO%252023.20.5.34%255D][ip:{23.20.0.0 TO 23.20.5.34}]]. You can search for hosts that serve a particular protocol by searching
+the protocols field, e.g., [[https://censys.io/ipv4?q=protocols%253A%2520%2522102%252Fs7%2522][protocols: "102/s7"]].
+
+Inline DNS queries are possible with the following syntax: [[https://censys.io/ipv4?q=a%25253Afacebook.com][a:facebook.com]] and [[https://censys.io/ipv4?q=mx%253Agmail.com][mx:gmail.com]].
+You can search for ranges of numbers using [ and ] for inclusive ranges and { and } for exclusive ranges. For
+example, 80.http.get.status_code:[200 TO 300]. Dates should be formatted using the following syntax:
+[2012-01-01 TO 2012-12-31]. One sided limits can also be specified: [2012-01-01 TO *]. Warning! The TO
+operator must be capitalized.
+By default, Censys searches for complete words. In other words, the search Del will not return records that
+contain the word Dell. Wildcard searches can be run on individual terms, using ? to replace a single character,
+and * to replace zero or more characters. For example, if you want to search for words that start with Del, you
+would search for Del*.
+
+You can also search using regular expressions, e.g., metadata.manufacturer:/De[ll]/. The full regex syntax is
+[[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][available here]].
+The following characters must be escaped with a backslash: + - = && || > &lt ! ( ) { } [ ] ^ &quot ~ * ? : \ /.
+Censys supports generating reports on aggregate statistics within a result set. For example, you can calculate
+the breakdown of cipher suites chosen by IPv4 hosts with browser trusted certificates by searching for
+[[https://censys.io/ipv4?q=443.https.tls.validation.browser_trusted%253A+true][443.https.tls.validation.browser_trusted: true]] and then building a report in which you show the breakdown of the
+443.https.tls.cipher_suite.name field:
 # NOTE: Do a quick example of hackthissite
               1. This singular, full-text search includes
                  1. FTP
@@ -97,13 +138,27 @@
                     3. Allows devices to automatically discover each other and establish connections
                     4. Can be seen in: IoT, printers, IP Cameras, TVs, Routers
                     5. By default, no authentication
-                 8. Industrial Control Systems
+                 8. Industrial Control/Building Systems
                     1. Siemens S7
                     2. MODBUS
                     3. Niagara Fox
+                    4. DNP3
+                    5. BACnet
                  9. CWMP
-                 10. DNP3
-                 11. BACnet
+                    1. CPE Wan Management Protocol
+                    2. Leveraged by ISPs to remotely troubleshoot/control home routers
+                       1. Routers automatically connect to ISPs Auto Configuration Server (ACS)
+                    3. Functionality includes
+                       1. Firmware management
+                       2. Log retrival
+                    4. Attacks
+                       1. Server/ACS
+                          1. You can controll entire subscriber base of routers
+                       2. Client/Router
+                          1. Logs rarely monitored
+                          2. Reconfigure DNS
+                          3. RCE
+                             1. https://isc.sans.edu/forums/diary/TR069+NewNTPServer+Exploits+What+we+know+so+far/21763/
               2. Data is annotated with useful information
                  1. OS Type
                  2. Vulnerable to heartbleed
