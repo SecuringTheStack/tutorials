@@ -32,10 +32,11 @@
            1. Maintained by computer scientists at
               1. University Of Michigan
               2. University of Illinois Urbana-Champaign
-           2. Notable feature
+           2. Notable features
               1. Crawls the entire public IPv4 space and allows you to full-text
                  search the results
               2. Downloadable [[https://censys.io/data][raw data]]
+                 1. Understand how a host/network has changed over time
               3. Public [[https://censys.io/api][REST API]]
            3. Data Overview
               1. Primary Datasets (with Daily updates)
@@ -48,6 +49,20 @@
            1. Crawl the entire public IPv4 space and allows you to full-text
               search the results
            2. Search Syntax
+              1. Plain `hackthissite` [[https://censys.io/ipv4?q=hackthissite][Search]]
+                 1. Case insensitive
+                 2. Wouldn't search for `hackthissite.org`
+                    1. We're doing a full-text search
+                    2. Would leave out good results in HTTP body (other places)
+                 3. Search Results
+                    1. Items to note
+                       1. Yellow highlight text
+                       2. Details Plane
+                          1.
+                    2.
+              2. Regex
+                 1.
+                 2.
 To facilitate complex questions that can't be expressed in a single search, we also allow researchers to run SQL
 queries against the raw datasets and historical snapshots. [[[https://censys.io/overview#][more information]]]
 IPv4
