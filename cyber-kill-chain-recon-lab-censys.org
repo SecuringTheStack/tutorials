@@ -1,5 +1,5 @@
 #+TITLE: Cyber Kill Chain
-#+DATE: Part 1: Reconnaissance
+#+DATE: Reconnaissance Lab: Censys.io
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:3
 #+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
@@ -24,47 +24,130 @@
 #+ATTR_REVEAL: :frag (appear)
 + Todo
   + Track how hackthissite has been patched over time?
+  + Searches
+    + Search for juicy response codes: 500, etc
 + Level: Beginner
-+ Attacker researches target given the goal
-  1. Find IP Ranges of targets
-     1. Censys.io
-        1. Background
-           1. Maintained by computer scientists at
-              1. University Of Michigan
-              2. University of Illinois Urbana-Champaign
-           2. Notable features
-              1. Crawls the entire public IPv4 space and allows you to full-text
-                 search the results
-              2. Downloadable [[https://censys.io/data][raw data]]
-                 1. Understand how a host/network has changed over time
-              3. Public [[https://censys.io/api][REST API]]
-           3. Data Overview
-              1. Primary Datasets (with Daily updates)
-                 1. IPv4 Address Space
-                 2. Alexa Top Million Domains
-                 3. X.509 Certificates
-              2. Download/Scan Information
-                 1. https://censys.io/data
-        2. IPv4 Address Dataset
-           1. Crawl the entire public IPv4 space and allows you to full-text
-              search the results
-           2. Search Syntax
-              1. Plain `hackthissite` [[https://censys.io/ipv4?q=hackthissite][Search]]
-                 1. Case insensitive
-                 2. Wouldn't search for `hackthissite.org`
-                    1. We're doing a full-text search
-                    2. Would leave out good results in HTTP body (other places)
-                 3. Search Results
-                    1. Items to note
-                       1. Yellow highlight text
-                       2. Details Plane
-                          1.
-                    2.
-              2. Regex
-                 1.
-                 2.
-To facilitate complex questions that can't be expressed in a single search, we also allow researchers to run SQL
-queries against the raw datasets and historical snapshots. [[[https://censys.io/overview#][more information]]]
+  1. Censys.io
+     1. Background
+        1. Maintained by computer scientists at
+           1. University Of Michigan
+           2. University of Illinois Urbana-Champaign
+        2. [[https://censys.io/static/censys.pdf][Research paper]]
+        3. Notable features
+           1. Crawls the entire public IPv4 space
+           2. Allows full-text search of the results
+           3. Downloadable [[https://censys.io/data][raw data]]
+              1. Understand how a host/network has changed over time
+           4. Public [[https://censys.io/api][REST API]]
+        4. Censys vs Shodan
+           1. Shodan is relatively similar
+           2. Censys research paper
+           3. We compared the number of hosts returned by Shodan and Censys for
+              FTP, HTTP, and HTTPS on three different /16 network blocks, each
+              belonging to a different public U.S. university. We find that, on
+              average, Censys found 600% more FTP hosts, 220% more HTTP hosts,
+              and 800% more HTTPS hosts
+        5. Data Overview
+           1. Primary Datasets (with Daily updates)
+              1. IPv4 Address Space
+              2. Alexa Top Million Domains
+              3. X.509 Certificates
+           2. Download/Scan Information
+              1. https://censys.io/data
+     2. IPv4 Address Dataset
+        1. Crawl the entire public IPv4 space and allows you to full-text
+           search the results
+        2. Search Syntax
+           1. Plain `hackthissite` [[https://censys.io/ipv4?q=hackthissite][Search]]
+              1. Case insensitive
+              2. Wouldn't search for `hackthissite.org`
+                 1. We're doing a full-text search
+                 2. Would leave out good results in HTTP body (other places)
+              3. Search Results
+                 1. Items to note
+                    1. Yellow highlight text is limited
+           2. Regex Search
+              1. [[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][Search syntax]]
+              2. =/.*hackthissite.*/=
+                 1. .
+                    1. Any character
+                 2. *
+                    1. Match 0 or more occurances
+              3. [[https://censys.io/ipv4?q=%252F.*hackthissite.*%252F][Search]]
+              4. Items to note
+                 1. Highlight text
+                 2. OS Banners
+                    1. Q: Would a hacker rather target FreeBSD or Ubuntu?
+                       1. A: Ubuntu
+                 3. `2.static.htscdn.org`
+                    1. TARGET: CDNs usually leveraged by other sites
+                 4. `lille.irc.hackthissite.org`
+                    1. Social Engineering Attacks
+                 5. Domain Naming Conventions
+                    1. Abbreviations
+                       1. `lille.irc.hackthissite.org`
+                          1. Extensive subdomains
+                       2. `lille.irc-v6.hackthissite.org`
+                          1. Appear to have IPv6 support
+                          2. Remote Fetch Exploit
+                             1. Give website url and it does analysis
+                             2. Sanitisize for IPv4
+                                1. Ex: 127.0.0.1
+                             3. Does it sanitisize for IPv6?
+                                1. ::1
+                       3. `git.hackthissite.org`
+                          1. Great target
+                             1. Secrets
+                             2. Intellectual Property
+                             3. Upload malicious code
+                          2.
+                             1. Q: Look at the certs within
+                                `lille.irc.hackthissite.org` compared to
+                                `git.hackthissite.org`. Given the naming
+                                structure of the site, what should we further
+                                investigate?
+                             2. A: Any other virtual hosts on the server
+                                - git servers are usually used within dev environments
+                                - dev.hackthissite.org
+                                  - Given naming structure it would probably
+                                    be here rather than `development.hackthissite.org`
+                                - Other notable subdomains
+                                  - staging, stage, test, uat
+                                  - `staging-FOO.BAR.com`
+                                - Bing search: `IP: 198.148.81.155`
+                          3. Hosting Providers
+                             1. Get rid of noise by adding an `AND` query to
+                                specifically look for hosts by the company
+                             2. Notice different IP ranges
+                                1. Start with ip:137.74.187.128
+                                   1. nginx moved page... nginx exploits on
+                                      host headers?
+                                      1. Look at the difference in headers
+                                         via this site relative to the
+                                         redirected site
++ Redirect could be from a legacy site
+  1. Start enumeration
+     1. Notice IP space
++ Managed hosting
+  1. Lots of other websites on box
+  2. Search via BING
+     1. ip:137.74.187.128
+     2. http://137.74.187.134/s
+     3. https://tools.kali.org/information-gathering/bing-ip2host
++ Q: Given the naming structure and the fact
+  that there's a wildcard cert attached to this
+  server. What coul
+  1.
++ what about dev.hackthissite.org
+  1. UAT, test, stage, staging, dev
+     Search http body for javascript files (.js).  These
+     can expose secrets and source code comments.  LOok
+     for TODOs
++ Certificate Conventions
+  1. `git.hackthissite.org`
+     1.
++ Search Syntax
+  1. Find status.hackthissite.org! Great mapping of architecture
 IPv4
 23.0.0.0/8 or 8.8.8.0/24                 Search
 
@@ -94,7 +177,6 @@ and * to replace zero or more characters. For example, if you want to search for
 would search for Del*.
 
 You can also search using regular expressions, e.g., metadata.manufacturer:/De[ll]/. The full regex syntax is
-[[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][available here]].
 The following characters must be escaped with a backslash: + - = && || > &lt ! ( ) { } [ ] ^ &quot ~ * ? : \ /.
 Censys supports generating reports on aggregate statistics within a result set. For example, you can calculate
 the breakdown of cipher suites chosen by IPv4 hosts with browser trusted certificates by searching for
