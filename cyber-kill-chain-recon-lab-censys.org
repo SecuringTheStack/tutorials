@@ -26,6 +26,7 @@
   + Track how hackthissite has been patched over time?
   + Searches
     + Search for juicy response codes: 500, etc
+    + scans.io
 + Level: Beginner
   1. Censys.io
      1. Background
@@ -39,14 +40,24 @@
            3. Downloadable [[https://censys.io/data][raw data]]
               1. Understand how a host/network has changed over time
            4. Public [[https://censys.io/api][REST API]]
+           5. Free
+           6. Open Source
         4. Censys vs Shodan
-           1. Shodan is relatively similar
+           1. Both seek similar goals
            2. Censys research paper
-           3. We compared the number of hosts returned by Shodan and Censys for
-              FTP, HTTP, and HTTPS on three different /16 network blocks, each
-              belonging to a different public U.S. university. We find that, on
-              average, Censys found 600% more FTP hosts, 220% more HTTP hosts,
-              and 800% more HTTPS hosts
+              1. Host Discovery
+                 1. Compared the number of hosts returned by Shodan and Censys
+                    on three different /16 network blocks
+                 2. On average, Censys found 600% more FTP hosts, 220% more HTTP
+                    hosts, and 800% more HTTPS hosts
+              2. Host Discovery Time
+                 1. A publicly available FTP server with a unique banner was
+                    provisioned
+                 2. Queried the Shodan search API every 10 minutes for the
+                    banner
+                 3. Shodan did not respond with our FTP host in its result set
+                    until 25 days after provisioning the server
+                 4. The host was present in Censys’s public interface in under 48 hours
         5. Data Overview
            1. Primary Datasets (with Daily updates)
               1. IPv4 Address Space
