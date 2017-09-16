@@ -1,7 +1,7 @@
-#+TITLE: Cyber Kill Chain
-#+DATE: Reconnaissance Lab: Censys.io
+#+TITLE: Reconnaissance Lab
+#+DATE: Censys.io
 #+AUTHOR: Zach Roof
-#+OPTIONS: num:nil toc:3
+#+OPTIONS: num:nil toc:nil
 #+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
 #+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
 #+OPTIONS: reveal_slide_number:"c"
@@ -20,144 +20,148 @@
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
-* Cyber Kill Chain: Reconnaissance
+** Todo                                                            :noexport:
+   + Track how hackthissite has been patched over time?
+   + Searches
+     + Search for juicy response codes: 500, etc
+     + scans.io
+     + censys maltago transformations
+* Recon Lab: Censys.io Introduction
 #+ATTR_REVEAL: :frag (appear)
-+ Todo
-  + Track how hackthissite has been patched over time?
-  + Searches
-    + Search for juicy response codes: 500, etc
-    + scans.io
 + Level: Beginner
-  1. Censys.io
-     1. Background
-        1. Maintained by computer scientists at
-           1. University Of Michigan
-           2. University of Illinois Urbana-Champaign
-        2. [[https://censys.io/static/censys.pdf][Research paper]]
-        3. Notable features
-           1. Crawls the entire public IPv4 space
-           2. Allows full-text search of the results
-           3. Downloadable [[https://censys.io/data][raw data]]
-              1. Understand how a host/network has changed over time
-           4. Public [[https://censys.io/api][REST API]]
-           5. Free
-           6. Open Source
-        4. Censys vs Shodan
-           1. Both seek similar goals
-           2. Censys research paper
-              1. Host Discovery
-                 1. Compared the number of hosts returned by Shodan and Censys
-                    on three different /16 network blocks
-                 2. On average, Censys found 600% more FTP hosts, 220% more HTTP
-                    hosts, and 800% more HTTPS hosts
-              2. Host Discovery Time
-                 1. A publicly available FTP server with a unique banner was
-                    provisioned
-                 2. Queried the Shodan search API every 10 minutes for the
-                    banner
-                 3. Shodan did not respond with our FTP host in its result set
-                    until 25 days after provisioning the server
-                 4. The host was present in Censys’s public interface in under 48 hours
-        5. Data Overview
-           1. Primary Datasets (with Daily updates)
-              1. IPv4 Address Space
-              2. Alexa Top Million Domains
-              3. X.509 Certificates
-           2. Download/Scan Information
-              1. https://censys.io/data
-     2. IPv4 Address Dataset
-        1. Crawl the entire public IPv4 space and allows you to full-text
-           search the results
-        2. Search Syntax
-           1. Plain `hackthissite` [[https://censys.io/ipv4?q=hackthissite][Search]]
-              1. Case insensitive
-              2. Wouldn't search for `hackthissite.org`
-                 1. We're doing a full-text search
-                 2. Would leave out good results in HTTP body (other places)
-              3. Search Results
-                 1. Items to note
-                    1. Yellow highlight text is limited
-           2. Regex Search
-              1. [[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][Search syntax]]
-              2. =/.*hackthissite.*/=
-                 1. .
-                    1. Any character
-                 2. *
-                    1. Match 0 or more occurances
-              3. [[https://censys.io/ipv4?q=%252F.*hackthissite.*%252F][Search]]
-              4. Items to note
-                 1. Highlight text
-                 2. OS Banners
-                    1. Q: Would a hacker rather target FreeBSD or Ubuntu?
-                       1. A: Ubuntu
-                 3. `2.static.htscdn.org`
-                    1. TARGET: CDNs usually leveraged by other sites
-                 4. `lille.irc.hackthissite.org`
-                    1. Social Engineering Attacks
-                 5. Domain Naming Conventions
-                    1. Abbreviations
-                       1. `lille.irc.hackthissite.org`
-                          1. Extensive subdomains
-                       2. `lille.irc-v6.hackthissite.org`
-                          1. Appear to have IPv6 support
-                          2. Remote Fetch Exploit
-                             1. Give website url and it does analysis
-                             2. Sanitisize for IPv4
-                                1. Ex: 127.0.0.1
-                             3. Does it sanitisize for IPv6?
-                                1. ::1
-                       3. `git.hackthissite.org`
-                          1. Great target
-                             1. Secrets
-                             2. Intellectual Property
-                             3. Upload malicious code
-                          2.
-                             1. Q: Look at the certs within
-                                `lille.irc.hackthissite.org` compared to
-                                `git.hackthissite.org`. Given the naming
-                                structure of the site, what should we further
-                                investigate?
-                             2. A: Any other virtual hosts on the server
-                                - git servers are usually used within dev environments
-                                - dev.hackthissite.org
-                                  - Given naming structure it would probably
-                                    be here rather than `development.hackthissite.org`
-                                - Other notable subdomains
-                                  - staging, stage, test, uat
-                                  - `staging-FOO.BAR.com`
-                                - Bing search: `IP: 198.148.81.155`
-                          3. Hosting Providers
-                             1. Get rid of noise by adding an `AND` query to
-                                specifically look for hosts by the company
-                             2. Notice different IP ranges
-                                1. Start with ip:137.74.187.128
-                                   1. nginx moved page... nginx exploits on
-                                      host headers?
-                                      1. Look at the difference in headers
-                                         via this site relative to the
-                                         redirected site
-+ Redirect could be from a legacy site
++ Background
+  + Maintained by computer scientists at
+    - University Of Michigan
+    - University of Illinois Urbana-Champaign
+** Notable features
+  1. Crawls the entire public IPv4 space
+  2. Allows full-text search of the results
+  3. Downloadable [[https://censys.io/data][raw data]]
+     1. Understand how a host/network has changed over time
+  4. Public [[https://censys.io/api][REST API]]
+
+* Censys vs Shodan
+   1. Both seek similar goals
+   2. Censys [[https://censys.io/static/censys.pdf][Research paper]]
+      1. Host Discovery
+         1. Compared the number of hosts returned by Shodan and Censys
+            on three different /16 network blocks
+         2. On average, Censys found 600% more FTP hosts, 220% more HTTP
+            hosts, and 800% more HTTPS hosts
+      2. Host Discovery Time
+         1. A publicly available FTP server with a unique banner was
+            provisioned
+         2. Queried the Shodan search API every 10 minutes for the
+            banner
+         3. Shodan did not respond with our FTP host in its result set
+            until 25 days after provisioning the server
+         4. The host was present in Censys’s public interface in under 48 hours
+      3. Cost and Transparency
+         1. Censys is free and open source
+6. Data Overview
+   1. Primary Datasets (with Daily updates)
+      1. IPv4 Address Space
+      2. Alexa Top Million Domains
+      3. X.509 Certificates
+   2. Download/Scan Information
+      1. https://censys.io/data
+         1. Data Ex
+            1. https://censys.io/data/80-http-get-full_ipv4
+         2. Hisorical Data Ex:
+            1. https://censys.io/data/80-http-get-full_ipv4/historical
+* Recon Lab: Censys.io IPv4 Address Dataset
+- Results from the entire public IPv4 space
+** Search Syntax
+  - Learn as we go!
+  - Plain `hackthissite` [[https://censys.io/ipv4?q=hackthissite][Search]]
+    1. Case insensitive
+    2. Wouldn't search for `hackthissite.org`
+       1. We're doing a full-text search
+       2. Would leave out good results in HTTP body (other places)
+    3. Search Results
+       1. Items to note
+          1. Yellow highlight text is limited
+  - Regex Search
+    1. [[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][Search syntax]]
+    2. =/.*hackthissite.*/=
+       1. .
+          1. Any character
+       2. *
+          1. Match 0 or more occurances
+    3. [[https://censys.io/ipv4?q=%252F.*hackthissite.*%252F][Search]]
+    4. Items to note
+       1. Highlight text
+       2. OS Banners
+          1. Q: Would a hacker rather target FreeBSD or Ubuntu?
+             1. A: Ubuntu
+       3. `2.static.htscdn.org`
+          1. TARGET: CDNs usually leveraged by other sites
+       4. `lille.irc.hackthissite.org`
+          1. Social Engineering Attacks
+       5. Domain Naming Conventions
+          1. Abbreviations
+             1. `lille.irc.hackthissite.org`
+                1. Extensive subdomains
+             2. `lille.irc-v6.hackthissite.org`
+                1. Appear to have IPv6 support
+                2. Remote Fetch Exploit
+                   1. Give website url and it does analysis
+                   2. Sanitisize for IPv4
+                      1. Ex: 127.0.0.1
+                   3. Does it sanitisize for IPv6?
+                      1. ::1
+             3. `git.hackthissite.org`
+                1. Great target
+                   1. Secrets
+                   2. Intellectual Property
+                   3. Upload malicious code
+                2.
+                   1. Q: Look at the certs within
+                      `lille.irc.hackthissite.org` compared to
+                      `git.hackthissite.org`. Given the naming
+                      structure of the site, what should we further
+                      investigate?
+                   2. A: Any other virtual hosts on the server
+                      - git servers are usually used within dev environments
+                      - dev.hackthissite.org
+                        - Given naming structure it would probably
+                          be here rather than `development.hackthissite.org`
+                      - Other notable subdomains
+                        - staging, stage, test, uat
+                        - `staging-FOO.BAR.com`
+                      - Bing search: `IP: 198.148.81.155`
+                3. Hosting Providers
+                   1. Get rid of noise by adding an `AND` query to
+                      specifically look for hosts by the company
+                   2. Notice different IP ranges
+                      1. Start with ip:137.74.187.128
+                         1. nginx moved page... nginx exploits on
+                            host headers?
+                            1. Look at the difference in headers
+                               via this site relative to the
+                               redirected site
+- Redirect could be from a legacy site
   1. Start enumeration
      1. Notice IP space
-+ Managed hosting
+- Managed hosting
   1. Lots of other websites on box
   2. Search via BING
      1. ip:137.74.187.128
      2. http://137.74.187.134/s
      3. https://tools.kali.org/information-gathering/bing-ip2host
-+ Q: Given the naming structure and the fact
+- Q: Given the naming structure and the fact
   that there's a wildcard cert attached to this
   server. What coul
   1.
-+ what about dev.hackthissite.org
+- what about dev.hackthissite.org
   1. UAT, test, stage, staging, dev
      Search http body for javascript files (.js).  These
      can expose secrets and source code comments.  LOok
      for TODOs
-+ Certificate Conventions
+- Certificate Conventions
   1. `git.hackthissite.org`
      1.
-+ Search Syntax
+- Search Syntax
   1. Find status.hackthissite.org! Great mapping of architecture
 IPv4
 23.0.0.0/8 or 8.8.8.0/24                 Search
@@ -194,265 +198,265 @@ the breakdown of cipher suites chosen by IPv4 hosts with browser trusted certifi
 [[https://censys.io/ipv4?q=443.https.tls.validation.browser_trusted%253A+true][443.https.tls.validation.browser_trusted: true]] and then building a report in which you show the breakdown of the
 443.https.tls.cipher_suite.name field:
 # NOTE: Do a quick example of hackthissite
-              1. This singular, full-text search includes
-                 1. FTP
-                    1. Misconfigured to allow "anonymous ftp"
-                       1. Usernames
-                          1. anonymous
-                          2. ftp
-                          3. guest
-                       2. Password
-                          1. Type anything
-                          2. "guest"
-                          3. an email
-                             1. There might be regex validation
-                       3. Ex TODO: protocols: "21/ftp" AND regex of target
-                          domain.  Learn intersting search queries while
-                          learning about each area
-                 2. SSH
-                    1. Multiple methods of authentication, including passwords
-                    2. Brute force attack via passwords
-                    3. TODO: Give defense SSH lecture: https://security.stackexchange.com/questions/110706/am-i-experiencing-a-brute-force-attack
-                 3. Telnet
-                    1. Still seen in embedded sytems, industrial control
-                       systems
-                    2. Problems
-                       1. No encryption
-                       2. Sometimes no auth
-                       3. Many vulnerabilities in the telnet daemon
-                    3. Hint at other misconfigurations
-                    4. Ex Search: https://censys.io/ipv4?q=protocols%3A+%2223%2Ftelnet%22
-                 4. Email
-                    1. Protocols Supported
-                       1. SMTP/SMTPS
-                       2. IMAP/IMAPS
-                       3. POP3/POP3S
-                    2. Attacks
-                       1. Injection (https://www.owasp.org/index.php/Testing_for_IMAP/SMTP_Injection
-                       2. Spoofing
-                          1. Social Engineering
-                       3. Directory Harvest Attack
-                          1. Email/Mailing list harvesting
-                 5. DNS
-                    1. Internal
-                       1. Redirect all system updates to attacker server
-                    2. External
-                       1. Redirect customers to your site
-                 6. HTTP/HTTPS
-                    1. XSS, website attack vectors
-                 7. UPnP
-                    1. Universal Plug and Play
-                    2. Set of networking protocols
-                    3. Allows devices to automatically discover each other and establish connections
-                    4. Can be seen in: IoT, printers, IP Cameras, TVs, Routers
-                    5. By default, no authentication
-                 8. Industrial Control/Building Systems
-                    1. Siemens S7
-                    2. MODBUS
-                    3. Niagara Fox
-                    4. DNP3
-                    5. BACnet
-                 9. CWMP
-                    1. CPE Wan Management Protocol
-                    2. Leveraged by ISPs to remotely troubleshoot/control home routers
-                       1. Routers automatically connect to ISPs Auto Configuration Server (ACS)
-                    3. Functionality includes
-                       1. Firmware management
-                       2. Log retrival
-                    4. Attacks
-                       1. Server/ACS
-                          1. You can controll entire subscriber base of routers
-                       2. Client/Router
-                          1. Logs rarely monitored
-                          2. Reconfigure DNS
-                          3. RCE
-                             1. https://isc.sans.edu/forums/diary/TR069+NewNTPServer+Exploits+What+we+know+so+far/21763/
-              2. Data is annotated with useful information
-                 1. OS Type
-                 2. Vulnerable to heartbleed
+      1. This singular, full-text search includes
+         1. FTP
+            1. Misconfigured to allow "anonymous ftp"
+               1. Usernames
+                  1. anonymous
+                  2. ftp
+                  3. guest
+               2. Password
+                  1. Type anything
+                  2. "guest"
+                  3. an email
+                     1. There might be regex validation
+               3. Ex TODO: protocols: "21/ftp" AND regex of target
+                  domain.  Learn intersting search queries while
+                  learning about each area
+         2. SSH
+            1. Multiple methods of authentication, including passwords
+            2. Brute force attack via passwords
+            3. TODO: Give defense SSH lecture: https://security.stackexchange.com/questions/110706/am-i-experiencing-a-brute-force-attack
+         3. Telnet
+            1. Still seen in embedded sytems, industrial control
+               systems
+            2. Problems
+               1. No encryption
+               2. Sometimes no auth
+               3. Many vulnerabilities in the telnet daemon
+            3. Hint at other misconfigurations
+            4. Ex Search: https://censys.io/ipv4?q=protocols%3A+%2223%2Ftelnet%22
+         4. Email
+            1. Protocols Supported
+               1. SMTP/SMTPS
+               2. IMAP/IMAPS
+               3. POP3/POP3S
+            2. Attacks
+               1. Injection (https://www.owasp.org/index.php/Testing_for_IMAP/SMTP_Injection
+               2. Spoofing
+                  1. Social Engineering
+               3. Directory Harvest Attack
+                  1. Email/Mailing list harvesting
+         5. DNS
+            1. Internal
+               1. Redirect all system updates to attacker server
+            2. External
+               1. Redirect customers to your site
+         6. HTTP/HTTPS
+            1. XSS, website attack vectors
+         7. UPnP
+            1. Universal Plug and Play
+            2. Set of networking protocols
+            3. Allows devices to automatically discover each other and establish connections
+            4. Can be seen in: IoT, printers, IP Cameras, TVs, Routers
+            5. By default, no authentication
+         8. Industrial Control/Building Systems
+            1. Siemens S7
+            2. MODBUS
+            3. Niagara Fox
+            4. DNP3
+            5. BACnet
+         9. CWMP
+            1. CPE Wan Management Protocol
+            2. Leveraged by ISPs to remotely troubleshoot/control home routers
+               1. Routers automatically connect to ISPs Auto Configuration Server (ACS)
+            3. Functionality includes
+               1. Firmware management
+               2. Log retrival
+            4. Attacks
+               1. Server/ACS
+                  1. You can controll entire subscriber base of routers
+               2. Client/Router
+                  1. Logs rarely monitored
+                  2. Reconfigure DNS
+                  3. RCE
+                     1. https://isc.sans.edu/forums/diary/TR069+NewNTPServer+Exploits+What+we+know+so+far/21763/
+      2. Data is annotated with useful information
+         1. OS Type
+         2. Vulnerable to heartbleed
 
-              3. Scan frequency
-              4. Notable Programs That Censys Leverages
-                 1. [[https://www.zmap.io/][zmap]]
-                    1. Maps the network
-                    2. On a computer with a gigabit connection, can scan the entire
-                       public IPv4 address space in under 45 minutes
-                 2. [[https://github.com/zmap/zgrab][zgrab]]
-                    1. Connects to hosts found in zmap and collects metadata/banners
-              5. We collect data about IPv4 hosts through weekly ZMap scans for
-              FTP, SSH, Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS,
-              SMTPS, MODBUS, IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and
-              BACnet. This data is aggregated by ip, port, and protocol to
-              construct structured records about each host. For example, HTTPS
-              hosts will define 443.https.tls.cipher_suite and Telnet hosts will
-              define 23.telnet.banner.banner.
+      3. Scan frequency
+      4. Notable Programs That Censys Leverages
+         1. [[https://www.zmap.io/][zmap]]
+            1. Maps the network
+            2. On a computer with a gigabit connection, can scan the entire
+               public IPv4 address space in under 45 minutes
+         2. [[https://github.com/zmap/zgrab][zgrab]]
+            1. Connects to hosts found in zmap and collects metadata/banners
+      5. We collect data about IPv4 hosts through weekly ZMap scans for
+                    FTP, SSH, Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS,
+                    SMTPS, MODBUS, IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and
+                    BACnet. This data is aggregated by ip, port, and protocol to
+                    construct structured records about each host. For example, HTTPS
+                    hosts will define 443.https.tls.cipher_suite and Telnet hosts will
+                    define 23.telnet.banner.banner.
 
-Where possible, we annotate higher-level information such as server software,
-geographic location, autonomous system, and device identity with ZTag. The
-top-level metadata fields describe the device as a whole and each protocol's
-metadata describes information extracted about that protocol's server-side
-software.
-              1. Censys supports
-                 1. protocol
-           5. Supports full-text searches on protocol metadata that's retrieved
-              1. Ex: 443.https.cipher
-           6. Created by/for researchers
-              1. Public has rate restricted accessjk
-           7. Does a daily zmap/zgrab scan of the internet
-           8. Scans
-              1. https://censys.io/data
-              2. Shows scheduled scans
-              3. Primary Datasets
-                 1. IPv4 Address Space
-                 2. Alexa Top Million Domains
-                 3. X.509 Certificates
-           9. Other Notable Scans
-              1. https://censys.io/data/443-https-heartbleed-full_ipv4
-https://groups.google.com/a/censys.io/forum/#!topic/discussion/DGJndylhoGg
-        2. Through zmap/zgrab
-        3. Searches
-           1. Hosts on the Public IPv4 Address Space
- 1. If website, can search entire HTTPS response
-           2. X.509 Certificates
-        4. Example Searches
-           1. location.country_code: US and tags: scada
-              1. Industrial Control Systems within the US
-           2. not 443.https.tls.validation.browser_trusted: true
-              1. Websites that have erroneous certificates
-           3. location.country_code: US and protocols: ("23/telnet" or "21/ftp")
-              1. Telnet and FTP Servers in the US
-        5. Ex: hackthissite.org censys.io search
-           1. Look for vulnerabilities/attack vectors
-              1. What ports are open
-                 1. Look for Honey Pots
-                    1. Unrealistic open ports
-                       1. Number and Service
-                       2. Would a host really have mySQL and Mongo on it?
-              2.
-              3. Vulnerable Ciphers
-              4. Customer Environments that are on seperate servers?
-                 1. Legacy systems the might not be updated as frequently
-                 2. Virtual Hosting
-                    1. Most customer pages usually resolve to 1 server group
-              5. Location
-                 1. Can signify DEV/PROD environments
-                    1. Which one is DEV?
-                       1. Multi-location company with engineering headquarters in florida
-                          1. Found this via website
-                          2. DEV environment is likely to be in east region
-                 2. Satellite locations will probably have looser security
-              6. Hosting Providers
-                 1. Most are in AWS but 1 is in Azure?
-                    1. Azure might be a temporary environment
-                       1. Pivot point
-                 2. Cloudflare?
-                 3. CloudFail - Unmask server IP addresses hidden behind
-                    Cloudflare by searching old database records and detecting
-                    misconfigured DNS.
-              7. Printers?
+      Where possible, we annotate higher-level information such as server software,
+      geographic location, autonomous system, and device identity with ZTag. The
+      top-level metadata fields describe the device as a whole and each protocol's
+      metadata describes information extracted about that protocol's server-side
+      software.
+      1. Censys supports
+         1. protocol
+   2. Supports full-text searches on protocol metadata that's retrieved
+      1. Ex: 443.https.cipher
+   3. Created by/for researchers
+      1. Public has rate restricted accessjk
+   4. Does a daily zmap/zgrab scan of the internet
+      5. Scans
+         1. https://censys.io/data
+         2. Shows scheduled scans
+         3. Primary Datasets
+            1. IPv4 Address Space
+            2. Alexa Top Million Domains
+            3. X.509 Certificates
+      6. Other Notable Scans
+         1. https://censys.io/data/443-https-heartbleed-full_ipv4
+      https://groups.google.com/a/censys.io/forum/#!topic/discussion/DGJndylhoGg
+   1. Through zmap/zgrab
+      2. Searches
+         1. Hosts on the Public IPv4 Address Space
+3. If website, can search entire HTTPS response
+   1. X.509 Certificates
+2. Example Searches
+   1. location.country_code: US and tags: scada
+      1. Industrial Control Systems within the US
+   2. not 443.https.tls.validation.browser_trusted: true
+      1. Websites that have erroneous certificates
+   3. location.country_code: US and protocols: ("23/telnet" or "21/ftp")
+      1. Telnet and FTP Servers in the US
+3. Ex: hackthissite.org censys.io search
+   1. Look for vulnerabilities/attack vectors
+      1. What ports are open
+         1. Look for Honey Pots
+            1. Unrealistic open ports
+               1. Number and Service
+               2. Would a host really have mySQL and Mongo on it?
+      2.
+      3. Vulnerable Ciphers
+      4. Customer Environments that are on seperate servers?
+         1. Legacy systems the might not be updated as frequently
+         2. Virtual Hosting
+            1. Most customer pages usually resolve to 1 server group
+      5. Location
+         1. Can signify DEV/PROD environments
+            1. Which one is DEV?
+               1. Multi-location company with engineering headquarters in florida
+                  1. Found this via website
+                  2. DEV environment is likely to be in east region
+         2. Satellite locations will probably have looser security
+      6. Hosting Providers
+         1. Most are in AWS but 1 is in Azure?
+            1. Azure might be a temporary environment
+               1. Pivot point
+         2. Cloudflare?
+         3. CloudFail - Unmask server IP addresses hidden behind
+            Cloudflare by searching old database records and detecting
+            misconfigured DNS.
+      7. Printers?
 
-                 1. Printer Exploitation Toolkit (PRET) - Tool for printer
-                    security testing capable of IP and USB connectivity,
-                    fuzzing, and exploitation of PostScript, PJL, and PCL
-                    printer language features.
+         1. Printer Exploitation Toolkit (PRET) - Tool for printer
+            security testing capable of IP and USB connectivity,
+            fuzzing, and exploitation of PostScript, PJL, and PCL
+            printer language features.
 
-                    1. Capture print jobs
+            1. Capture print jobs
 
-              8. Routers?
+      8. Routers?
 
-                 1. https://github.com/reverse-shell/routersploit
+         1. https://github.com/reverse-shell/routersploit
 
-                    1. Routers are often not upgraded
+            1. Routers are often not upgraded
 
-              9. Webserver
-                 1. Google Hacking
-                 2. waybackmachine
-                 3. Find virtual hosts
-                    1. Companies usually publish their customers.  If a given
-                       company isn't on the main server with all of the vhosts,
-                       it might be a one off environment that's more vulnerable
-                    2. Bing: "IP:*" syntax with "OR" for range
-              10. VPN or gateway in DNS
-                  1. Great pivot point
-                  2. gw as well
-                  3. Fake upgrades by controlling DNS
-                     1. https://github.com/infobyte/evilgrade
-              11. DHCP Server
-                  1. When performing internal testing, first enumerate your local
-                     subnet, and you can often extrapolate from there to other
-                     subnets by modifying the address slightly. Also, a look a
-                     the routing table of an internal host can be particularly
-                     telling. Below are a number of techniques which can be used.
+      9. Webserver
+         1. Google Hacking
+         2. waybackmachine
+         3. Find virtual hosts
+            1. Companies usually publish their customers.  If a given
+               company isn't on the main server with all of the vhosts,
+               it might be a one off environment that's more vulnerable
+            2. Bing: "IP:*" syntax with "OR" for range
+      10. VPN or gateway in DNS
+          1. Great pivot point
+          2. gw as well
+          3. Fake upgrades by controlling DNS
+             1. https://github.com/infobyte/evilgrade
+      11. DHCP Server
+          1. When performing internal testing, first enumerate your local
+             subnet, and you can often extrapolate from there to other
+             subnets by modifying the address slightly. Also, a look a
+             the routing table of an internal host can be particularly
+             telling. Below are a number of techniques which can be used.
 
 DHCP servers can be a potential source of not just local information, but also
 remote IP range and details of important hosts. Most DHCP servers will provide a
 local IP gateway address as well as the address of DNS and WINS servers. In
 Windows based networks, DNS servers tend to be Active Directory domain
 controllers, and thus targets of interest.
-              1. DNS
-                 1. DNS TXT Records
-                    1. used to verify many cloud based services
-                 2. Hacks I can be you
-                 3. Naming Conventions
-                 4. prod.hackthissite.org
-                    1. what about dev.hackthissite.org
-                       1. UAT, test, stage, staging, dev
-                 5. Azure/AWS
-                    1. AWS S3
-                       1. https://BUCKET_NAME.s3.amazonaws.com
-                       2. Examples to try
-                          1. https://hackthissite.s3.amazonaws.com
-                          2. https://hack-this-site.s3.amazonaws.com
-                          3. https://dev-hackthissite.s3.amazonaws.com
-                 6. Network Topology
-                    1. Traditional 3-tier architecture
-                       1. Browser --> API Server --> Database
-                          1. Potential Attack Vectors
-                             1. Too much trust between API and Database
-                          2. Caching layer
-                             1. Caching attacks
-                             2. DoS
-                    2. DB
-                       1. DNS names with sql or nosql
-                    3. Modern Cloud
-                       1. Browser could be making direct calls to Database
-                          1. Investigate client-side code
-                 7. Lower security dev environment where one can pivot into
-                    privileged servers
-              2. Network Topology
-              3. Any self-signed certs
-              4. Federated servers
-                 1. No standard naming
-                 2. adfs
-                 3. auth
-                 4. fs
-                 5. okta
-                 6. ping
-                 7. sso
-                 8. sts
-              5. Devops Tools
-                 1. Jenkins server
-                    1. Can pivot between dev/prod
-                    2. usually has creds to all environments
-                    3.
-                 2. Give common names
-              6. Docker Registry
-                 1. registry.*.com
-                 2. Usually has secrets
-              7. logging servers
-                 1. Standard names
-                    1. Prometheus
-                 2. XSS and juicy info/ session tokens, etc
-              8. git servers?
-                 1. Intellectual Property, wiki on-boarding information, etc.
-                 2. Automatated build on merge into dev.
-                    1. Can inject malicious code to get into jenkins
-                    2. https://github.com/spaceB0x/cider
-                 3. Auto
-              9. smtp servers?
-                 1. Social Engineering Attacks via fake emails
-                    1. Social Engineering = Human Minipulation
-                       1. https://www.amazon.com/Social-Engineering-Art-Human-Hacking/dp/0470639539
-              10. Note "198.148.81.0/24" subnet.  Invoke new search.
-              11. Note git.hackthissite.org
-              12. Censys.io
+      1. DNS
+         1. DNS TXT Records
+            1. used to verify many cloud based services
+         2. Hacks I can be you
+         3. Naming Conventions
+         4. prod.hackthissite.org
+            1. what about dev.hackthissite.org
+               1. UAT, test, stage, staging, dev
+         5. Azure/AWS
+            1. AWS S3
+               1. https://BUCKET_NAME.s3.amazonaws.com
+               2. Examples to try
+                  1. https://hackthissite.s3.amazonaws.com
+                  2. https://hack-this-site.s3.amazonaws.com
+                  3. https://dev-hackthissite.s3.amazonaws.com
+         6. Network Topology
+            1. Traditional 3-tier architecture
+               1. Browser --> API Server --> Database
+                  1. Potential Attack Vectors
+                     1. Too much trust between API and Database
+                  2. Caching layer
+                     1. Caching attacks
+                     2. DoS
+            2. DB
+               1. DNS names with sql or nosql
+            3. Modern Cloud
+               1. Browser could be making direct calls to Database
+                  1. Investigate client-side code
+         7. Lower security dev environment where one can pivot into
+            privileged servers
+      2. Network Topology
+      3. Any self-signed certs
+      4. Federated servers
+         1. No standard naming
+         2. adfs
+         3. auth
+         4. fs
+         5. okta
+         6. ping
+         7. sso
+         8. sts
+      5. Devops Tools
+         1. Jenkins server
+            1. Can pivot between dev/prod
+            2. usually has creds to all environments
+            3.
+         2. Give common names
+      6. Docker Registry
+         1. registry.*.com
+         2. Usually has secrets
+      7. logging servers
+         1. Standard names
+            1. Prometheus
+         2. XSS and juicy info/ session tokens, etc
+      8. git servers?
+         1. Intellectual Property, wiki on-boarding information, etc.
+         2. Automatated build on merge into dev.
+            1. Can inject malicious code to get into jenkins
+            2. https://github.com/spaceB0x/cider
+         3. Auto
+      9. smtp servers?
+         1. Social Engineering Attacks via fake emails
+            1. Social Engineering = Human Minipulation
+               1. https://www.amazon.com/Social-Engineering-Art-Human-Hacking/dp/0470639539
+      10. Note "198.148.81.0/24" subnet.  Invoke new search.
+      11. Note git.hackthissite.org
+      12. Censys.io
