@@ -21,6 +21,7 @@
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
 ** Todo                                                            :noexport:
+   + show AND/OR syntax with certs
    + Track how hackthissite has been patched over time?
    + Searches
      + Search for juicy response codes: 500, etc
@@ -91,14 +92,40 @@
        1. Any character is matched with ~.~
        2. Match 0 or more occurances with ~*~
     3. Example Regex [[https://censys.io/ipv4?q=%252F.*hackthissite.*%252F][Search]]
-** Ex: Regex Search Results 1/
        1. Highlight text
-       2. OS Banners
-          1. Q: Would a hacker rather target FreeBSD or Ubuntu?
+** Ex: Search Results 1/foo: OS Banners and Location
+# Hover over all fields in GUI
+       1. OS Banners
+          1. Not always available via Censys
+          2. Further information could be deduced via nmap once the correct IPs
+             are found
+          3. Q: Would a hacker rather target FreeBSD or Ubuntu?
              1. A: Ubuntu
                 1. [[http://www.trustedbsd.org/][TrustedBSD]]
                    1. Open source project commited to security enhancements of FreeBSD
-                   3. Has had support by the NSA, Apple, Google, etc.
+                   2. Has had support by the NSA, Apple, Google, etc.
+          4. Location
+             1. Cant trust due to internet routing
+
+** Ex: Search Results 1/foo: Autonomous System
++ Good tell for virtual hosts
+
+** Ex: Search Results 1/foo: Ports, Honey Pots
++ Who is the target? Are they sophisticated? Profiling
++ https://github.com/paralax/awesome-honeypots
++ Honey Pots
+  + Set up fake ports/services to capture traffic
+    + Production Honeypots
+      + Typical Usage
+        + Leveraged by corporations for IDS
+        + Put inside private network
+        + Setup: Easy
+    + Research Honeypots
+      + Capture more information
+      + Threat research
+      + Setup: Difficult
+      + Research, military, or government organizations
+** Search Results Ex: OS Banners
        3. `2.static.htscdn.org`
           1. TARGET: CDNs usually leveraged by other sites
        4. `lille.irc.hackthissite.org`
