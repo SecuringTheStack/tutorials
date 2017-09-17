@@ -34,11 +34,22 @@
     - University Of Michigan
     - University of Illinois Urbana-Champaign
 ** Notable features
-  1. Crawls the entire public IPv4 space
-  2. Allows full-text search of the results
-  3. Downloadable [[https://censys.io/data][raw data]]
+  1) Crawls the entire public IPv4 space
+  2) Allows full-text search of the results
+  3) Downloadable [[https://censys.io/data][raw data]]
      1. Understand how a host/network has changed over time
-  4. Public [[https://censys.io/api][REST API]]
+  4) Public [[https://censys.io/api][REST API]]
+** Data Overview
+1. Primary Datasets (with Daily updates)
+   1. IPv4 Address Space
+   2. Alexa Top Million Domains
+   3. X.509 Certificates
+2. Download/Scan Information
+   1. https://censys.io/data
+      1. Data Ex
+         1. https://censys.io/data/80-http-get-full_ipv4
+      2. Hisorical Data Ex:
+         1. https://censys.io/data/80-http-get-full_ipv4/historical
 
 * Censys vs Shodan
    1. Both seek similar goals
@@ -58,42 +69,36 @@
          4. The host was present in Censys’s public interface in under 48 hours
       3. Cost and Transparency
          1. Censys is free and open source
-6. Data Overview
-   1. Primary Datasets (with Daily updates)
-      1. IPv4 Address Space
-      2. Alexa Top Million Domains
-      3. X.509 Certificates
-   2. Download/Scan Information
-      1. https://censys.io/data
-         1. Data Ex
-            1. https://censys.io/data/80-http-get-full_ipv4
-         2. Hisorical Data Ex:
-            1. https://censys.io/data/80-http-get-full_ipv4/historical
+
 * Recon Lab: Censys.io IPv4 Address Dataset
 - Results from the entire public IPv4 space
-** Search Syntax
+** General Search Syntax
   - Learn as we go!
-  - Plain `hackthissite` [[https://censys.io/ipv4?q=hackthissite][Search]]
-    1. Case insensitive
-    2. Wouldn't search for `hackthissite.org`
-       1. We're doing a full-text search
-       2. Would leave out good results in HTTP body (other places)
-    3. Search Results
-       1. Items to note
-          1. Yellow highlight text is limited
-  - Regex Search
+  - Plain ~hackthissite~ [[https://censys.io/ipv4?q=hackthissite][Search]]
+    # - Maybe do the coloring similar to red in slack?
+    - Case insensitive
+    - Wouldn't search for ~hackthissite.org~
+      - Would leave out good results in HTTP body (and other places)
+        - Full-text search
+    - Search Results
+      1. Items to note
+         1. Yellow highlight text is limited
+
+** Regex Search Synax
     1. [[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][Search syntax]]
-    2. =/.*hackthissite.*/=
-       1. .
-          1. Any character
-       2. *
-          1. Match 0 or more occurances
-    3. [[https://censys.io/ipv4?q=%252F.*hackthissite.*%252F][Search]]
-    4. Items to note
+       1. Elasticsearch syntax
+    2. ~.*hackthissite.*~
+       1. Any character is matched with ~.~
+       2. Match 0 or more occurances with ~*~
+    3. Example Regex [[https://censys.io/ipv4?q=%252F.*hackthissite.*%252F][Search]]
+** Ex: Regex Search Results 1/
        1. Highlight text
        2. OS Banners
           1. Q: Would a hacker rather target FreeBSD or Ubuntu?
              1. A: Ubuntu
+                1. [[http://www.trustedbsd.org/][TrustedBSD]]
+                   1. Open source project commited to security enhancements of FreeBSD
+                   3. Has had support by the NSA, Apple, Google, etc.
        3. `2.static.htscdn.org`
           1. TARGET: CDNs usually leveraged by other sites
        4. `lille.irc.hackthissite.org`
@@ -140,16 +145,16 @@
                             1. Look at the difference in headers
                                via this site relative to the
                                redirected site
-- Redirect could be from a legacy site
-  1. Start enumeration
-     1. Notice IP space
-- Managed hosting
-  1. Lots of other websites on box
-  2. Search via BING
-     1. ip:137.74.187.128
-     2. http://137.74.187.134/s
-     3. https://tools.kali.org/information-gathering/bing-ip2host
-- Q: Given the naming structure and the fact
+       6. Redirect could be from a legacy site
+          1. Start enumeration
+             1. Notice IP space
+       7. Managed hosting
+          1. Lots of other websites on box
+          2. Search via BING
+             1. ip:137.74.187.128
+             2. http://137.74.187.134/s
+             3. https://tools.kali.org/information-gathering/bing-ip2host
+       8. Q: Given the naming structure and the fact
   that there's a wildcard cert attached to this
   server. What coul
   1.
