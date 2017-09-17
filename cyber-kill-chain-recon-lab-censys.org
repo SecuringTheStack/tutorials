@@ -35,7 +35,13 @@
     - University Of Michigan
     - University of Illinois Urbana-Champaign
 ** Notable features
-  1) Crawls the entire public IPv4 space
+  1) Crawls the entire public IPv4 space on a weekly basis
+     1) Frequency can be more often
+     2) Devices/Protocols
+     3) Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS, SMTPS, MODBUS,
+        IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and BACnet
+        2) Siemens S7
+           1) Helps control water, energy, waste, and weapon systems
   2) Allows full-text search of the results
   3) Downloadable [[https://censys.io/data][raw data]]
      1. Understand how a host/network has changed over time
@@ -111,8 +117,9 @@
 + Good tell for virtual hosts
 
 ** Ex: Search Results 1/foo: Ports, Honey Pots
-+ Who is the target? Are they sophisticated? Profiling
-+ https://github.com/paralax/awesome-honeypots
++ Open ports
+  + Staple of reconnaissance
+  + Could the host be a honeypot?
 + Honey Pots
   + Set up fake ports/services to capture traffic
     + Production Honeypots
@@ -125,6 +132,11 @@
       + Threat research
       + Setup: Difficult
       + Research, military, or government organizations
++ Profiling
+  + What resources does the target have?
+  + Look at job postings and website
+  + Startup with little funds? Fortune 100 company with Infosec team?
++ https://github.com/paralax/awesome-honeypots
 ** Search Results Ex: OS Banners
        3. `2.static.htscdn.org`
           1. TARGET: CDNs usually leveraged by other sites
