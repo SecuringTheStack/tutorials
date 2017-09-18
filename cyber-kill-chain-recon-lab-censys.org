@@ -22,6 +22,8 @@
 # TODO FT:Security-Controls, nmap
 ** Todo                                                            :noexport:
    + show AND/OR syntax with certs
+   + Find shodan searches via popular lists on shodan.io and through book
+     + Integrate them into this tutorial
    + Track how hackthissite has been patched over time?
    + Searches
      + Search for juicy response codes: 500, etc
@@ -58,7 +60,7 @@
       2. Hisorical Data Ex:
          1. https://censys.io/data/80-http-get-full_ipv4/historical
 
-* Censys vs Shodan
+* Censys.io Pros vs. Shodan.io
    1. Both seek similar goals
    2. Censys [[https://censys.io/static/censys.pdf][Research paper]]
       1. Host Discovery
@@ -76,6 +78,8 @@
          4. The host was present in Censys’s public interface in under 48 hours
       3. Cost and Transparency
          1. Censys is free and open source
+   3. Upcoming tutorial on Shodan.io (and pros)
+      1. Ex: Screen capture of remote desktop services
 
 * Recon Lab: Censys.io IPv4 Address Dataset
 - Results from the entire public IPv4 space
@@ -101,17 +105,22 @@
        1. Highlight text
 ** Ex: Search Results 1/foo: OS Banners and Location
 # Hover over all fields in GUI
-       1. OS Banners
-          1. Not always available via Censys
-          2. Further information could be deduced via nmap once the correct IPs
-             are found
-          3. Q: Would a hacker rather target FreeBSD or Ubuntu?
-             1. A: Ubuntu
-                1. [[http://www.trustedbsd.org/][TrustedBSD]]
-                   1. Open source project commited to security enhancements of FreeBSD
-                   2. Has had support by the NSA, Apple, Google, etc.
-          4. Location
-             1. Cant trust due to internet routing
+1. OS Banners
+   1. Not always available via Censys
+   2. Further information could be deduced via nmap once the correct IPs
+      are found
+2. Q: Would a hacker rather target FreeBSD or Ubuntu?
+   1. Knowing Different OS' Strengths/Weaknesses is essential
+   2. A: Ubuntu
+      1. [[http://www.trustedbsd.org/][TrustedBSD]]
+         1. Open source project commited to security enhancements of FreeBSD
+         2. Has had support by the NSA, Apple, Google, etc.
+   3. Q: Outside of security, what information could OS make
+      1. Financial resources available
+      2. Dynamic pricing algorithms make certain items more expensive for Mac users
+      3. Hacking mindset: Everything is a piece of information
+3. Location
+   1. Cant trust due to internet routing
 
 ** Ex: Search Results 1/foo: Autonomous System
 + Good tell for virtual hosts
@@ -120,6 +129,8 @@
 + Open ports
   + Staple of reconnaissance
   + Could the host be a honeypot?
++ How many serives are open?
++ Honeypot on AMAZON? Do search!
 + Honey Pots
   + Set up fake ports/services to capture traffic
     + Production Honeypots
