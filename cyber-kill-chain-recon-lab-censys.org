@@ -1,4 +1,4 @@
-#+TITLE: Reconnaissance Lab: Censys.io
+#+TITLE: Recon Lab: Censys.io
 #+DATE: Part 1
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:nil
@@ -29,9 +29,16 @@
      + Search for juicy response codes: 500, etc
      + scans.io
      + censys maltago transformations
+   + Automation
+     + Within weekly sts
+       + Automate current tutorial going into this repo
+       + Publish to various formats
+       + Trigger browser refresh on save
+
 * Recon Lab: Censys.io Introduction
 #+ATTR_REVEAL: :frag (appear)
 + Level: Beginner
++ Prereq: Recon Intro
 + Background
   + Maintained by computer scientists at
     - University Of Michigan
