@@ -1,5 +1,5 @@
-#+TITLE: Reconnaissance Lab
-#+DATE: Censys.io
+#+TITLE: Reconnaissance Lab: Censys.io
+#+DATE: Part 1
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:nil
 #+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
@@ -83,7 +83,8 @@
 
 * Recon Lab: Censys.io IPv4 Address Dataset
 - Results from the entire public IPv4 space
-** General Search Syntax
+
+* Recon Lab: Censys.io Search Syntax
   - Learn as we go!
   - Plain ~hackthissite~ [[https://censys.io/ipv4?q=hackthissite][Search]]
     # - Maybe do the coloring similar to red in slack?
@@ -105,22 +106,22 @@
        1. Highlight text
 ** Ex: Search Results 1/foo: OS Banners and Location
 # Hover over all fields in GUI
-1. OS Banners
-   1. Not always available via Censys
-   2. Further information could be deduced via nmap once the correct IPs
-      are found
+*** OS Banners
+1. Not always available via Censys
+2. Further information could be deduced via nmap once the correct IPs
+   are found
 2. Q: Would a hacker rather target FreeBSD or Ubuntu?
    1. Knowing Different OS' Strengths/Weaknesses is essential
    2. A: Ubuntu
       1. [[http://www.trustedbsd.org/][TrustedBSD]]
          1. Open source project commited to security enhancements of FreeBSD
          2. Has had support by the NSA, Apple, Google, etc.
-   3. Q: Outside of security, what information could OS make
+   3. Q: Outside of security, what information could OS choice leak?
       1. Financial resources available
-      2. Dynamic pricing algorithms make certain items more expensive for Mac users
+      2. Ex: Dynamic pricing algorithms make certain items more expensive for Mac users
       3. Hacking mindset: Everything is a piece of information
-3. Location
-   1. Cant trust due to internet routing
+*** Location
+  1. Cant trust due to internet routing
 
 ** Ex: Search Results 1/foo: Autonomous System
 + Good tell for virtual hosts
@@ -128,9 +129,13 @@
 ** Ex: Search Results 1/foo: Ports, Honey Pots
 + Open ports
   + Staple of reconnaissance
-  + Could the host be a honeypot?
-+ How many serives are open?
-+ Honeypot on AMAZON? Do search!
+  + Gateway to vulnerabilities
+  + Port range limited to supported protocols
+    + Censys is a starting point, always research further with nmap
++ "When you sit down at the business table you always look for the sucker, and
+  if you don’t see it – it’s you." -Mark Cuban
+  + Did you really find a server with open ports?
+  + Recon Mindset: Is my reconnaissance allowing others to do reconnaissance on me?
 + Honey Pots
   + Set up fake ports/services to capture traffic
     + Production Honeypots
@@ -143,6 +148,9 @@
       + Threat research
       + Setup: Difficult
       + Research, military, or government organizations
++ Could the host be a honeypot?
++ How many serives are open?
++ Honeypot on AMAZON? Do search!
 + Profiling
   + What resources does the target have?
   + Look at job postings and website
