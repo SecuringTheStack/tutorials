@@ -20,20 +20,25 @@
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
-# ** Todo                                                            :noexport:
-#    + show AND/OR syntax with certs
-#    + Find shodan searches via popular lists on shodan.io and through book
-#      + Integrate them into this tutorial
-#    + Track how hackthissite has been patched over time?
-#    + Searches
-#      + Search for juicy response codes: 500, etc
-#      + scans.io
-#      + censys maltago transformations
-#    + Automation
-#      + Within weekly sts
-#        + Automate current tutorial going into this repo
-#        + Publish to various formats
-#        + Trigger browser refresh on save
+** Todo                                                            :noexport:
+   + show AND/OR syntax with certs
+   + Find shodan searches via popular lists on shodan.io and through book
+     + Integrate them into this tutorial
+   + Track how hackthissite has been patched over time?
+   + Searches
+     + Search for juicy response codes: 500, etc
+     + scans.io
+     + censys maltago transformations
+   + Automation
+     + Within weekly sts
+       + Automate current tutorial going into this repo
+       + Publish to various formats
+       + Trigger browser refresh on save
+   + "Censys Additional Information" tutorial
+     + Academic paper
+     + https://scans.io/
+     + https://groups.google.com/a/censys.io/forum/#!forumsearch/
+
 
 ** Introduction
 #+ATTR_REVEAL: :frag (appear)
@@ -44,30 +49,42 @@
   + Maintained by computer scientists at
     - University Of Michigan
     - University of Illinois Urbana-Champaign
-** Notable features
-+ Crawls the entire public IPv4 space on a weekly basis
-  - Frequency can be more often
+** Notable feature: Crawler
++ Crawls the entire public IPv4 space
   - Devices/Protocols
     - Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS, SMTPS, MODBUS,
       IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and BACnet
       + Siemens S7
         - Helps control water, energy, waste, and weapon systems
-+ Allows full-text search of the results
-+ Downloadable [[https://censys.io/data][raw data]]
-  1. Understand how a host/network has changed over time
-+ Public [[https://censys.io/api][REST Api]]
-** Data Overview
-1. Primary Datasets (with Daily updates)
-   1. IPv4 Address Space
-   2. Alexa Top Million Domains
-   3. X.509 Certificates
-2. Download/Scan Information
-   1. https://censys.io/data
-      1. Data Ex
-         1. https://censys.io/data/80-http-get-full_ipv4
-      2. Hisorical Data Ex:
-         1. https://censys.io/data/80-http-get-full_ipv4/historical
 
++ Primary Datasets (with Daily updates)
+  1. IPv4 Address Space
+     1. Full scan atleast weekly
+     2. Daily snapshots
+  2. Alexa Top Million Domains
+     1. Daily scan
+     2. Additional DNS data compared to IPv4 scan
+  3. X.509 Certificates
++ Download/Scan Information
+  1. https://censys.io/data
+     1. Data Ex
+        1. https://censys.io/data/80-http-get-full_ipv4
+     2. Hisorical Data Ex:
+        1. https://censys.io/data/80-http-get-full_ipv4/historical
+** Notable feature: Search
+  - Frequency can be more often
+
+  - You can search for records that meet certain criteria (e.g., IPv4 hosts in
+    Germany manufactured by Siemens, or browser trusted certificates for
+    github.com),
+
+  - Allows full-text search of the results
+  - Downloadable [[https://censys.io/data][raw data]]
+    1. Understand how a host/network has changed over time
+  - Public [[https://censys.io/api][REST Api]]
+** Notable feature: Datasets
+** Notable feature: Aggregation Features
++ View all results on a map
 * Censys.io Pros vs. Shodan.io
    1. Both seek similar goals
    2. Censys [[https://censys.io/static/censys.pdf][Research paper]]
