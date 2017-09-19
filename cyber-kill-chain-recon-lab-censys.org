@@ -36,25 +36,26 @@
 #        + Trigger browser refresh on save
 
 ** Introduction
- #+ATTR_REVEAL: :frag (appear)
+#+ATTR_REVEAL: :frag (appear)
 + Level: Beginner
-+ Prereq: Recon Intro
++ Whats if I feel lost?!
+  + Recon Intro
 + Background
   + Maintained by computer scientists at
     - University Of Michigan
     - University of Illinois Urbana-Champaign
 ** Notable features
-  1) Crawls the entire public IPv4 space on a weekly basis
-     1) Frequency can be more often
-     2) Devices/Protocols
-     3) Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS, SMTPS, MODBUS,
-        IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and BACnet
-        2) Siemens S7
-           1) Helps control water, energy, waste, and weapon systems
-  2) Allows full-text search of the results
-  3) Downloadable [[https://censys.io/data][raw data]]
-     1. Understand how a host/network has changed over time
-  4) Public [[https://censys.io/api][REST API]]
++ Crawls the entire public IPv4 space on a weekly basis
+  - Frequency can be more often
+  - Devices/Protocols
+    - Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS, SMTPS, MODBUS,
+      IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and BACnet
+      + Siemens S7
+        - Helps control water, energy, waste, and weapon systems
++ Allows full-text search of the results
++ Downloadable [[https://censys.io/data][raw data]]
+  1. Understand how a host/network has changed over time
++ Public [[https://censys.io/api][REST Api]]
 ** Data Overview
 1. Primary Datasets (with Daily updates)
    1. IPv4 Address Space
