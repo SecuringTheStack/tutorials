@@ -20,20 +20,20 @@
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
-** Todo                                                            :noexport:
-   + show AND/OR syntax with certs
-   + Find shodan searches via popular lists on shodan.io and through book
-     + Integrate them into this tutorial
-   + Track how hackthissite has been patched over time?
-   + Searches
-     + Search for juicy response codes: 500, etc
-     + scans.io
-     + censys maltago transformations
-   + Automation
-     + Within weekly sts
-       + Automate current tutorial going into this repo
-       + Publish to various formats
-       + Trigger browser refresh on save
+# ** Todo                                                            :noexport:
+#    + show AND/OR syntax with certs
+#    + Find shodan searches via popular lists on shodan.io and through book
+#      + Integrate them into this tutorial
+#    + Track how hackthissite has been patched over time?
+#    + Searches
+#      + Search for juicy response codes: 500, etc
+#      + scans.io
+#      + censys maltago transformations
+#    + Automation
+#      + Within weekly sts
+#        + Automate current tutorial going into this repo
+#        + Publish to various formats
+#        + Trigger browser refresh on save
 
 ** Introduction
  #+ATTR_REVEAL: :frag (appear)
