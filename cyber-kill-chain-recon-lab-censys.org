@@ -37,12 +37,12 @@
 
 ** Introduction
  #+ATTR_REVEAL: :frag (appear)
- + Level: Beginner
- + Prereq: Recon Intro
- + Background
-   + Maintained by computer scientists at
-     - University Of Michigan
-     - University of Illinois Urbana-Champaign
++ Level: Beginner
++ Prereq: Recon Intro
++ Background
+  + Maintained by computer scientists at
+    - University Of Michigan
+    - University of Illinois Urbana-Champaign
 ** Notable features
   1) Crawls the entire public IPv4 space on a weekly basis
      1) Frequency can be more often
