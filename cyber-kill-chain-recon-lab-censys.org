@@ -65,10 +65,10 @@
         1. Any preexisting scan
         2. Parsing of the [[https://www.certificate-transparency.org][public certificate transparency logs]]
      2. Parse certificate fields and annotate with metadata
-        1. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522self-signed%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*dev.*%252F%2529][~(tags: "self-signed") AND (parsed.extensions.subject_alt_name.dns_names: /.*dev.*/)~]]
+        2. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522untrusted%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*hackthissite.org%252F%2529][~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~]]
            1. Also try ~localhost~
            2. Recon for dev environments
-        2. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522expired%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*target.*%252F%2529][~(tags: "expired") AND (parsed.extensions.subject_alt_name.dns_names: /.*TARGET.*/)~]]
+        2. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522untrusted%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*hackthissite.org%252F%2529][~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~]]
            1. Is a certificate expired?
            2. Recon for legacy environments
 
@@ -567,3 +567,16 @@ controllers, and thus targets of interest.
       10. Note "198.148.81.0/24" subnet.  Invoke new search.
       11. Note git.hackthissite.org
       12. Censys.io
+
+* Recon Lab: Censys.io Cert Dataset
+  3. X.509 Certificates
+     1. Certificates that are encountered during
+        1. Any preexisting scan
+        2. Parsing of the [[https://www.certificate-transparency.org][public certificate transparency logs]]
+     2. Parse certificate fields and annotate with metadata
+        2. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522untrusted%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*hackthissite.org%252F%2529][~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~]]
+           1. Also try ~localhost~
+           2. Recon for dev environments
+        2. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522untrusted%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*hackthissite.org%252F%2529][~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~]]
+           1. Is a certificate expired?
+           2. Recon for legacy environments
