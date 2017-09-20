@@ -39,7 +39,7 @@
      + https://scans.io/
      + https://groups.google.com/a/censys.io/forum/#!forumsearch/
 
-
+# I take no responsibility item
 ** Introduction
 #+ATTR_REVEAL: :frag (appear)
 + Level: Beginner
@@ -64,10 +64,11 @@
      1. Certificates that are encountered during
         1. Any preexisting scan
         2. Parsing of the [[https://www.certificate-transparency.org][public certificate transparency logs]]
-     2. Parse certificate fields
-        1. Recon for dev environments by finding self-signed certs
-     3. Annotate with metadata
-        1. Ex: ~tags~
+     2. Parse certificate fields and annotate with metadata
+        1. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522self-signed%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*dev.*%252F%2529][~(tags: "self-signed") AND (parsed.extensions.subject_alt_name.dns_names: /.*dev.*/)~]]
+           1. Also try ~localhost~
+           2. Recon for dev environments
+        2. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522expired%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*target.*%252F%2529][~(tags: "expired") AND (parsed.extensions.subject_alt_name.dns_names: /.*TARGET.*/)~]]
            1. Is a certificate expired?
            2. Recon for legacy environments
 
