@@ -49,6 +49,28 @@
   + Maintained by computer scientists at
     - University Of Michigan
     - University of Illinois Urbana-Champaign
++ High lever overview of features
+  + Upcoming tutorials will show granular examples
+
+** Notable feature: Datasets
++ Primary Datasets
+  1. IPv4 Address Space
+     1. Full scan atleast weekly
+     2. Daily snapshots
+  2. Alexa Top Million Domains
+     1. Full daily scan
+     2. Additional DNS data compared to IPv4 scan
+  3. X.509 Certificates
+     1. Certificates that are encountered during
+        1. Any preexisting scan
+        2. Parsing of the [[https://www.certificate-transparency.org][public certificate transparency logs]]
+     2. Parse certificate fields
+        1. Recon for dev environments by finding self-signed certs
+     3. Annotate with metadata
+        1. Ex: ~tags~
+           1. Is a certificate expired?
+           2. Recon for legacy environments
+
 ** Notable feature: Crawler
 + Crawls the entire public IPv4 space
   - Devices/Protocols
@@ -57,32 +79,28 @@
       + Siemens S7
         - Helps control water, energy, waste, and weapon systems
 
-+ Primary Datasets (with Daily updates)
-  1. IPv4 Address Space
-     1. Full scan atleast weekly
-     2. Daily snapshots
-  2. Alexa Top Million Domains
-     1. Daily scan
-     2. Additional DNS data compared to IPv4 scan
-  3. X.509 Certificates
-+ Download/Scan Information
-  1. https://censys.io/data
-     1. Data Ex
-        1. https://censys.io/data/80-http-get-full_ipv4
-     2. Hisorical Data Ex:
-        1. https://censys.io/data/80-http-get-full_ipv4/historical
 ** Notable feature: Search
-  - Frequency can be more often
-
-  - You can search for records that meet certain criteria (e.g., IPv4 hosts in
-    Germany manufactured by Siemens, or browser trusted certificates for
-    github.com),
-
-  - Allows full-text search of the results
+  - Web interface search
+    - Allows full-text search of the results
+      - Includes HTTP body
+    - Boolean Logic
+      - Includes boosting
+    - Ranges
+      - Including CIDR blocks
+    - Elastic Search Regex Syntax
   - Downloadable [[https://censys.io/data][raw data]]
-    1. Understand how a host/network has changed over time
+    -
+    - Understand how a host/network has changed over time
   - Public [[https://censys.io/api][REST Api]]
-** Notable feature: Datasets
+
+  - Download/Scan Information
+
+    - Researchers given SQL access
+    - https://censys.io/data
+      1. Data Ex
+         1. https://censys.io/data/80-http-get-full_ipv4
+      2. Hisorical Data Ex:
+         1. https://censys.io/data/80-http-get-full_ipv4/historical
 ** Notable feature: Aggregation Features
 + View all results on a map
 * Censys.io Pros vs. Shodan.io
