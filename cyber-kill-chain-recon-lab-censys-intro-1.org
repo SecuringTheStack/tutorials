@@ -51,21 +51,27 @@
 + High level overview of features
   + Upcoming tutorials will show granular examples
 
-** Notable feature: Primary Datasets
+** Datasets: IPv4 and Alexa Top Million
 #+ATTR_REVEAL: :frag (appear)
-1. IPv4 Address Space
-   - 1 full scan a week (minimum)
-   - Daily snapshots
-2. Alexa Top Million Domains
-   - Full daily scan
-   - Additional DNS data compared to IPv4 scan
-3. X.509 Certificates
-   - Certificates that are encountered during
-     1. Any preexisting scan
-     2. Parsing of the [[https://www.certificate-transparency.org][public certificate transparency logs]]
-   - Parse certificate fields and annotate with metadata
-     1. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522untrusted%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*hackthissite.org%252F%2529][~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~]]
-        1. Recon for dev, legacy environments
++ IPv4 Address Space
+  - 1 full scan a week (minimum)
+  - Daily snapshots
++ Alexa Top Million Domains
+  - Full daily scan
+  - Additional DNS data compared to IPv4 scan
+
+** Datasets: X.509 Certificates (1/2)
+#+ATTR_REVEAL: :frag (appear)
+- Certificates that are encountered during
+  1. Any preexisting scan
+  2. Syncing with the [[https://www.certificate-transparency.org][public certificate transparency logs]](CTL)
+     1. https://github.com/censys/ctsync-daemon
+     2. As of this tutorial, daemon seems to pull but not push to CTL
+
+** Datasets: X.509 Certificates (2/2)
+- Parse certificate fields and annotate with metadata
+  1. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522untrusted%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*hackthissite.org%252F%2529][~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~]]
+     1. Recon for dev, legacy environments
 
 ** Notable feature: Crawler
 + Crawls the entire public IPv4 space
