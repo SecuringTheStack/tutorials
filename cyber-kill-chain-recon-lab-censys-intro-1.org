@@ -70,7 +70,7 @@
 
 ** Datasets: X.509 Certificates (2/2)
 - Parse certificate fields and annotate with metadata
-  1. Ex: [[https://censys.io/certificates?q=%2528tags%253A+%2522untrusted%2522%2529+AND+%2528parsed.extensions.subject_alt_name.dns_names%253A+%252F.*hackthissite.org%252F%2529][(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: ~/.*hackthissite.org/~)]]
+  2. Ex: ~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~
      1. Recon for dev, legacy environments
 
 ** Notable feature: Crawler
