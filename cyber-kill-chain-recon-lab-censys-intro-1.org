@@ -11,12 +11,12 @@
 #+REVEAL_MARGIN: 0
 #+REVEAL_MIN_SCALE: 1
 #+REVEAL_MAX_SCALE: 1
-#+REVEAL_ROOT: file:///Users/zachroof/repos/reveal.js
+#+REVEAL_ROOT: file:///Users/zachroof/repos/sts-reveal.js
 #+REVEAL_TRANS: default
 #+REVEAL_SPEED: default
-#+REVEAL_THEME: moon
-#+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
+#+REVEAL_THEME: laravel
 #+REVEAL_PLUGINS: notes
+#+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
