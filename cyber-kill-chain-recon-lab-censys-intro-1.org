@@ -5,7 +5,7 @@
 #+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
 #+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
 #+OPTIONS: reveal_slide_number:"c"
-#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h5>%d<h5>"
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
 #+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
 #+REVEAL_HLEVEL: 1
 #+REVEAL_MARGIN: 0
@@ -20,36 +20,58 @@
 # YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
 # YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
-** Todo                                                            :noexport:
-   + show AND/OR syntax with certs
-   + Find shodan searches via popular lists on shodan.io and through book
-     + Integrate them into this tutorial
-   + Track how hackthissite has been patched over time?
-   + Searches
-     + Search for juicy response codes: 500, etc
-     + scans.io
-     + censys maltago transformations
-   + Automation
-     + Within weekly sts
-       + Automate current tutorial going into this repo
-       + Publish to various formats
-       + Trigger browser refresh on save
-   + "Censys Additional Information" tutorial
-     + Academic paper
-     + https://scans.io/
-     + https://groups.google.com/a/censys.io/forum/#!forumsearch/
-
-** Introduction
+** General Information (1/2)
 #+ATTR_REVEAL: :frag (appear)
-+ Level: Beginner
-+ Additional help
+- What is Censys?
+  - Censys is a search engine that allows computer scientists to ask questions
+    about the devices and networks that compose the Internet. Driven by
+    Internet-wide scanning, Censys lets researchers find specific hosts and
+    create aggregate reports on how devices, websites, and certificates are
+    configured and deployed.
+- Maintained by computer scientists at
+  - University Of Michigan
+  - University of Illinois Urbana-Champaign
+
+** General Information (2/2)
+#+ATTR_REVEAL: :frag (appear)
+- Tutorial scope
+  - High-level overview of features
+  - Upcoming tutorials will show granular examples
+- Level: Beginner
+- Additional help
   + Recon Intro
-+ Censys Background
-  + Maintained by computer scientists at
-    - University Of Michigan
-    - University of Illinois Urbana-Champaign
-+ High level overview of features
-  + Upcoming tutorials will show granular examples
+
+** Crawler
+#+ATTR_REVEAL: :frag (appear)
++ Crawls the entire public IPv4 space
+  + [[https://en.wikipedia.org/wiki/Private_network][Private IP ranges]]
+  + Devices/Protocols
+    - Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS, SMTPS, MODBUS,
+      IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and BACnet
+      + Siemens S7
+        - Helps control water, energy, waste, and weapon systems
+
+** Search (1/2)
+#+ATTR_REVEAL: :frag (appear)
+- Web interface search
+  - Allows full-text search of Censys findings
+    - Includes HTTP body
+      - Old Javascript libraries?
+- Elasticsearch regex [[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][syntax]]
+  - Elasticsearch
+    - Very powerful search engine
+- Boolean Logic
+  - Includes boosting
+- Ex: ~(/.*hackthissite.*/) AND (80.http.get.body:/.*javascript.*/)~
+  - [[https://censys.io/ipv4?q=%2528%252F.*hackthissite.*%252F%2529+AND+%252880.http.get.body%253A%252F.*javascript.*%252F%2529][Link]]
+
+** Search (2/2)
+#+ATTR_REVEAL: :frag (appear)
+- Ranges
+  - Including CIDR blocks
+- Public [[https://censys.io/api][REST Api]]
+  - [[https://github.com/censys/censys-python][Python Client]]
+- Researchers given SQL access
 
 ** Datasets: IPv4 and Alexa Top Million
 #+ATTR_REVEAL: :frag (appear)
@@ -59,49 +81,42 @@
 + Alexa Top Million Domains
   - Full daily scan
   - Additional DNS data compared to IPv4 scan
+    - SPF records?
+    - AXFR support?
 
 ** Datasets: X.509 Certificates (1/2)
 #+ATTR_REVEAL: :frag (appear)
 - Certificates that are encountered during
-  1. Any preexisting scan
-  2. Syncing with the [[https://www.certificate-transparency.org][public certificate transparency logs]](CTL)
-     1. https://github.com/censys/ctsync-daemon
-     2. As of this tutorial, daemon seems to pull but not push to CTL
+  - Any preexisting scan
+  - Syncing with the [[https://www.certificate-transparency.org][certificate transparency logs]] (CTL)
+    - Contributors to the CTL
+      - Google's crawlers
+      - Other CAs
+    - [[https://github.com/censys/ctsync-daemon][ctsync-daemon]]
+      - As of this tutorial, daemon seems to pull but not push to CTL
 
 ** Datasets: X.509 Certificates (2/2)
+#+ATTR_REVEAL: :frag (appear)
 - Parse certificate fields and annotate with metadata
-  2. Ex: ~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~
-     1. Recon for dev, legacy environments
-
-** Notable feature: Crawler
-+ Crawls the entire public IPv4 space
-  - Devices/Protocols
-    - Telnet, SMTP, DNS, HTTP, Siemens S7, POP3, IMAP, HTTPS, SMTPS, MODBUS,
-      IMAPS, POP3S, UPnP, Niagara Fox, CWMP, DNP3, and BACnet
-      + Siemens S7
-        - Helps control water, energy, waste, and weapon systems
-
-** Notable feature: Search
-  - Ex: ~[[https://censys.io/ipv4?q=%2528%252F.*hackthissite.*%252F%2529+AND+%252880.http.get.body%253A%252F.*dns.*%252F%2529][(/.*hackthissite.*/) AND (80.http.get.body:/.*dns.*/)]]~
-  - Elastic Search Regex [[https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax][Syntax]]
-  - Boolean Logic
-    - Includes boosting
-  - Web interface search
-    - Allows full-text search of the results
-      - Includes HTTP body
-  - Ranges
-    - Including CIDR blocks
+  + Ex: ~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~
+  + ~untrusted~ was never trusted
+  + ~expired~ was once trusted
+    + [[https://censys.io/certificates?q=(tags:%2520%2522untrusted%2522)%2520AND%2520(parsed.extensions.subject_alt_name.dns_names:%2520/.*hackthissite.org/)][Link]]
+    + Recon for dev, legacy environments
 
 ** Download/Scan Information
-  - Downloadable [[https://censys.io/data][raw data]]
-    - Timestampled
-    - Witness how a host/network has changed over time
-      - https://censys.io/data/80-http-get-full_ipv4/historical
-  - Public [[https://censys.io/api][REST Api]]
-    - https://github.com/censys/censys-python
-  - Researchers given SQL access
+#+ATTR_REVEAL: :frag (appear)
+# TODO See if this is available for all datasets
+- Downloadable [[https://censys.io/data][raw data]]
+  - Witness how a host/network has changed over time
+- Timestamps
+  + Overarching dataset
+    - Ex: [[https://censys.io/data/80-http-get-full_ipv4/historical][IPv4 Data]]
+  + Within the dataset
+    - ~updated_at~
 
-** Notable feature: Aggregation Features
+** Aggregation Features
+#+ATTR_REVEAL: :frag (appear)
 + View all results [[https://censys.io/ipv4/map?q=/.*hackthissite.*/][on a map]]
-+ Summary of findings for [[https://censys.io/ipv4/map?q=/.*hackthissite.*/][specific search fields]]
++ Summary of findings for [[https://censys.io/ipv4/report?q=%252F.%252Ahackthissite.%252A%252F][specific search fields]]
   + Available for all datasets
