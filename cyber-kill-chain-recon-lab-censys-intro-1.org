@@ -17,10 +17,25 @@
 #+REVEAL_THEME: laravel
 #+REVEAL_PLUGINS: notes
 #+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
-# YOUTUBE_EXPORT_TAGS:INFOSec,TLS,SSL,Cryptography,Alice,Bob,Trent,Mallory,Active Attacks,Passive Attacks
-# YOUTUBE_EXPORT_DESC: 'Start our learning journey into TLS/Cryptography by understanding the "Crypto-Chacters" and the common attacks that they represent.'
 # TODO FT:Security-Controls, nmap
 ** General Information (1/2)
+# *** Title:
+# Recon. Lab - Censys.io - Intro.
+
+# *** Desc.
+# Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+
+# From a high-level, in this tutorial we investigate:
+# 1) The Censys internet crawler
+# 2) The search functionalities
+
+# Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+# Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it.
+
+# *** Keywords:
+# cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance
+
 #+ATTR_REVEAL: :frag (appear)
 - What is Censys?
   - Censys is a search engine that allows computer scientists to ask questions
@@ -52,6 +67,21 @@
         - Helps control water, energy, waste, and weapon systems
 
 ** Search (1/2)
+# *** Title:
+#  Recon. Lab - Censys.io - Intro. (Part 2)
+
+# *** Keywords:
+# cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance
+
+# *** Desc.
+# Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+
+# From a high-level, in this tutorial we investigate:
+# 1) Censys' search functionalities
+
+# Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+# Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it.
 #+ATTR_REVEAL: :frag (appear)
 - Web interface search
   - Allows full-text search of Censys findings
@@ -74,6 +104,24 @@
 - Researchers given SQL access
 
 ** Datasets: IPv4 and Alexa Top Million
+# ***  Title:
+# Recon. Lab - Censys.io - Intro. (Part 3)
+
+# *** Desc.
+# Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+
+# From a high-level, in this tutorial we investigate:
+# 1) Censys' datasets: IPv4, Alexa Top Million, X.509 Certificates
+
+# Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+# Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it.
+
+# *** Keywords:
+# cybersecurity, ethical hacking, infosec, information security, hacking,
+# securing the stack, sts, censys.io, reconnaissance, IPv4, Alexa Top Million,
+# X.509, Certificate
+
 #+ATTR_REVEAL: :frag (appear)
 + IPv4 Address Space
   - 1 full scan a week (minimum)
@@ -96,6 +144,23 @@
       - As of this tutorial, daemon seems to pull but not push to CTL
 
 ** Datasets: X.509 Certificates (2/2)
+# ***  Title:
+# Recon. Lab - Censys.io - Intro. (Part 4)
+
+# *** Desc.
+# Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+
+# From a high-level, in this tutorial we investigate:
+# 1) Censys' datasets: X.509 Certificates
+
+# Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+# Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it.
+
+# *** Keywords:
+# cybersecurity, ethical hacking, infosec, information security, hacking,
+# securing the stack, sts, censys.io, reconnaissance, X.509, Certificate
+
 #+ATTR_REVEAL: :frag (appear)
 - Parse certificate fields and annotate with metadata
   + Ex: ~(tags: "untrusted") AND (parsed.extensions.subject_alt_name.dns_names: /.*hackthissite.org/)~
