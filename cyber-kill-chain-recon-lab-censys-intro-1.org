@@ -144,22 +144,31 @@
       - As of this tutorial, daemon seems to pull but not push to CTL
 
 ** Datasets: X.509 Certificates (2/2)
-# ***  Title:
-# Recon. Lab - Censys.io - Intro. (Part 4)
+#+BEGIN_SRC sh :results silent
+export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
+mkdir -p ${YOUTUBE_BASE}/current
+mkdir -p ${YOUTUBE_BASE}/old
 
-# *** Desc.
-# Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+$(youtube-upload \
+    --title="Recon. Lab - Censys.io - Intro. (Part 4)" \
+    --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+(Click SHOW MORE for more information...)
+From a high-level, in this tutorial we investigate:
+1) Censys' datasets: X.509 Certificates
 
-# From a high-level, in this tutorial we investigate:
-# 1) Censys' datasets: X.509 Certificates
+Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
 
-# Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
-
-# Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it.
-
-# *** Keywords:
-# cybersecurity, ethical hacking, infosec, information security, hacking,
-# securing the stack, sts, censys.io, reconnaissance, X.509, Certificate
+Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
+    --category="Science & Technology" \
+    --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, X.509, Certificate" \
+    --default-language="en" \
+    --default-audio-language="en" \
+    --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
+    --client-secrets=${YOUTUBE_BASE}/client_secrets.json \
+    --playlist "Recon. Lab: Censys.io" \
+    ${YOUTUBE_BASE}/current/current.mov && \
+ mv ${YOUTUBE_BASE}/current/current.mov ${YOUTUBE_BASE}/old/${RANDOM}.mov) &
+#+END_SRC
 
 #+ATTR_REVEAL: :frag (appear)
 - Parse certificate fields and annotate with metadata
