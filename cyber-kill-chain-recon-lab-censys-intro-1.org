@@ -183,6 +183,7 @@
 # TODO See if this is available for all datasets
 - Downloadable [[https://censys.io/data][raw data]]
   - Witness how a host/network has changed over time
+  - Additional data at scan.io
 - Timestamps
   + Overarching dataset
     - Ex: [[https://censys.io/data/80-http-get-full_ipv4/historical][IPv4 Data]]
@@ -194,3 +195,14 @@
 + View all results [[https://censys.io/ipv4/map?q=/.*hackthissite.*/][on a map]]
 + Summary of findings for [[https://censys.io/ipv4/report?q=%252F.%252Ahackthissite.%252A%252F][specific search fields]]
   + Available for all datasets
+    + Find available fields within the help section
+    + Ex: https://censys.io/ipv4/help
+      + Click on Data Definitions
+  + ~80.http.get.headers.server~
+  + ~80.http.get.headers.cache_control~
+  + ~80.http.get.headers.content_security_policy~
+  + ~80.http.get.headers.x_content_type_options~
+  + ~80.http.get.headers.x_xss_protection
+  + ~80.http.get.headers.x_powered_by
+  +
+  + ~80.http.get.status_code
