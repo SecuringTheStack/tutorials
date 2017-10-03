@@ -150,17 +150,17 @@
   mkdir -p ${YOUTUBE_BASE}/old
 
   $(youtube-upload \
-      --title="Recon. Lab - Censys.io - Intro. (Part 4)" \
+      --title="Recon. Lab - Censys.io - Intro. (Part 5)" \
       --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
   (Click SHOW MORE for more information...)
   From a high-level, in this tutorial we investigate:
-  1) Censys' datasets: X.509 Certificates
+  1) Censys' download/aggregation functionality
 
   Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
 
   Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
       --category="Science & Technology" \
-      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, X.509, Certificate" \
+      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance" \
       --default-language="en" \
       --default-audio-language="en" \
       --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
@@ -190,19 +190,77 @@
   + Within the dataset
     - ~updated_at~
 
-** Aggregation Features
+** Notable Aggregation Features
 #+ATTR_REVEAL: :frag (appear)
-+ View all results [[https://censys.io/ipv4/map?q=/.*hackthissite.*/][on a map]]
-+ Summary of findings for [[https://censys.io/ipv4/report?q=%252F.%252Ahackthissite.%252A%252F][specific search fields]]
-  + Available for all datasets
-    + Find available fields within the help section
-    + Ex: https://censys.io/ipv4/help
-      + Click on Data Definitions
-  + ~80.http.get.headers.server~
-  + ~80.http.get.headers.cache_control~
-  + ~80.http.get.headers.content_security_policy~
-  + ~80.http.get.headers.x_content_type_options~
-  + ~80.http.get.headers.x_xss_protection
-  + ~80.http.get.headers.x_powered_by
-  +
-  + ~80.http.get.status_code
++ ~Tools~ tab
+  1. View On Map
+     + [[https://censys.io/ipv4/map?q=/.*hackthissite.*/][Example]]
+     + Not available for every dataset
+       + Ex: Certificate dataset
+  2. View Report
+     - Finding it
+     - Available for all datasets
+     - Summary of findings for [[https://censys.io/ipv4/report?q=%252F.%252Ahackthissite.%252A%252F][specific search fields]]
+     - Find available fields within the help section
+       + Ex: https://censys.io/ipv4/help
+         + Click on ~Data Definitions~
+
+** IPv4 View Report Ex.
++ HTTP Header Digression
+  + HTTP Headers are the metadata that's attached to HTTP Requests/Responses
+  + Certain HTTP Headers have key security functionality
+  + Ex: ~curl -v hackthissite.org~
+    + The server's HTTP headers can instruct the browser to enable certain
+      security features
++ In the upcoming slides we'll investigate
+  + A few common security vulnerabilities within web apps
+  + The HTTP headers that mitigate the vulnerabilities
+
+** Caching Vulnerabilities
+1. Browser Cache
+   1. Browser can cache sensitive information
+      1. Ex: Session ID, SSNs, financial information, etc.
+   2. Google Chrome Ex:
+      1. Browse as a Guest
+      2. Browse random links on [[https://www.hackthissite.org]]
+         1. Make sure to go into the forum
+            1. [[https://www.hackthissite.org/forums/index.php]]
+      3. View [[chrome://cache][chrome://cache]]
+      4. Search for ~sid~
+      5. Q: Is there anything peculiar?
+   3. Ex:
+2. Mitigations: Aforementioned headers
+3. "Back" button
+   + Ex Sequence
+     1. Entering Sensitive Data
+     2. Logging Out
+     3. Clicking "Back"
+     4. Witnessing sensitive data
+   + Mitigations
+     + Aforementioned headers
+     + Leveraging HTTPS
+4. Headers used in mitigation
+   + ~80.http.get.headers.cache_control~
+   + ~80.http.get.headers.pragma~
+   + ~80.http.get.headers.expires~
+5. Note the complexity
+   + In general, different browsers leverage different headers in different ways
+   + It's very difficult to get this right
+6. Injection Vulnerabilities
+   * Headers involved
+     * ~80.http.get.headers.content_security_policy~
+     * ~80.http.get.headers.x_xss_protection~
+   * Cross Site Scripting (XSS)
+     * https://www.yourBANK.com/promo_offer?source=fd&q=intro_offer&transfer=<script>EVIL_CODE()</script>
+     * You click on the link because you only see the ~promo_offer~
+   * ~80.http.get.headers.x_content_type_options~
+   * ~80.http.get.headers.x_frame_options~
+7. ~80.http.get.headers.x_powered_by
+   +
+   + ~80.http.get.status_code
+
+   + ~80.http.get.headers.server~
+   + ~80.http.get.headers.set_cookie~
+   + ~80.http.get.headers.set_cookie~
+     + Fingerprint systems through cookies
+       + Ex: PHP
