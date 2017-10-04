@@ -210,7 +210,7 @@
   (Click SHOW MORE for more information...)
   From a high-level, in this tutorial we investigate:
   1) A live demo on how HTTP Headers can be misconfigured
-  2) How HTTP Headers work
+  2) How HTTP Headers work, specifically HTTP Strict Transport Layer Security (HSTS)
   3) Censys' Reporting Functionality
 
   Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
@@ -249,7 +249,23 @@
 ** HSTS Preload List
 + ~Strict-Transport-Security: max-age=31536000; includeSubdomains; preload~
 + But Zach, hackthissite is on Chromium's HSTS ~preload~ list, so this isn't a vulnerability!
-+
++ What is the preload list?
+  + A list of domains that force HTTPS over every connection
+  + This list is hardcoded into browsers, so a HTTP request can't even be attempted
+  + Most major browsers (Chrome, Firefox, Opera, Safari, IE 11 and Edge) have HSTS preload lists based on the Chrome list.
++ What happens if I dont use the preload list but I set the ~Strict-Transport-Security~ header?
+  + The initial request wont force HTTPS
+    + But after the browser recieves the header, it will force HTTPS on all subsequent requests
+    + The future duration is governed by the ~max-age~
+
+** HSTS Preload List
++ ~Strict-Transport-Security: max-age=31536000; includeSubdomains; preload~
++ But Zach, hackthissite is on Chromium's HSTS ~preload~ list, so this isn't a vulnerability!
++ Note that new entries are hardcoded into the Chrome source code and can take
+  several months before they reach the stable version.
+  + https://hstspreload.org/
+
+** HSTS Preload List
 
 ** Caching Vulns: Browser Cache
 * Yesterdays lecture with http strict content *
@@ -362,3 +378,4 @@ Notice that cookie doesn't have a HTTP only, thus an XSS risk (pivot into XSS he
    + ~80.http.get.headers.set_cookie~
      + Fingerprint systems through cookies
        + Ex: PHP
++ TODO: Need to loop all caching (and other header vulns) back to a censys search
