@@ -264,8 +264,14 @@
 + Note that new entries are hardcoded into the Chrome source code and can take
   several months before they reach the stable version.
   + https://hstspreload.org/
+** Censys search
+(not 80.http.get.headers.strict_transport_security:/.*max.*/) and
+(/.*hackthissite.*/)
+Make sure to use parens!
+Try 404 search
 
-** HSTS Preload List
+** HSTS Preload List: General Takeaways
++ It's easy to get h
 
 ** Caching Vulns: Browser Cache
 * Yesterdays lecture with http strict content *
