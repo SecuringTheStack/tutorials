@@ -190,33 +190,69 @@
   + Within the dataset
     - ~updated_at~
 
-** Notable Aggregation Features
+** Aggregation Feature: View On Map
 #+ATTR_REVEAL: :frag (appear)
-+ ~Tools~ tab
-  1. View On Map
-     + [[https://censys.io/ipv4/map?q=/.*hackthissite.*/][Example]]
-     + Not available for every dataset
-       + Ex: Certificate dataset
-  2. View Report
-     - Finding it
-     - Available for all datasets
-     - Summary of findings for [[https://censys.io/ipv4/report?q=%252F.%252Ahackthissite.%252A%252F][specific search fields]]
-     - Find available fields within the help section
-       + Ex: https://censys.io/ipv4/help
-         + Click on ~Data Definitions~
++ Accessed through the ~Tools~ tab
++ [[https://censys.io/ipv4/map?q=/.*hackthissite.*/][Ex.]]
++ Not available for every dataset
+  + Ex: Certificate dataset
 
-** IPv4 View Report Ex.
-+ HTTP Header Digression
-  + HTTP Headers are the metadata that's attached to HTTP Requests/Responses
-  + Certain HTTP Headers have key security functionality
-  + Ex: ~curl -v hackthissite.org~
-    + The server's HTTP headers can instruct the browser to enable certain
-      security features
+
+** Aggregation Feature: View Report
+#+BEGIN_SRC sh :results silent :exports none :noweb yes
+  export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
+  mkdir -p ${YOUTUBE_BASE}/current
+  mkdir -p ${YOUTUBE_BASE}/old
+
+  $(youtube-upload \
+      --title="Recon. Lab - Censys.io - Intro. (Part 6)" \
+      --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+  (Click SHOW MORE for more information...)
+  From a high-level, in this tutorial we investigate:
+  1) A live demo on how HTTP Headers can be misconfigured
+  2) How HTTP Headers work
+  3) Censys' Reporting Functionality
+
+  Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+  Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
+      --category="Science & Technology" \
+      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, hack this site, HTTP Headers, HTTP Strict Transport Layer Security, HSTS" \
+      --default-language="en" \
+      --default-audio-language="en" \
+      --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
+      --client-secrets=${YOUTUBE_BASE}/client_secrets.json \
+      --playlist "Recon. Lab: Censys.io" \
+      ${YOUTUBE_BASE}/current/current.mov && \
+   mv ${YOUTUBE_BASE}/current/current.mov ${YOUTUBE_BASE}/old/${RANDOM}.mov) &
+#+END_SRC
++ Summary of findings for [[https://censys.io/ipv4/report?q=%252F.%252Ahackthissite.%252A%252F][specific search fields]]
++ Accessed through the ~Tools~ tab
++ Available for all datasets
++ Find available aggregation fields within the help section
+  + Ex: https://censys.io/ipv4/help
+    + Click on ~Data Definitions~
+    + Ex. Search: ~header~
+    + We'll focus on the security related HTTP Headers
+
+** HTTP Header Digression
++ HTTP Headers are the metadata that's attached to HTTP Requests/Responses
++ Certain HTTP Headers have key security functionality
++ Ex: ~curl -v hackthissite.org~
+  + The server's HTTP headers can instruct the browser to enable certain
+    security features
 + In the upcoming slides we'll investigate
-  + A few common security vulnerabilities within web apps
-  + The HTTP headers that mitigate the vulnerabilities
+  + A few common vulnerabilities within web applications
+  + The HTTP Headers that mitigate these vulnerabilities
+  + A hackthissite search that looks for misconfigured HTTP Headers
 
-** Caching Vulnerabilities
+** HSTS Preload List
++ ~Strict-Transport-Security: max-age=31536000; includeSubdomains; preload~
++ But Zach, hackthissite is on Chromium's HSTS ~preload~ list, so this isn't a vulnerability!
++
+
+** Caching Vulns: Browser Cache
+* Yesterdays lecture with http strict content *
 1. Browser Cache
    1. Browser can cache sensitive information
       1. Ex: Session ID, SSNs, financial information, etc.
@@ -227,7 +263,69 @@
             1. [[https://www.hackthissite.org/forums/index.php]]
       3. View [[chrome://cache][chrome://cache]]
       4. Search for ~sid~
-      5. Q: Is there anything peculiar?
+      5. Q: Is anything peculiar?
+** Caching Vulns: PHP Search
++ Notice ~.php~ within https://www.hackthissite.org/forums/index.php
+  + We know the server side framework
++ Google search for ~php sid~
++ https://secure.php.net/manual/en/session.constants.php
+  + SID - Constant containing either the session name and session ID in the form
+    of "name=ID" or empty string if session ID was set in an appropriate session
+    cookie. This is the same id as the one returned by session_id().
+
+** Caching Vulns: Inspecting All Cookies
++ How does ~sid~ fit into the general cookie structure?
++ Ex:
+  + Navigate to hackthissite.org
+  + Open up Chrome Dev Tools
+  + Open the ~Cookie~ tab
+  + Q: Initial observations?
+    + ~phpbb3_28pla_sid~ correlates to the ~sid~
+    + On the surface, it appears that we have two session cookies!
+      + ~PHPSESSID~
+    + Q: What could this mean?
+** Caching Vulns:
+1) One auth session, One tracking session
+2) One can be a decoy
+2) Broken implementation
+One session for one part of the site.. one session for another
+Look at php docs, looks like it will use url param if cookie isnt available
+which cookie is being used? remove phpsessid and reauth
+remove url param and try to reauth.... remove url param, try to reauth with
+changed cookie... cant do it.  We know the order of presidence and that this
+cookie is what's being leveraged relative to php docs.  We could then read more
+into whatever PHP functionality is tied to this order of presidence
+
+
+Remove query string param and then remove php cookie.  Php cookie doesn't look
+like it's being leveraged
+
+Go into cookie tab, why does PHP have all of the flags that other cookie has?
+Thats a tell
+
+Auth via chrome into forum and delete all cookies and refresh
+Change url param back and forth, notice it logs in and logs out
+Try in firefox.. it doesn't work!
+What does this mean?
+curl
+'https://www.hackthissite.org/forums/index.php?sid=2eb509c64b11b07fe3655e7806ebdc9f'
+-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+--compressed | grep logout
+
+forum links are readily shared, if you are on a shared computer, or you can
+brute force the user agent string... you have the keys to someone's account
+
+But what about trying to auth into regular site with this cookie?  Not the
+forum?
+Try via URL param and via cookie.  Is the session being invalidated?
+Delete all cookies and notice PHP session id is the only logic
+
+Notice that cookie doesn't have a HTTP only, thus an XSS risk (pivot into XSS headers)
+** Caching Vulns: Inspecting All Cookies
++ Q: W
+
+
    3. Ex:
 2. Mitigations: Aforementioned headers
 3. "Back" button
