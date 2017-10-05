@@ -356,115 +356,115 @@
     + Notice ~Site Not Found~
     + Lack of headers finds abnormal situations
 
-** Caching Vulns: Browser Cache
-* Yesterdays lecture with http strict content *
-1. Browser Cache
-   1. Browser can cache sensitive information
-      1. Ex: Session ID, SSNs, financial information, etc.
-   2. Google Chrome Ex:
-      1. Browse as a Guest
-      2. Browse random links on [[https://www.hackthissite.org]]
-         1. Make sure to go into the forum
-            1. [[https://www.hackthissite.org/forums/index.php]]
-      3. View [[chrome://cache][chrome://cache]]
-      4. Search for ~sid~
-      5. Q: Is anything peculiar?
-** Caching Vulns: PHP Search
-+ Notice ~.php~ within https://www.hackthissite.org/forums/index.php
-  + We know the server side framework
-+ Google search for ~php sid~
-+ https://secure.php.net/manual/en/session.constants.php
-  + SID - Constant containing either the session name and session ID in the form
-    of "name=ID" or empty string if session ID was set in an appropriate session
-    cookie. This is the same id as the one returned by session_id().
+# ** Caching Vulns: Browser Cache
+# * Yesterdays lecture with http strict content *
+# 1. Browser Cache
+#    1. Browser can cache sensitive information
+#       1. Ex: Session ID, SSNs, financial information, etc.
+#    2. Google Chrome Ex:
+#       1. Browse as a Guest
+#       2. Browse random links on [[https://www.hackthissite.org]]
+#          1. Make sure to go into the forum
+#             1. [[https://www.hackthissite.org/forums/index.php]]
+#       3. View [[chrome://cache][chrome://cache]]
+#       4. Search for ~sid~
+#       5. Q: Is anything peculiar?
+# ** Caching Vulns: PHP Search
+# + Notice ~.php~ within https://www.hackthissite.org/forums/index.php
+#   + We know the server side framework
+# + Google search for ~php sid~
+# + https://secure.php.net/manual/en/session.constants.php
+#   + SID - Constant containing either the session name and session ID in the form
+#     of "name=ID" or empty string if session ID was set in an appropriate session
+#     cookie. This is the same id as the one returned by session_id().
 
-** Caching Vulns: Inspecting All Cookies
-+ How does ~sid~ fit into the general cookie structure?
-+ Ex:
-  + Navigate to hackthissite.org
-  + Open up Chrome Dev Tools
-  + Open the ~Cookie~ tab
-  + Q: Initial observations?
-    + ~phpbb3_28pla_sid~ correlates to the ~sid~
-    + On the surface, it appears that we have two session cookies!
-      + ~PHPSESSID~
-    + Q: What could this mean?
-** Caching Vulns:
-1) One auth session, One tracking session
-2) One can be a decoy
-2) Broken implementation
-One session for one part of the site.. one session for another
-Look at php docs, looks like it will use url param if cookie isnt available
-which cookie is being used? remove phpsessid and reauth
-remove url param and try to reauth.... remove url param, try to reauth with
-changed cookie... cant do it.  We know the order of presidence and that this
-cookie is what's being leveraged relative to php docs.  We could then read more
-into whatever PHP functionality is tied to this order of presidence
-
-
-Remove query string param and then remove php cookie.  Php cookie doesn't look
-like it's being leveraged
-
-Go into cookie tab, why does PHP have all of the flags that other cookie has?
-Thats a tell
-
-Auth via chrome into forum and delete all cookies and refresh
-Change url param back and forth, notice it logs in and logs out
-Try in firefox.. it doesn't work!
-What does this mean?
-curl
-'https://www.hackthissite.org/forums/index.php?sid=2eb509c64b11b07fe3655e7806ebdc9f'
--H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
---compressed | grep logout
-
-forum links are readily shared, if you are on a shared computer, or you can
-brute force the user agent string... you have the keys to someone's account
-
-But what about trying to auth into regular site with this cookie?  Not the
-forum?
-Try via URL param and via cookie.  Is the session being invalidated?
-Delete all cookies and notice PHP session id is the only logic
-
-Notice that cookie doesn't have a HTTP only, thus an XSS risk (pivot into XSS headers)
-** Caching Vulns: Inspecting All Cookies
-+ Q: W
+# ** Caching Vulns: Inspecting All Cookies
+# + How does ~sid~ fit into the general cookie structure?
+# + Ex:
+#   + Navigate to hackthissite.org
+#   + Open up Chrome Dev Tools
+#   + Open the ~Cookie~ tab
+#   + Q: Initial observations?
+#     + ~phpbb3_28pla_sid~ correlates to the ~sid~
+#     + On the surface, it appears that we have two session cookies!
+#       + ~PHPSESSID~
+#     + Q: What could this mean?
+# ** Caching Vulns:
+# 1) One auth session, One tracking session
+# 2) One can be a decoy
+# 2) Broken implementation
+# One session for one part of the site.. one session for another
+# Look at php docs, looks like it will use url param if cookie isnt available
+# which cookie is being used? remove phpsessid and reauth
+# remove url param and try to reauth.... remove url param, try to reauth with
+# changed cookie... cant do it.  We know the order of presidence and that this
+# cookie is what's being leveraged relative to php docs.  We could then read more
+# into whatever PHP functionality is tied to this order of presidence
 
 
-   3. Ex:
-2. Mitigations: Aforementioned headers
-3. "Back" button
-   + Ex Sequence
-     1. Entering Sensitive Data
-     2. Logging Out
-     3. Clicking "Back"
-     4. Witnessing sensitive data
-   + Mitigations
-     + Aforementioned headers
-     + Leveraging HTTPS
-4. Headers used in mitigation
-   + ~80.http.get.headers.cache_control~
-   + ~80.http.get.headers.pragma~
-   + ~80.http.get.headers.expires~
-5. Note the complexity
-   + In general, different browsers leverage different headers in different ways
-   + It's very difficult to get this right
-6. Injection Vulnerabilities
-   * Headers involved
-     * ~80.http.get.headers.content_security_policy~
-     * ~80.http.get.headers.x_xss_protection~
-   * Cross Site Scripting (XSS)
-     * https://www.yourBANK.com/promo_offer?source=fd&q=intro_offer&transfer=<script>EVIL_CODE()</script>
-     * You click on the link because you only see the ~promo_offer~
-   * ~80.http.get.headers.x_content_type_options~
-   * ~80.http.get.headers.x_frame_options~
-7. ~80.http.get.headers.x_powered_by
-   +
-   + ~80.http.get.status_code
+# Remove query string param and then remove php cookie.  Php cookie doesn't look
+# like it's being leveraged
 
-   + ~80.http.get.headers.server~
-   + ~80.http.get.headers.set_cookie~
-   + ~80.http.get.headers.set_cookie~
-     + Fingerprint systems through cookies
-       + Ex: PHP
-+ TODO: Need to loop all caching (and other header vulns) back to a censys search
+# Go into cookie tab, why does PHP have all of the flags that other cookie has?
+# Thats a tell
+
+# Auth via chrome into forum and delete all cookies and refresh
+# Change url param back and forth, notice it logs in and logs out
+# Try in firefox.. it doesn't work!
+# What does this mean?
+# curl
+# 'https://www.hackthissite.org/forums/index.php?sid=2eb509c64b11b07fe3655e7806ebdc9f'
+# -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)
+# AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+# --compressed | grep logout
+
+# forum links are readily shared, if you are on a shared computer, or you can
+# brute force the user agent string... you have the keys to someone's account
+
+# But what about trying to auth into regular site with this cookie?  Not the
+# forum?
+# Try via URL param and via cookie.  Is the session being invalidated?
+# Delete all cookies and notice PHP session id is the only logic
+
+# Notice that cookie doesn't have a HTTP only, thus an XSS risk (pivot into XSS headers)
+# ** Caching Vulns: Inspecting All Cookies
+# + Q: W
+
+
+#    3. Ex:
+# 2. Mitigations: Aforementioned headers
+# 3. "Back" button
+#    + Ex Sequence
+#      1. Entering Sensitive Data
+#      2. Logging Out
+#      3. Clicking "Back"
+#      4. Witnessing sensitive data
+#    + Mitigations
+#      + Aforementioned headers
+#      + Leveraging HTTPS
+# 4. Headers used in mitigation
+#    + ~80.http.get.headers.cache_control~
+#    + ~80.http.get.headers.pragma~
+#    + ~80.http.get.headers.expires~
+# 5. Note the complexity
+#    + In general, different browsers leverage different headers in different ways
+#    + It's very difficult to get this right
+# 6. Injection Vulnerabilities
+#    * Headers involved
+#      * ~80.http.get.headers.content_security_policy~
+#      * ~80.http.get.headers.x_xss_protection~
+#    * Cross Site Scripting (XSS)
+#      * https://www.yourBANK.com/promo_offer?source=fd&q=intro_offer&transfer=<script>EVIL_CODE()</script>
+#      * You click on the link because you only see the ~promo_offer~
+#    * ~80.http.get.headers.x_content_type_options~
+#    * ~80.http.get.headers.x_frame_options~
+# 7. ~80.http.get.headers.x_powered_by
+#    +
+#    + ~80.http.get.status_code
+
+#    + ~80.http.get.headers.server~
+#    + ~80.http.get.headers.set_cookie~
+#    + ~80.http.get.headers.set_cookie~
+#      + Fingerprint systems through cookies
+#        + Ex: PHP
+# + TODO: Need to loop all caching (and other header vulns) back to a censys search
