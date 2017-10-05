@@ -246,32 +246,63 @@
   + The HTTP Headers that mitigate these vulnerabilities
   + A hackthissite search that looks for misconfigured HTTP Headers
 
-** HSTS Preload List
-+ ~Strict-Transport-Security: max-age=31536000; includeSubdomains; preload~
-+ But Zach, hackthissite is on Chromium's HSTS ~preload~ list, so this isn't a vulnerability!
-+ What is the preload list?
-  + A list of domains that force HTTPS over every connection
-  + This list is hardcoded into browsers, so a HTTP request can't even be attempted
-  + Most major browsers (Chrome, Firefox, Opera, Safari, IE 11 and Edge) have HSTS preload lists based on the Chrome list.
-+ What happens if I dont use the preload list but I set the ~Strict-Transport-Security~ header?
-  + The initial request wont force HTTPS
-    + But after the browser recieves the header, it will force HTTPS on all subsequent requests
-    + The future duration is governed by the ~max-age~
+** Potential Questions About Last Tutorial
++ Will touch upon HSTS preload list to answer potential questions about the last tutorial
+  + The answers of these questions will be pivotal to understanding
+    + Recon
+    + The "why" behind using Censys to query HTTP Headers
 
 ** HSTS Preload List
++ What is the preload list?
+  + Comprised of websites that opt-in to forcing HTTPS over every connection
+  + This list is hardcoded into browsers, so a HTTP request to a domain can
+    NEVER occur
+    + Ex: Chrome Dev Tools ~307 Redirect~
+  + Chromium project maintains the "master" list
+    + Most major browsers HSTS preload lists inherit from the Chromium project's
+      list
+
+** HSTS Questions
 + ~Strict-Transport-Security: max-age=31536000; includeSubdomains; preload~
-+ But Zach, hackthissite is on Chromium's HSTS ~preload~ list, so this isn't a vulnerability!
-+ Note that new entries are hardcoded into the Chrome source code and can take
-  several months before they reach the stable version.
-  + https://hstspreload.org/
++ What happens if I dont use the preload list but I set the ~Strict-Transport-Security~ header?
+  + The browser wont force HTTPS on the initial request
+    + But after the browser recieves the header in the response, it will force HTTPS on all subsequent requests
+    + The future duration is governed by the ~max-age~
++ How do I know if a site is on the preload list?
+  + chrome://net-internals
+
+** Recap of issues found in last tutorial
++ We saw how hackthissite is leveraging HSTS to enforce encryption
+  + I.e., not doing true server side validation
+  + This led to an unencrypted connection
+    + This could allow a MiTM to inject malicious code on the page and steal the ~PHPSESSID~
+    + Ex: ~PHPSESSID~'s lack of ~HttpOnly~ flag
++ Server Side validation Ex:
+  + ~curl -v http://accounts.google.com/SignUp~
+  + Ideally, should have this in addition to HSTS headers
+
+** HSTS Assumption/Question
++ Q: hackthissite is on the ~preload~ list, why shouldn't we offload the validation work
+  to the browser? To do otherwise would be a waste of server resources.
++ Whats wrong
+  + "Note that new entries are hardcoded into the Chrome source code and can take
+    several months before they reach the stable version."
+    + Found on https://hstspreload.org/
+  + Alarm: "Offload security tasks (or any validation) to a browser"
+    + This is common practice
+    + Browser can help, but there always needs to be server-side validation
+
+** Bringing it all together
++ How does this relate to recon within censys.io?
++ Focus your searches on common sources of misconfiguration
+  + HTTP Header misconfiguration
+  + Leverage the aggregation tool to easily find descripencies/unusual behavior
 ** Censys search
 (not 80.http.get.headers.strict_transport_security:/.*max.*/) and
 (/.*hackthissite.*/)
 Make sure to use parens!
 Try 404 search
 
-** HSTS Preload List: General Takeaways
-+ It's easy to get h
 
 ** Caching Vulns: Browser Cache
 * Yesterdays lecture with http strict content *
