@@ -255,23 +255,24 @@
 ** HSTS Preload List
 + What is the preload list?
   + Comprised of websites that opt-in to forcing HTTPS over every connection
-  + This list is hardcoded into browsers, so a HTTP request to a domain can
+  + This list is hard-coded into browsers, so a HTTP request to a website can
     NEVER occur
     + Ex: Chrome Dev Tools ~307 Redirect~
-  + Chromium project maintains the "master" list
-    + Most major browsers HSTS preload lists inherit from the Chromium project's
-      list
+  + Chromium project maintains the "master" preload list
+    + Most major browsers inherit from this list
 
-** HSTS Questions
+** General HSTS Questions
 + ~Strict-Transport-Security: max-age=31536000; includeSubdomains; preload~
 + What happens if I dont use the preload list but I set the ~Strict-Transport-Security~ header?
   + The browser wont force HTTPS on the initial request
-    + But after the browser recieves the header in the response, it will force HTTPS on all subsequent requests
+    + But after the browser receives the header in the response, it will force HTTPS on all subsequent requests
     + The future duration is governed by the ~max-age~
+    + The domain scope is governed by ~includeSubdomains~
 + How do I know if a site is on the preload list?
   + chrome://net-internals
+  + Recon: Signals more mature security posture
 
-** Recap of issues found in last tutorial
+** Recap Of Issues Found In Last Tutorial
 + We saw how hackthissite is leveraging HSTS to enforce encryption
   + I.e., not doing true server side validation
   + This led to an unencrypted connection
@@ -285,7 +286,7 @@
 + Q: hackthissite is on the ~preload~ list, why shouldn't we offload the validation work
   to the browser? To do otherwise would be a waste of server resources.
 + Whats wrong
-  + "Note that new entries are hardcoded into the Chrome source code and can take
+  + "Note that new entries are hard-coded into the Chrome source code and can take
     several months before they reach the stable version."
     + Found on https://hstspreload.org/
   + Alarm: "Offload security tasks (or any validation) to a browser"
