@@ -311,21 +311,30 @@
   + HTTP Header misconfiguration
   + Leverage the aggregation tool to easily find discrepancies/unusual behavior
 
-** Censys HSTS Search
+** HSTS Report
 + Aggregate based on HSTS headers
-  + Ex Query: /.*hackthissite.*/
-    + [[https://censys.io/ipv4/report?q=%2528%252F.*hackthissite.*%252F%2529&field=80.http.get.headers.strict_transport_security.raw&max_buckets=][Aggregation report]]
++ Ex Query: /.*hackthissite.*/
+  + [[https://censys.io/ipv4/report?q=%2528%252F.*hackthissite.*%252F%2529&field=80.http.get.headers.strict_transport_security.raw&max_buckets=][Aggregation report]]
+  + Results
+    + Different headers could mean different webservers
     + ~max-age=31536000~
       + no ~preload~
       + no ~includeSubdomains~
       + Could those subdomains have faulty encryption?
     + Note count (68) vs. nonnull_count (49)
-    + Retrieve 19 hosts via
-(not 80.http.get.headers.strict_transport_security:/.*max.*/) and
-(/.*hackthissite.*/)
-Make sure to use parens!
-Try 404 search
 
+** Find Domains That Dont Leverage Hsts
++ ~(not 80.http.get.headers.strict_transport_security:/.*max.*/) and
+(/.*hackthissite.*/)~
+  + [[https://censys.io/ipv4?q=%2528not+80.http.get.headers.strict_transport_security%253A%252F.*max.*%252F%2529+and+%2528%252F.*hackthissite.*%252F%2529][Ex.]]
+  + Simulate null search through UI
+  + ~not~ and ~()~
+  + Will only pick up domains, not individual routes
+    + http://www.hackthissite.org/pages/errors/404.php
+    + Censys is a compliment, not the solution
+  + Search results
+    + Notice ~Site Not Found~
+    + Lack of headers finds abnormal situations
 
 ** Caching Vulns: Browser Cache
 * Yesterdays lecture with http strict content *
