@@ -246,6 +246,27 @@
   + The HTTP Headers that mitigate these vulnerabilities
   + A hackthissite search that looks for misconfigured HTTP Headers
 
+** Aggregation Feature: View Report
++ Summary of findings for [[https://censys.io/ipv4/report?q=%252F.%252Ahackthissite.%252A%252F][specific search fields]]
++ Accessed through the ~Tools~ tab
++ Available for all datasets
++ Find available aggregation fields within the help section
+  + Ex: https://censys.io/ipv4/help
+    + Click on ~Data Definitions~
+    + Ex. Search: ~header~
+    + We'll focus on the security related HTTP Headers
+
+** HTTP Header Digression
++ HTTP Headers are the metadata that's attached to HTTP Requests/Responses
++ Certain HTTP Headers have key security functionality
++ Ex: ~curl -v hackthissite.org~
+  + The server's HTTP headers can instruct the browser to enable certain
+    security features
++ In the upcoming slides we'll investigate
+  + A few common vulnerabilities within web applications
+  + The HTTP Headers that mitigate these vulnerabilities
+  + A hackthissite search that looks for misconfigured HTTP Headers
+
 ** Potential Questions About Last Tutorial
 + Will touch upon HSTS preload list to answer potential questions about the last tutorial
   + The answers of these questions will be pivotal to understanding
@@ -288,7 +309,7 @@
 + Q: hackthissite is on the ~preload~ list, why shouldn't we offload the validation work
   to the browser? To do otherwise would be a waste of server resources.
 + Whats wrong with this question?
-  #+ATTR_REVEAL: :frag (appear)
+#+ATTR_REVEAL: :frag (appear)
 + Regarding the preload list
   + "Note that new entries are hard-coded into the Chrome source code and can take
     several months before they reach the stable version."
@@ -313,7 +334,7 @@
 
 ** HSTS Report
 + Aggregate based on HSTS headers
-+ Ex Query: /.*hackthissite.*/
++ Ex Query: ~/.*hackthissite.*/~
   + [[https://censys.io/ipv4/report?q=%2528%252F.*hackthissite.*%252F%2529&field=80.http.get.headers.strict_transport_security.raw&max_buckets=][Aggregation report]]
   + Results
     + Different headers could mean different webservers
@@ -321,11 +342,10 @@
       + no ~preload~
       + no ~includeSubdomains~
       + Could those subdomains have faulty encryption?
-    + Note count (68) vs. nonnull_count (49)
+    + Note ~count~ (68) vs. ~nonnull_count~ (49)
 
-** Find Domains That Dont Leverage Hsts
-+ ~(not 80.http.get.headers.strict_transport_security:/.*max.*/) and
-(/.*hackthissite.*/)~
+** Find Domains That Dont Leverage HSTS
++ ~(not 80.http.get.headers.strict_transport_security:/.*max.*/) and (/.*hackthissite.*/)~
   + [[https://censys.io/ipv4?q=%2528not+80.http.get.headers.strict_transport_security%253A%252F.*max.*%252F%2529+and+%2528%252F.*hackthissite.*%252F%2529][Ex.]]
   + Simulate null search through UI
   + ~not~ and ~()~
