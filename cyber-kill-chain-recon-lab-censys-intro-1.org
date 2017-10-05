@@ -276,22 +276,35 @@
 + We saw how hackthissite is leveraging HSTS to enforce encryption
   + I.e., not doing true server side validation
   + This led to an unencrypted connection
-    + This could allow a MiTM to inject malicious code on the page and steal the ~PHPSESSID~
-    + Ex: ~PHPSESSID~'s lack of ~HttpOnly~ flag
+  + Given ~PHPSESSID~'s lack of ~Secure~ flag
+    + The session could be sent over HTTP
+    + Unreliable ~Secure~ flag behavior
+    + Ex: Show in browser
 + Server Side validation Ex:
   + ~curl -v http://accounts.google.com/SignUp~
   + Ideally, should have this in addition to HSTS headers
 
-** HSTS Assumption/Question
+** HSTS Security Question
 + Q: hackthissite is on the ~preload~ list, why shouldn't we offload the validation work
   to the browser? To do otherwise would be a waste of server resources.
-+ Whats wrong
++ Whats wrong with this question?
+  #+ATTR_REVEAL: :frag (appear)
++ Regarding the preload list
   + "Note that new entries are hard-coded into the Chrome source code and can take
     several months before they reach the stable version."
     + Found on https://hstspreload.org/
-  + Alarm: "Offload security tasks (or any validation) to a browser"
-    + This is common practice
-    + Browser can help, but there always needs to be server-side validation
+
+** HSTS Security Question (Part 2)
++ "Offload tasks to a browser/client"
+  + Alarm!  This is an untrusted environment
+    + Browser only validation is a common practice
++ Recon mindset
+  + What are the industry trends?
+    + Cloud
+      + Amazon's SDKs allow direct calls to databases
+      + Pushes validation to browser through HTTP headers
+    + General
+      + Notice the browser taking on the more of the workload
 
 ** Bringing it all together
 + How does this relate to recon within censys.io?
