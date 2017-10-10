@@ -352,10 +352,38 @@
     + Notice the browser taking on the more of the workload
 
 ** Bringing it all together
-+ How does this relate to recon within Censys?
-+ Focus your searches on common sources of browser misconfiguration
-  + HTTP Header misconfiguration
-  + Leverage the aggregation tool to easily find discrepancies/unusual behavior
+#+BEGIN_SRC sh :results silent :exports none :noweb yes
+  export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
+  export TITLE="Recon. Lab - Censys.io - Intro. (Part 8)"
+  mkdir -p ${YOUTUBE_BASE}/current
+  mkdir -p ${YOUTUBE_BASE}/old
+
+  $(youtube-upload \
+      --title=${YOUTUBE_BASE} \
+      --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+  (Click SHOW MORE for more information...)
+  From a high-level, in this tutorial we investigate:
+  1) How to leverage Censys to find HTTP Header misconfiguration
+  2) Search Operators: AND, NOT
+  3) Why git.hackthissite.org would be a big target for hackers
+
+  Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+  Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
+      --category="Science & Technology" \
+      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, hack this site, HTTP Headers, HTTP Strict Transport Layer Security, HSTS" \
+      --default-language="en" \
+      --default-audio-language="en" \
+      --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
+      --client-secrets=${YOUTUBE_BASE}/client_secrets.json \
+      --playlist "Recon. Lab: Censys.io" \
+      ${YOUTUBE_BASE}/current/current.mov && \
+   mv ${YOUTUBE_BASE}/current/current.mov ${YOUTUBE_BASE}/old/${TITLE}.mov) &
+#+END_SRC
++ Given the browser's increasing role in "security" and overall workload
+  + Focus your searches on common sources of browser misconfiguration
+    + HTTP Header misconfiguration
+    + Leverage the aggregation tool to easily find discrepancies/unusual behavior
 
 ** HSTS Report
 + Aggregate based on HSTS headers
@@ -367,129 +395,28 @@
       + no ~preload~
       + no ~includeSubdomains~
       + Could those subdomains have faulty encryption?
-    + Note ~count~ (68) vs. ~nonnull_count~ (49)
+    + Note ~count~ (65) vs. ~nonnull_count~ (45)
 
 ** Find Domains That Dont Leverage HSTS
 + ~(not 80.http.get.headers.strict_transport_security:/.*max.*/) and (/.*hackthissite.*/)~
   + [[https://censys.io/ipv4?q=%2528not+80.http.get.headers.strict_transport_security%253A%252F.*max.*%252F%2529+and+%2528%252F.*hackthissite.*%252F%2529][Ex.]]
   + Simulate null search through UI
   + ~not~ and ~()~
-  + Will only pick up domains, not individual routes
+  + Will only pick up ip addresses and the correlated domain, not individual routes
     + http://www.hackthissite.org/pages/errors/404.php
     + Censys is a compliment, not the solution
   + Search results
     + Notice ~Site Not Found~
     + Lack of headers finds abnormal situations
 
-# ** Caching Vulns: Browser Cache
-# * Yesterdays lecture with http strict content *
-# 1. Browser Cache
-#    1. Browser can cache sensitive information
-#       1. Ex: Session ID, SSNs, financial information, etc.
-#    2. Google Chrome Ex:
-#       1. Browse as a Guest
-#       2. Browse random links on [[https://www.hackthissite.org]]
-#          1. Make sure to go into the forum
-#             1. [[https://www.hackthissite.org/forums/index.php]]
-#       3. View [[chrome://cache][chrome://cache]]
-#       4. Search for ~sid~
-#       5. Q: Is anything peculiar?
-# ** Caching Vulns: PHP Search
-# + Notice ~.php~ within https://www.hackthissite.org/forums/index.php
-#   + We know the server side framework
-# + Google search for ~php sid~
-# + https://secure.php.net/manual/en/session.constants.php
-#   + SID - Constant containing either the session name and session ID in the form
-#     of "name=ID" or empty string if session ID was set in an appropriate session
-#     cookie. This is the same id as the one returned by session_id().
-
-# ** Caching Vulns: Inspecting All Cookies
-# + How does ~sid~ fit into the general cookie structure?
-# + Ex:
-#   + Navigate to hackthissite.org
-#   + Open up Chrome Dev Tools
-#   + Open the ~Cookie~ tab
-#   + Q: Initial observations?
-#     + ~phpbb3_28pla_sid~ correlates to the ~sid~
-#     + On the surface, it appears that we have two session cookies!
-#       + ~PHPSESSID~
-#     + Q: What could this mean?
-# ** Caching Vulns:
-# 1) One auth session, One tracking session
-# 2) One can be a decoy
-# 2) Broken implementation
-# One session for one part of the site.. one session for another
-# Look at php docs, looks like it will use url param if cookie isnt available
-# which cookie is being used? remove phpsessid and reauth
-# remove url param and try to reauth.... remove url param, try to reauth with
-# changed cookie... cant do it.  We know the order of presidence and that this
-# cookie is what's being leveraged relative to php docs.  We could then read more
-# into whatever PHP functionality is tied to this order of presidence
-
-
-# Remove query string param and then remove php cookie.  Php cookie doesn't look
-# like it's being leveraged
-
-# Go into cookie tab, why does PHP have all of the flags that other cookie has?
-# Thats a tell
-
-# Auth via chrome into forum and delete all cookies and refresh
-# Change url param back and forth, notice it logs in and logs out
-# Try in firefox.. it doesn't work!
-# What does this mean?
-# curl
-# 'https://www.hackthissite.org/forums/index.php?sid=2eb509c64b11b07fe3655e7806ebdc9f'
-# -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)
-# AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
-# --compressed | grep logout
-
-# forum links are readily shared, if you are on a shared computer, or you can
-# brute force the user agent string... you have the keys to someone's account
-
-# But what about trying to auth into regular site with this cookie?  Not the
-# forum?
-# Try via URL param and via cookie.  Is the session being invalidated?
-# Delete all cookies and notice PHP session id is the only logic
-
-# Notice that cookie doesn't have a HTTP only, thus an XSS risk (pivot into XSS headers)
-# ** Caching Vulns: Inspecting All Cookies
-# + Q: W
-
-
-#    3. Ex:
-# 2. Mitigations: Aforementioned headers
-# 3. "Back" button
-#    + Ex Sequence
-#      1. Entering Sensitive Data
-#      2. Logging Out
-#      3. Clicking "Back"
-#      4. Witnessing sensitive data
-#    + Mitigations
-#      + Aforementioned headers
-#      + Leveraging HTTPS
-# 4. Headers used in mitigation
-#    + ~80.http.get.headers.cache_control~
-#    + ~80.http.get.headers.pragma~
-#    + ~80.http.get.headers.expires~
-# 5. Note the complexity
-#    + In general, different browsers leverage different headers in different ways
-#    + It's very difficult to get this right
-# 6. Injection Vulnerabilities
-#    * Headers involved
-#      * ~80.http.get.headers.content_security_policy~
-#      * ~80.http.get.headers.x_xss_protection~
-#    * Cross Site Scripting (XSS)
-#      * https://www.yourBANK.com/promo_offer?source=fd&q=intro_offer&transfer=<script>EVIL_CODE()</script>
-#      * You click on the link because you only see the ~promo_offer~
-#    * ~80.http.get.headers.x_content_type_options~
-#    * ~80.http.get.headers.x_frame_options~
-# 7. ~80.http.get.headers.x_powered_by
-#    +
-#    + ~80.http.get.status_code
-
-#    + ~80.http.get.headers.server~
-#    + ~80.http.get.headers.set_cookie~
-#    + ~80.http.get.headers.set_cookie~
-#      + Fingerprint systems through cookies
-#        + Ex: PHP
-# + TODO: Need to loop all caching (and other header vulns) back to a censys search
+** git.hackthissite.org
++ Why would hackers target this?
+  #+ATTR_REVEAL: :frag (appear)
+  + git
+    + Intellectual property
+    + Wikis can contain credentials, on-boarding docs
+  + SMTP
+    + Mail server
+    + Many unauthenticated SMTP servers
+    + Social Engineering
+      + "Human manipulation"
