@@ -18,6 +18,11 @@
 #+REVEAL_PLUGINS: notes
 #+REVEAL_EXTRA_CSS: file:///Users/zachroof/repos/weekly-sts-in-prog/local.css
 # TODO FT:Security-Controls, nmap
+# Add in Errata doc and rephrase it's existance in the first lecture
+# Link to this in all show notes
+** Errata
++ Changes to wildcard search at the front of query
++ UI Changes
 ** General Information (1/2)
 # *** Title:
 # Recon. Lab - Censys.io - Intro.
@@ -420,3 +425,59 @@
     + Many unauthenticated SMTP servers
     + Social Engineering
       + "Human manipulation"
+
+** IPv4 Dataset Results: DNS vs IP recap
++ Last tutorial recap
+  + ~(not 80.http.get.headers.strict_transport_security:/.*max.*/) and (/.*hackthissite.*/)~
+  + [[https://censys.io/ipv4?q=%2528not+80.http.get.headers.strict_transport_security%253A%252F.*max.*%252F%2529+and+%2528%252F.*hackthissite.*%252F%2529][Ex.]]
++ ~curl -vL git.hackthissite.org~
+  + There's an HSTS header, is Censys lying?!
++ ~dig +short git.hackthissite.org~
+  + Output correlates to Censys UI
+  + Within the IPv4 hosts dataset, Censys initiates connection via the IP
+    + Not DNS
++ Why am I bringing this up again?
+  + Common source of confusion
+  + To illustrate an error I made in a previous tutorial
+
+** Unintended Logic Error
++ ~curl -vL git.hackthissite.org~
+  + ~Strict-Transport-Security: max-age=31536000~
+    + I suggested that this header be set on HTTP responses
+      + What could happen if the browser accepted the above header via HTTP?
+        + https://tools.ietf.org/html/rfc6797#section-6.1.1
+        + In this context, Firefox doesn't accept this header
+          + https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+    + Takeaway
+      + How easy would it have been for a site admin to think that their site
+        was protected, but in reality, the browser wasn't even accepting the
+        header in the first place?
+      + For headers found via Censys, investigate how different browsers deal
+        with edge cases
+    + Edge case ex
+      + ~curl -vL git.hackthissite.org~
+        + Do you find anything duplicated?
+
+** Multiple HTTP Headers
++ Source of bizarre behavior
++ Each browser can handle this differently
+  + Chrome
+    + https://bugs.chromium.org/p/chromium/issues/detail?id=537523
+  + Firefox
+    + https://bugzilla.mozilla.org/show_bug.cgi?id=1074642
+      + Multiple HSTS headers values would be concatented via Necko
+        + Necko is Firefox's networking library
+        + ~Strict-Transport-Security: max-age=3600, max-age=3600~
+      + Firefox when then reject because the header was malformed and not enable HSTS
+  + "Correct" behavior
+    + ~If a UA receives more than one STS header field in an HTTP response
+      message over secure transport, then the UA MUST process only the first such header field.~
+      + Consequences for other headers that you find via Censys
+
+** Censys handling of multiple HTTP headers
++ Ex: ~git.hackthissite.org~
+  + [[https://censys.io/ipv4/report?q=%2528%252F.*hackthissite.*%252F%2529&field=80.http.get.headers.strict_transport_security.raw&max_buckets=][Aggregation report]]
+  + We should find...
+    + ~Strict-Transport-Security: max-age=0; includeSubdomains; preload~
+  #+ATTR_REVEAL: :frag (appear)
+  + Censys only reports 1 header value
