@@ -359,18 +359,19 @@
 ** Bringing it all together
 #+BEGIN_SRC sh :results silent :exports none :noweb yes
   export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
-  export TITLE="Recon. Lab - Censys.io - Intro. (Part 8)"
+  export COURSE_NAME="Recon. Lab: Censys.io"
+  export VIDEO_NAME="Negation Searches (Part 8)"
+  export COMPLETE_COURSE="${COURSE_NAME} - ${VIDEO_NAME}"
   mkdir -p ${YOUTUBE_BASE}/current
   mkdir -p ${YOUTUBE_BASE}/old
 
   $(youtube-upload \
-      --title=${YOUTUBE_BASE} \
+      --title="${COMPLETE_COURSE}" \
       --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
   (Click SHOW MORE for more information...)
   From a high-level, in this tutorial we investigate:
-  1) How to leverage Censys to find HTTP Header misconfiguration
-  2) Search Operators: AND, NOT
-  3) Why git.hackthissite.org would be a big target for hackers
+  1) Negation Searches
+  2) Targeting git repos
 
   Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
 
@@ -381,9 +382,9 @@
       --default-audio-language="en" \
       --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
       --client-secrets=${YOUTUBE_BASE}/client_secrets.json \
-      --playlist "Recon. Lab: Censys.io" \
+      --playlist "${COURSE_NAME}" \
       ${YOUTUBE_BASE}/current/current.mov && \
-   mv ${YOUTUBE_BASE}/current/current.mov ${YOUTUBE_BASE}/old/${TITLE}.mov) &
+   mv "${YOUTUBE_BASE}/current/current.mov" "${YOUTUBE_BASE}/old/${COMPLETE_COURSE}.mov") &
 #+END_SRC
 + Given the browser's increasing role in "security" and overall workload
   + Focus your searches on common sources of browser misconfiguration
@@ -426,58 +427,147 @@
     + Social Engineering
       + "Human manipulation"
 
-** IPv4 Dataset Results: DNS vs IP recap
-+ Last tutorial recap
-  + ~(not 80.http.get.headers.strict_transport_security:/.*max.*/) and (/.*hackthissite.*/)~
-  + [[https://censys.io/ipv4?q=%2528not+80.http.get.headers.strict_transport_security%253A%252F.*max.*%252F%2529+and+%2528%252F.*hackthissite.*%252F%2529][Ex.]]
-+ ~curl -vL git.hackthissite.org~
+** Censys Changes To UI And Search Syntax
+#+BEGIN_SRC sh :results silent :exports none :noweb yes
+  export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
+  export COURSE_NAME="Recon. Lab: Censys.io"
+  export VIDEO_NAME="UI and Search Changes (Part 9)"
+  export COMPLETE_COURSE="${COURSE_NAME} - ${VIDEO_NAME}"
+  mkdir -p ${YOUTUBE_BASE}/current
+  mkdir -p ${YOUTUBE_BASE}/old
+
+  $(youtube-upload \
+      --title="${COMPLETE_COURSE}" \
+      --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+  (Click SHOW MORE for more information...)
+  From a high-level, in this tutorial we investigate:
+  1) Changes to UI and Search
+  2) Cross-checking Censys results
+
+  Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+  Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
+      --category="Science & Technology" \
+      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, hack this site, HTTP Headers, HTTP Strict Transport Layer Security, HSTS, Search Syntax" \
+      --default-language="en" \
+      --default-audio-language="en" \
+      --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
+      --client-secrets=${YOUTUBE_BASE}/client_secrets.json \
+      --playlist "${COURSE_NAME}" \
+      ${YOUTUBE_BASE}/current/current.mov && \
+   mv "${YOUTUBE_BASE}/current/current.mov" "${YOUTUBE_BASE}/old/${COMPLETE_COURSE}.mov") &
+#+END_SRC
++ Search Changes
+  + Censys now doesn't support wildcard searches on the beginning of the query
+  + ~(not 80.http.get.headers.strict_transport_security:/max.*/) and (/hackthissite.*/)~
++ UI Changes
+  + [[https://censys.io/ipv4/198.148.81.155][Ex]]
+
+** Recap Of Search Results
+#+ATTR_REVEAL: :frag (appear)
++ ~(not 80.http.get.headers.strict_transport_security:/max.*/) and (/hackthissite.*/)~
+  + Found ~git.hackthissite.org~ through the [[https://censys.io/ipv4?q=%2528not+80.http.get.headers.strict_transport_security%253A%252Fmax.*%252F%2529+and+%2528%252Fhackthissite.*%252F%2529][search]]
++ In next slide, we'll cross-check results via ~curl -IL git.hackthissite.org~
+  + ~-I~ Sends a ~HEAD~ request
+  + Many frameworks and languages treat "HEAD" as a "GET" request, albeit one without any body in the response. If a security constraint was set on "GET" requests such that only "authenticatedUsers" could access GET requests for a particular servlet or resource, it would be bypassed for the "HEAD" version. This allowed unauthorized blind submission of any privileged GET request.
+    + https://www.owasp.org/index.php/Test_HTTP_Methods
+  + Con
+    + Can't see the response body
+  + Takeaway: Try multiple HTTP methods: ~GET~, ~CAT~, ~HEAD~
+    + Censys primarily initiates connections via ~GET~ on port 80
+      + That 80 request is then upgraded
+
+** Cross-Check Results Via IP and DNS
+#+ATTR_REVEAL: :frag (appear)
++ ~curl -IL git.hackthissite.org~
   + There's an HSTS header, is Censys lying?!
-+ ~dig +short git.hackthissite.org~
++ ~curl -IL $(dig +short git.hackthissite.org)~
   + Output correlates to Censys UI
-  + Within the IPv4 hosts dataset, Censys initiates connection via the IP
+  + Within the ~IPv4 Hosts~ dataset, Censys initiates connection via the IP address
     + Not DNS
 + Why am I bringing this up again?
   + Common source of confusion
   + To illustrate an error I made in a previous tutorial
+    + I don't edit these items, we are all on a learning journey together
 
-** Unintended Logic Error
-+ ~curl -vL git.hackthissite.org~
+** Zach's Error
+#+ATTR_REVEAL: :frag (appear)
++ ~curl -IL git.hackthissite.org~
   + ~Strict-Transport-Security: max-age=31536000~
     + I suggested that this header be set on HTTP responses
+      + "What could this hurt?"
       + What could happen if the browser accepted the above header via HTTP?
+        #+ATTR_REVEAL: :frag (appear)
         + https://tools.ietf.org/html/rfc6797#section-6.1.1
         + In this context, Firefox doesn't accept this header
           + https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
-    + Takeaway
-      + How easy would it have been for a site admin to think that their site
-        was protected, but in reality, the browser wasn't even accepting the
-        header in the first place?
-      + For headers found via Censys, investigate how different browsers deal
-        with edge cases
-    + Edge case ex
-      + ~curl -vL git.hackthissite.org~
-        + Do you find anything duplicated?
+
+** Zach's Error Reflection
++ How easy would it have been for a site admin to think that their site
+  was protected, but in reality, the browser wasn't even accepting the
+  HSTS header in the first place?
++ For headers found via Censys, investigate how different browsers deal
+  with
+  + Supporting the header
+    + Ex: https://caniuse.com/#feat=stricttransportsecurity
+    + Is this a site that has to support legacy browsers?
+      + Ex: government, etc.
+  + Edge cases
+    + ~curl -IL git.hackthissite.org~
+      + Do you find anything duplicated?
+      + Why would this happen?
+      + What does this tell you from a recon perspective?
 
 ** Multiple HTTP Headers
 + Source of bizarre behavior
-+ Each browser can handle this differently
++ We'll look at this behavior and how Censys handles these edge cases
++ Each browser can handle multiple headers differently
   + Chrome
     + https://bugs.chromium.org/p/chromium/issues/detail?id=537523
   + Firefox
     + https://bugzilla.mozilla.org/show_bug.cgi?id=1074642
-      + Multiple HSTS headers values would be concatented via Necko
+      + Multiple HSTS headers would be concatenated via Necko
         + Necko is Firefox's networking library
         + ~Strict-Transport-Security: max-age=3600, max-age=3600~
-      + Firefox when then reject because the header was malformed and not enable HSTS
-  + "Correct" behavior
-    + ~If a UA receives more than one STS header field in an HTTP response
-      message over secure transport, then the UA MUST process only the first such header field.~
-      + Consequences for other headers that you find via Censys
+      + Firefox would reject because the header was malformed and not enable HSTS
+        + Even if the header was correctly set via HTTPS
 
-** Censys handling of multiple HTTP headers
-+ Ex: ~git.hackthissite.org~
-  + [[https://censys.io/ipv4/report?q=%2528%252F.*hackthissite.*%252F%2529&field=80.http.get.headers.strict_transport_security.raw&max_buckets=][Aggregation report]]
-  + We should find...
-    + ~Strict-Transport-Security: max-age=0; includeSubdomains; preload~
-  #+ATTR_REVEAL: :frag (appear)
-  + Censys only reports 1 header value
+** HSTS "Correct" Behavior
++ "If a UA receives more than one STS header field in an HTTP response message over secure transport, then the UA MUST process only the first such header field."
+  + https://tools.ietf.org/html/rfc6797#section-8.1
++ What's if someone could influence the header ordering?
++ Think of the header ordering while doing recon
+
+** Censys Handling Of Multiple HTTP Headers
++ Censys only reports 1 header value
++ Takeaway: After your initial Censys search, look for multiple headers via ~curl~
+  + Scanners don't usually notice these edge cases
+
+** Searching For 500 Errors
++ Previously saw 404, 302
++ Why search for 500?
+  + Differences in security headers
+  + Error logs
+    + Env variables
+    + Version numbers
+  + One of the most important status codes to check
++ Censys Aggregation
+  + ~80.http.get.status_code~
+  + [[https://censys.io/ipv4/report?q=%252Fhackthissite.*%252F&field=80.http.get.status_code&max_buckets=][Ex.]]
+
+** Invoking 500 Errors: Malformed Host Header
++ Malformed ~Host~
+  + Routing logic is usually done on the ~Host~ header
+  + HTTPS route
+    + ~curl -Lv -H "Host: whoDaManNow?!" https://git.hackthissite.org~
+      + Not leveraging ~-I~ in this example to hunt for errors in response body
+    + Notice lack of HSTS header
+  + HTTP route
+    + ~curl -Lv -H "Host: whoDaManNow?!" git.hackthissite.org~
+    + Similar results
+      + I'll leave it to you to try (or script) all combinations
+
+** Invoking 500 Errors: Via Direct IP Request
++ ~curl -Lkv https://$(dig +short git.hackthissite.org)~
+  + ~-k~ force's HTTPS even though the cert is invalid
+  + Why would the certificate be invalid?
