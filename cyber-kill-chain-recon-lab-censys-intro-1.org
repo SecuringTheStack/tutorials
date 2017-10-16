@@ -20,6 +20,7 @@
 # TODO FT:Security-Controls, nmap
 # Add in Errata doc and rephrase it's existance in the first lecture
 # Link to this in all show notes
+# Think about changing name to Censys and HTTP headers or Censys and recon techniques?
 ** Errata
 + Changes to wildcard search at the front of query
 + UI Changes
@@ -428,7 +429,7 @@
       + "Human manipulation"
 
 ** Censys Changes To UI And Search Syntax
-#+BEGIN_SRC sh :results silent :exports none :noweb yes
+#+BEGIN_SRC sh :results silent :exports none :noweb yes :async
   export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
   export COURSE_NAME="Recon. Lab: Censys.io"
   export VIDEO_NAME="UI and Search Changes (Part 9)"
@@ -491,6 +492,35 @@
     + I don't edit these items, we are all on a learning journey together
 
 ** Zach's Error
+#+BEGIN_SRC sh :results silent :exports none :noweb yes :async
+  export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
+  export COURSE_NAME="Recon. Lab: Censys.io"
+  export VIDEO_NAME="Logic Flaws (Part 10)"
+  export COMPLETE_COURSE="${COURSE_NAME} - ${VIDEO_NAME}"
+  mkdir -p ${YOUTUBE_BASE}/current
+  mkdir -p ${YOUTUBE_BASE}/old
+
+  $(youtube-upload \
+      --title="${COMPLETE_COURSE}" \
+      --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+  (Click SHOW MORE for more information...)
+  From a high-level, in this tutorial we investigate:
+  1) Logic Flaws to consider while searching with Censys
+
+  Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+  Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
+      --category="Science & Technology" \
+      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, hack this site, HTTP Headers, HTTP Strict Transport Layer Security, RFC, browser bugs, bug forums" \
+      --default-language="en" \
+      --default-audio-language="en" \
+      --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
+      --client-secrets=${YOUTUBE_BASE}/client_secrets.json \
+      --playlist "${COURSE_NAME}" \
+      ${YOUTUBE_BASE}/current/current.mov && \
+   mv "${YOUTUBE_BASE}/current/current.mov" "${YOUTUBE_BASE}/old/${COMPLETE_COURSE}.mov") &
+#+END_SRC
+
 #+ATTR_REVEAL: :frag (appear)
 + ~curl -IL git.hackthissite.org~
   + ~Strict-Transport-Security: max-age=31536000~
@@ -544,6 +574,36 @@
   + Scanners don't usually notice these edge cases
 
 ** Searching For 500 Errors
+#+BEGIN_SRC sh :results silent :exports none :noweb yes :async
+  export YOUTUBE_BASE=/Users/zachroof/repos/youtube-upload
+  export COURSE_NAME="Recon. Lab: Censys.io"
+  export VIDEO_NAME="Invoking 500 Errors (Part 11)"
+  export COMPLETE_COURSE="${COURSE_NAME} - ${VIDEO_NAME}"
+  mkdir -p ${YOUTUBE_BASE}/current
+  mkdir -p ${YOUTUBE_BASE}/old
+
+  $(youtube-upload \
+      --title="${COMPLETE_COURSE}" \
+      --description="Lets learn about Censys.io, a brilliant internet wide scanner with an extremely powerful search engine.  Take your recon to the next level!
+  (Click SHOW MORE for more information...)
+  From a high-level, in this tutorial we investigate:
+  1) Why should we look for 500 errors?
+  2) Multiple methods of invoking 500 errors
+  3) Censys aggregation search for status codes
+
+  Series Notes: https://github.com/zachroof/sts-tutorials/blob/master/cyber-kill-chain-recon-lab-censys-intro-1.org
+
+  Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
+      --category="Science & Technology" \
+      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, hack this site, HTTP Headers, 500 Errors" \
+      --default-language="en" \
+      --default-audio-language="en" \
+      --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
+      --client-secrets=${YOUTUBE_BASE}/client_secrets.json \
+      --playlist "${COURSE_NAME}" \
+      ${YOUTUBE_BASE}/current/current.mov && \
+   mv "${YOUTUBE_BASE}/current/current.mov" "${YOUTUBE_BASE}/old/${COMPLETE_COURSE}.mov") &
+#+END_SRC
 + Previously saw 404, 302
 + Why search for 500?
   + Differences in security headers
