@@ -675,3 +675,50 @@
       + Doesn't set the ~Secure~ flag
       + Is scoped to ~sso.jerkybank.com~ and ~*.sso.jerkybank.com~
     + The Auth. Cookie will be sent unencrypted
+** Caching Vulns Intro: Tutorial Scope
+   :LOGBOOK:
+   CLOCK: [2017-11-14 Tue 09:13]--[2017-11-14 Tue 09:38] =>  0:25
+   CLOCK: [2017-11-11 Sat 11:28]--[2017-11-11 Sat 11:53] =>  0:25
+   :END:
+- Leverage Censys to find ~Cache-Control~ header misconfiguration
+- Focus on ~Cache-Control~, but there are other headers involved
+  in caching
+  - ~Pragma~
+  - ~Expires~
+
+** Caching Vulns Intro: What Is A Caching Vulnerability?
++ Sensitive information is saved that shouldn't be
++ Focus on a subsection of caching vulnerabilities that arises from placing sensitive information
+  within a ~GET~ request
+  + Ex: Session ID, SSNs, financial information, etc.
++ In general, why would this be a bad practice?
+  + Proxy Log Dork from Google Hacking series
+    + [[http://sts.watch/proxy-dork][sts.watch/proxy-dork]]
+  + Sharing a link
+    + Upcoming Ex.
+    + Leverage ~inanchor~ Google operator to find links with sensitive information
+      + [[http://sts.watch/admin-dork][sts.watch/admin-dork]]
+  +  Browser history
+
+** Caching Vulns Intro: Other Practical Risks
++ ~GET~ request/response can be stored in
+  + Browser cache
+    + Browser cache files are stored in common places which are accessible to malware
+  + Shared caching server
+    + Ex: ISP caching server
+    + Caching server compromise
+
+** Caching Vulns Intro: ~GET~ Caching Vulnerability Exs.
+   :LOGBOOK:
+   CLOCK: [2017-11-14 Tue 09:50]--[2017-11-14 Tue 10:15] =>  0:25
+   :END:
+1. Sensitive token within API route
+   + https://example.com/256993ac-ba65-11e7-8e6d-0242ac110003/profile
+     + Go to this route in incognito mode.  Are you still authenticated?
+2. Sensitive token within query string parameters
+   + https://example.com/profile?sid=256993ac-ba65-11e7-8e6d-0242ac110003&fst=1jshdjk-js1s-ejsl-jd18-jd73jsks7
+   + Certain web frameworks pass the session id via query string parameters
+     - Ex. Php
+     - Gives compatibility to browsers that disable cookies
+   + We'll leverage Censys to uncover this type of caching vulnerability in hackthissite
+     + Before we get there, we need a little more background information
