@@ -595,7 +595,7 @@
 
   Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it." \
       --category="Science & Technology" \
-      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, hack this site, HTTP Headers, 500 Errors" \
+      --tags="cybersecurity, ethical hacking, infosec, information security, hacking, securing the stack, sts, censys.io, reconnaissance, hack this site, HTTP Headers \
       --default-language="en" \
       --default-audio-language="en" \
       --credentials-file=${YOUTUBE_BASE}/my_credentials.json \
@@ -631,3 +631,47 @@
 + ~curl -Lkv https://$(dig +short git.hackthissite.org)~
   + ~-k~ force's HTTPS even though the cert is invalid
   + Why would the certificate be invalid?
+** Invoking 400 Errors: Malformed Host
++ The server cannot or will not process the request due to an apparent client
+  error (e.g., malformed request syntax, size too large, invalid request message
+  framing, or deceptive request routing)
+  + https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
++ ~curl -Lv -H "Host: /" https://git.hackthissite.org~
+  + ~-v~ shows us the ~Host~ being set for teaching purposes
++ Notice the nginx version leaked in the result
+  + ~<hr><center>nginx/1.4.4</center>~
+    + http://nginx.org/en/CHANGES-1.4
+    + http://nginx.org/en/security_advisories.html
+
+** Penetration Testing With Censys
++ You’re hired as a Penetration Tester for Jerky Bank and the following are true:
+  + Via a WiFi "guest" account, you have access to Jerky’s main internal network
+    + No network segmentation
+  + Through Censys, you find ~sso.jerkybank.com~ sets a more permissive HSTS header on 500 responses
+  + The permissive HSTS header doesn't set ~includeSubdomains~
+  + Auth cookie
+    + ~Set-Cookie: session=219ffwef9w0f; Domain=sso.jerkybank.com; Path=/;~
+      + No ~Secure~ directive
+      + ~Domain~ sends the cookie to ~sso.jerkybank.com~ and ~*.sso.jerkybank.com~
+        + https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+  + Jerky Bank leverages a public blog that most employees visit on a daily basis
+    + The blog’s comment feature allows for ~<img>~ embeds
+  + How could you get an employee’s auth cookie?
+
+** Penetration Testing with Censys (Part 2)
++ Hints
+  + Placing an ~<img>~ within the comments
+  + ~<img src="http://www.sso.jerkybank.com/bank.jpg">~
+    + What would this do?
+
+** Penetration Testing with Censys (Part 3)
++ A: On a popular blog article, embed an ~<img>~ that will leak the cookie
+  + ~<img src="http://www.sso.jerkybank.com/bank.jpg">~
+    + If ~www~ and ~bank.jpg~ don't exist, this flaw still works
+    + ~www~ makes this a unique subdomain
+      + Wouldn't be covered by HSTS due to lack of ~includeSubdomains~ directive
+  + This will force the browser to make an unencrypted request
+    + Recap: Auth. Cookie
+      + Doesn't set the ~Secure~ flag
+      + Is scoped to ~sso.jerkybank.com~ and ~*.sso.jerkybank.com~
+    + The Auth. Cookie will be sent unencrypted
