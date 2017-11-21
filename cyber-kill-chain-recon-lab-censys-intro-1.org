@@ -643,12 +643,13 @@
     + http://nginx.org/en/CHANGES-1.4
     + http://nginx.org/en/security_advisories.html
 
+
 ** Penetration Testing With Censys
 + You’re hired as a Penetration Tester for Jerky Bank and the following are true:
   + Via a WiFi "guest" account, you have access to Jerky’s main internal network
     + No network segmentation
-  + Through Censys, you find ~sso.jerkybank.com~ sets a more permissive HSTS header on 500 responses
-  + The permissive HSTS header doesn't set ~includeSubdomains~
+  + Through Censys, you find ~sso.jerkybank.com~ sets a permissive HSTS header
+    + The permissive HSTS header doesn't set ~includeSubdomains~
   + Auth cookie
     + ~Set-Cookie: session=219ffwef9w0f; Domain=sso.jerkybank.com; Path=/;~
       + No ~Secure~ directive
@@ -670,16 +671,13 @@
     + If ~www~ and ~bank.jpg~ don't exist, this flaw still works
     + ~www~ makes this a unique subdomain
       + Wouldn't be covered by HSTS due to lack of ~includeSubdomains~ directive
-  + This will force the browser to make an unencrypted request
+  + This will force the browser to make an unencrypted request on a network that
+    you're monitoring
     + Recap: Auth. Cookie
       + Doesn't set the ~Secure~ flag
       + Is scoped to ~sso.jerkybank.com~ and ~*.sso.jerkybank.com~
-    + The Auth. Cookie will be sent unencrypted
+
 ** Caching Vulns Intro: Tutorial Scope
-   :LOGBOOK:
-   CLOCK: [2017-11-14 Tue 09:13]--[2017-11-14 Tue 09:38] =>  0:25
-   CLOCK: [2017-11-11 Sat 11:28]--[2017-11-11 Sat 11:53] =>  0:25
-   :END:
 - Leverage Censys to find ~Cache-Control~ header misconfiguration
 - Focus on ~Cache-Control~, but there are other headers involved
   in caching
