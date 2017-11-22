@@ -720,3 +720,83 @@
      - Gives compatibility to browsers that disable cookies
    + We'll leverage Censys to uncover this type of caching vulnerability in hackthissite
      + Before we get there, we need a little more background information
+
+** Caching Vulns: Directives That Disable Caching
+#+ATTR_REVEAL: :frag (default)
++ What are directives?
+  + ~curl -IL accounts.google.com~
+  + ~Cache-Control: no-cache, no-store, max-age=0, must-revalidate~
+    + Each value between the ~,~
+    + Common ~Cache-Control~ directives that inhibit caching
+      + In this tutorial, we'll mainly focus on directives that allow caching
++ ~post-check=0~ ~pre-check=0~
+  + If you want to prevent caching, do not include the post-check and pre-check
+    directives. Doing so is completely unnecessary and results in wasted
+    bandwidth and HTTP header processing cycles.
+    + https://blogs.msdn.microsoft.com/ieinternals/2009/07/20/internet-explorers-cache-control-extensions/
+
+** Caching Vulns: Common Directives That Allow Caching
+   :LOGBOOK:
+   CLOCK: [2017-11-19 Sun 06:00]--[2017-11-19 Sun 06:25] =>  0:25
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Inspect these via Censys
++ ~private~
+  + Only browser will cache
+    + Intermediate caching servers wont cache
+      + Caching server between browser and ultimate target
++ ~public~
+  + No restrictions on caching
++ ~max-age=NUMBER_IN_SECONDS~
+  + Can be cached anywhere for ~NUMBER_IN_SECONDS~
+
+** Caching Vulns: Censys Aggregation Ex.
+#+ATTR_REVEAL: :frag (default)
++ Ex. [[https://censys.io/ipv4/report?q=%2528%252Fhackthissite.org%252F%2529+&field=80.http.get.headers.cache_control.raw&max_buckets=][Aggregation Report]] for ~/hackthissite.org/~
+  + Inspect directives that allow caching
+    + Quiz yourself
+  + Is there anything missing from our search?
+    #+ATTR_REVEAL: :frag (default)
+    + Sites where ~Cache-Control~ isn't set
+
+** Caching Vulns: Hints Of Misconfiguration Ex.
+#+ATTR_REVEAL: :frag (default)
++ What's the default behavior for ~Cache-Control~?
+  + Although caching is an entirely OPTIONAL feature of HTTP, it can be assumed
+    that reusing a cached response is desirable and that such reuse is the
+    default behavior when no requirement or local configuration prevents it.
+    + https://tools.ietf.org/html/rfc7234#page-5
++ ~(NOT 80.http.get.headers.cache_control:/.*/) AND (/hackthissite.org/)~
+  + [[https://censys.io/ipv4?q=%2528NOT+80.http.get.headers.cache_control%253A%252F.*%252F%2529+AND+%2528%252Fhackthissite.org%252F%2529][Aggregation Ex.]]
+  + Think about our caching discussion.  Does any site on this list standout?
+    + HINT: Think about the site that could easily store a sensitive ~GET~ request
+
+** Caching Vulns: Hints Of Misconfiguration Ex. (Part 2)
+#+ATTR_REVEAL: :frag (default)
++ hts.io
+  + Url Shortener
++ Ex: ~curl -vL hts.io/18A | grep --color SENSITIVE_TOKEN~
+  + Notice the lack of ~Cache-Control~
+  + ~SENSITIVE_TOKEN~ can easily be cached
+  + Whose responsibility is this? User or Site Admin?
+    #+ATTR_REVEAL: :frag (default)
+    + If there's no reason for caching the whole response, don't do it
+      + Defense In Depth
+    + This is a hint that we should further investigate HTS caching policy
+
+** Caching Vulns: Hunting For HTS Misconfiguration Ex.
+- Setup
+  - Go into Google Chrome as ~Guest~
+- Can you find an area on [[https://hackthissite.org][hackthissite.org]] that contains sensitive information
+  in the url?
+  - Hint: Think about an area that's likely to be shared
+
+** Caching Vulns: Hunting For HTS Misconfiguration Ex. (Part 2)
+1. Browse random links on [[https://hackthissite.org][hackthissite.org]]
+   1) Go into the forum and find a thread
+2. Search ~chrome://cache~ for ~?~
+   - Investigate items that look like tokens
+3. ~https://www.hackthissite.org/forums/viewtopic.php?f=8&t=10281&sid=733303ef8961026d75b2628b0ca3c8a2~
+   - Which query string parameter is sensitive?
+   - If a malicious user received this link, could they auth?
+     - Are there any other factors that are tied to auth?
