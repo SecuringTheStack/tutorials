@@ -1,4 +1,4 @@
-#+TITLE: Recon Lab: Google Hacking
+#+TITLE: Ethical Google Hacking
 #+DATE: Practical Search Operators For Recon
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:nil
@@ -28,7 +28,7 @@
       + Good for viewing categories
 + https://github.com/JohnTroony/Google-dorks/blob/master/google-dorks.txt
   + Good for overall search
-  + After we learn a search operator, search here for other applications 
+  + After we learn a search operator, search here for other applications
 
 ** Intro: General Info.
 + Level: All
@@ -40,7 +40,7 @@
     + Leveraging financial documents from Board Of Director's meetings
   + Searching nginx logs for error responses while adjusting for output variability
   + How to find admin area source code (or other functionality)
-  + Search timestamp ranges within PHP error logs 
+  + Search timestamp ranges within PHP error logs
 
 ** Intro: But Why?
 + From a recon perspective, why is Google hacking advantageous?
@@ -148,7 +148,7 @@
 + ~TERM 1~ ~AROUND(2)~ ~TERM 2~
   - ~TERM 1~ is within 2 words of ~TERM 2~
   - Capitalize ~AROUND~ for more consistent results
-+ Useful for searching documents where the ordering of terms can be customized 
++ Useful for searching documents where the ordering of terms can be customized
   + Ex: Logs
 + Nginx Log Ex:
   - ~- - - - "GET / HTTP/1.1" STATUS_CODE - - -~
