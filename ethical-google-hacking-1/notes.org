@@ -32,7 +32,7 @@
 
 ** Intro: General Info.
 + Level: All
-+ Course [[https://sts.wiki/google-hacking-1][Notes]] and [[https://sts.wiki/google-hacking-1-errata][Errata]]
++ Course [[https://sts.wiki/google-hacking-1][Notes]] and [[http://sts.wiki/google-hacking-1-errata][Errata]]
 + Focus on search operators in practical situations
   + Not every Google search operator will be covered
 + Examples
