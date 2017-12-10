@@ -17,7 +17,6 @@
 #+REVEAL_THEME: laravel
 #+REVEAL_PLUGINS: notes
 #+REVEAL_EXTRA_CSS: css/local.css
-# TODO FT:Security-Controls, nmap, test
 ** BEFORE RELEASE                                                  :noexport:
 + Create Errata and Tutorial Notes.  Link to them in slides with the format...
   + Course [[https://sts.wiki/google-hacking-1][Notes]] and [[https://sts.wiki/google-hacking-1-errata][Errata]]
@@ -188,7 +187,9 @@ curl.stdout.on('data', function(data) {
        + Data from 3rd party APIs
   2. The command/process has enough privileges to execute the unexpected command/s
 
-* Injection Mitigation: The Basics
+* Injection Controls: The Basics
++ Security Control
+  + Countermeasure
 + To the extent possible, don't place untrusted data into an execution context
   + Maybe there's already a mapping within the application which provides the given information
   + Attach data to a user's server-side session object
@@ -197,7 +198,7 @@ curl.stdout.on('data', function(data) {
     + Let your framework inform your code what RESTFul method was invoked
     + I.e., don't place user-provided CRUD actions directly into an execution context
 
-* Injection Mitigation: The Basics (CONT.)
+* Injection Controls: The Basics (CONT.)
 + Enforce principal of least privilege
   + Server
     + Instantiate all server processes with a highly restricted user
@@ -211,57 +212,67 @@ curl.stdout.on('data', function(data) {
     + IDE Integration
       + Tutorial notes
 
-* Injection Mitigation: Compensating Controls (CONT.)
-  + What is a compensating control?
-  + Leverage programs that limit the injection risk
-    + ~paranoid-request~
-      + Helps mitigate injection based risks
-        + E.g., ~curl context~ with ~localhost~
-      + https://github.com/uber-common/paranoid-request
-    + ~execFile~
-      #+BEGIN_SRC javascript
-      var execFile = require('child_process').execFile;
-      var user_defined_url = "example.com/callback"
-      execFile("/usr/bin/curl", [user_defined_url]);
-      curl.stdout.on('data', function(data) {
-        console.log(data);
-      });
+* Injection Compensating Controls: Alt. Execution
++ What is a compensating control?
++ Leverage programs that limit the injection risk
+  + ~paranoid-request~
+    + Helps mitigate injection based risks
+      + E.g., ~curl context~ with ~localhost~
+    + https://github.com/uber-common/paranoid-request
+  + ~execFile~
+    #+BEGIN_SRC javascript
+    var execFile = require('child_process').execFile;
+    var user_defined_url = "example.com/callback"
+    execFile("/usr/bin/curl", [user_defined_url]);
+    curl.stdout.on('data', function(data) {
+      console.log(data);
+    });
+    #+END_SRC
+    + Doesn't directly spawn a shell (interpreter)
+    + Invokes ~curl~ as a new process
+    + Only leverage if a module like ~paranoid-request~ doesn't exist
+
+* Injection Compensating Controls: Whitelisting
++ Whitelist expected application values
+  + https://validatejs.org
+    + Share validations between client/server (if running node.js)
+    + Declare validations at json attribute level
+      + Ex: https://validatejs.org/#examples
+    + Validators
+      + ~inclusion~
+        + whitelist
+      + ~format~
+        + If a predefined list isn't possible possible, validate by regex
+      + ~length~
+        + Unintended behavior of whitelisted values
+
+* Injection Compensating Controls: Whitelisting (CONT.)
++ Utilities
+  + ~cleanAttributes~
+    + Returns an object that only contains the whitelisted attributes. It
+      will remove all attributes that have a falsy value in the whitelist.
+    + Helps mitigate mass assignment risks
++ Supplementary notes for other validation libraries
+
+* Injection Compensating Controls: Character Encoding
++ Certain estimates place ~UTF-8~ usage at 90% (Dec, 2017)
++ Whitelist expected character encoding
+  1. Validate the character encoding that's coming from the client
+     + Python ex.
+      #+BEGIN_SRC python
+      "localhost".encode("utf-8")
+      "localhost".encode("utf-32")
       #+END_SRC
-      + Doesn't directly spawn a shell (interpreter)
-      + Invokes ~curl~ as a new process
-      + Only leverage if a module like ~paranoid-request~ doesn't exist
-
-* Injection Mitigation: Compensating Controls (CONT.)
-  + Whitelist expected application values
-    + https://validatejs.org/
-      + Share validations between client/server
-      + Declare validations at json attribute level
-        + Ex: https://validatejs.org/#examples
-      + Validators
-        + ~inclusion~
-          + whitelist
-        + ~format~
-          + If a predefined list isn't possible possible, validate by regex
-        + Validate expected length
-      + Supplementary notes for other validation libraries
-  + Whitelist expected character encoding
-    1. Validate the character encoding that's coming from the client
-       + Certain estimates place ~UTF-8~ usage at 90% (Dec, 2017)
-       + Python ex.
-        #+BEGIN_SRC python
-        "localhost".encode("utf-8")
-        "localhost".encode("utf-32")
-        #+END_SRC
-       + Assume that ~exec~ or ~curl~ could automatically decode other character sets
-         + Could be a way to bypass input validation
-       + https://github.com/sonicdoe/detect-character-encoding
-         + Ex: Reject a string if not 90% confident that the string is ~UTF-8~
-  + Accepting special characters within the input
-    + Different run contexts have different escape sequences
+     + Assume that ~exec~ or ~curl~ could automatically decode other character sets
+       + Could be a way to bypass input validation
+     + https://github.com/sonicdoe/detect-character-encoding
+       + Ex: Reject a string if not 90% confident that the string is ~UTF-8~
++ Accepting special characters within the input
+  + Different run contexts have different escape sequences
 
 
-  + Crash gracefully
-    + Especially with risky input
++ Crash gracefully
+  + Especially with risky input
 
 ** Blogs
 + For all OWASP Top Ten
@@ -354,9 +365,13 @@ queries.
 - [[https://cwe.mitre.org/data/definitions/917.html][CWE-917: Expression
   Language Injection]]
 - [[https://portswigger.net/kb/issues/00101080_serversidetemplateinjection][PortSwigger:
-  Server-side template injection]]
+  Server-side template injection]] * Local Vars                                                       :noexport: # Local variables: # before-save-hook: org-reveal-export-current-subtree # end:
 
 * Local Vars                                                       :noexport:
 # Local variables:
 # before-save-hook: org-reveal-export-current-subtree
 # end:
+
+  #+BEGIN_SRC shell
+ls -la
+  #+END_SRC
