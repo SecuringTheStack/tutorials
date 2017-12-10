@@ -1,0 +1,362 @@
+#+TITLE: Injection Fundamentals
+#+DATE: Practical Search Operators For Recon
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:nil
+#+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
+#+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:"c"
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: .
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: laravel
+#+REVEAL_PLUGINS: notes
+#+REVEAL_EXTRA_CSS: css/local.css
+# TODO FT:Security-Controls, nmap, test
+** BEFORE RELEASE                                                  :noexport:
++ Create Errata and Tutorial Notes.  Link to them in slides with the format...
+  + Course [[https://sts.wiki/google-hacking-1][Notes]] and [[https://sts.wiki/google-hacking-1-errata][Errata]]
+    + Make sure these links are in every video's description area
++ Confirm level (Beg, Int, Advanced, or All)
++ Create "Base" Tutorial
+  + Explains a concept with very concise examples
+    + Each example is linked to a distinct, seperate tutorial
+      + Seperate tutorial contains
+        + A live app that users can exploit a given vulnerability
+        + Code examples
+  + Links to frameworks that can mitigate a given area in (Put in show notes
+    area under each tutorial)
+    + Javascript
+    + Python
+    + Java
+    + Ruby
+    + PHP
+  + Make fonts better for code examples.  Look at original css from web.  Fix
+    width of code window in css
+
+** Todo                                                            :noexport:
+   :LOGBOOK:
+   CLOCK: [2017-11-23 Thu 03:26]--[2017-11-23 Thu 03:51] =>  0:25
+   :END:
+   + show AND/OR syntax with certs heh
+   + https://github.com/cujanovic/SSRF-Testing/
+   + Find shodan searches via popular lists on shodan.io and through book
+     + Integrate them into this tutorial
+   + Track how hackthissite has been patched over time?
+   + Make sure that all links in github are resolving correctly for ALL tutorials
+   + Searches
+     + Search for juicy response codes: 500, etc
+     + scans.io
+     + censys maltago transformations
+   + Automation
+     + Within weekly sts
+       + Automate current tutorial going into this repo
+       + Publish to various formats
+       + Trigger browser refresh on save
+   + "Censys Additional Information" tutorial
+     + Academic paper
+     + https://scans.io/
+     + https://groups.google.com/a/censys.io/forum/#!forumsearch/
+   + In Chrome Lecture (Part 7), I made the argument that on the redirect,
+     google should be setting the HSTS header... actually, the spec recommends
+     otherwise. You shouldn't be settings it on unencrypted connections
+   + Say that there might be some changes once Censys becomes commerical
+   + Errata:
+     + In this doc, every lecture will have a parent bullet-point.
+     + For any slide with an errata, do a subheading called "errata"
+     + Export these errata to given page that is correlated to the overarching
+       tutorial series
+
+   + Categories
+     + Directly from a user
+     + Has been touched by a user at some point (form field at signup)
+     + Remote File inclusion
+     + Server side request forgery
+     + Mitigations
+       + Look for groupings within AVFS
+   + TODO Update all examples for syntax highlighting
+   +
+* Supplementary tutorials
++ Running as nobody user
+  + This is insecure if multiple processes are running as this user
++ Local/unicode attacks
++ Directory traversal
+* Future OWASP Tutorials
++ Go through these for each area
++ https://github.com/OWASP/ASVS/tree/master/3.1/en
++ https://f1.holisticinfosecforwebdevelopers.com/chap06.html#web-applications-identify-risks-lack-of-input-validation-and-sanitisation
+* TODO before launch
+http://scottksmith.com/blog/2015/06/08/secure-node-apps-against-owasp-top-10-injection/
+https://github.com/mysqljs/mysql#escaping-query-values
+* OWASP
+  + Open Web Application Security Project (OWASP) (owasp.org)
+  + Notable Content
+    + [[https://www.youtube.com/user/OWASPGLOBAL][Videos]]
+    + [[https://www.owasp.org/index.php/OWASP_Cheat_Sheet_Series][Cheatsheets]]
+  + OWASP Top 10
+    + Top 10 security threats to web applications
+      + Crowd sourced metadata
+      + TODO Insert license?
+
+* Injection Intro
++ 2017 OWASP Top 10
+  + #1 Risk
++ General overview
+  + 80/20
++ Supplementary material
+  + Find these in the course notes
+  + Code
+    + Granular coding example/s
+  + Article/s
+    + Recommendations for other programming languages
+
+* User Defined Callback URL
++ Webhook functionality within node.js application
+  + Leveraging ~GET~ for simplicity
+  #+BEGIN_SRC javascript
+  var exec = require('child_process').exec;
+  var user_defined_url = "example.com/callback"
+  var curl = exec("curl " + user_defined_url);
+  curl.stdout.on('data', function(data) {
+    console.log(data);
+  });
+  #+END_SRC
++ Injection is introducing data with malicous intent
+  + This data could include unexpected commands that the program runs
+  + Main question to ask
+    + What malicious data could be /injected/ into ~user_defined_url~?
+     + ~exec~ and ~curl~ contexts
+      + syntax and semantics
+
+* User Defined Callback URL: Exec Context
+#+BEGIN_SRC javascript
+var exec = require('child_process').exec;
+var user_defined_url = "example.com/callback"
+var curl = exec("curl " + user_defined_url);
+curl.stdout.on('data', function(data) {
+  console.log(data);
+});
+#+END_SRC
++ What input could be inserted into ~user_defined_url~ to exploit the ~exec~ context?
+  + Hint: Think about the syntax
+  + ~; echo c > /proc/sysrq-trigger~
+    + https://unix.stackexchange.com/questions/66197/how-to-cause-kernel-panic-with-a-single-command
+    + Many other examples
+  + ~;~
+    + Syntactical Injection
+      + Exploiting "special characters" for a given intrepreter
+        + ~exec()~ leverages ~/bin/sh~ on unix based systems
+
+* User Defined Callback URL: Curl Context
+#+BEGIN_SRC javascript
+var exec = require('child_process').exec;
+var user_defined_url = "example.com/callback"
+var curl = exec("curl " + user_defined_url);
+curl.stdout.on('data', function(data) {
+  console.log(data);
+});
+#+END_SRC
++ What input could be inserted into ~user_defined_url~ to exploit the ~curl~ context?
++ ~curl~ context
+  + ~user_defined_url~ == ~localhost~
+  + ~user_defined_url~ == ~http://169.254.169.254/latest/meta-data/~
+    + EC2 metadata
+  + Semantic injection
+    + Exploiting the underlying /meaning/
+      + Not the syntax
+
+* Identifying Injection Risks
+#+BEGIN_SRC javascript
+var exec = require('child_process').exec;
+var user_defined_url = "example.com/callback"
+var curl = exec("curl " + user_defined_url);
+curl.stdout.on('data', function(data) {
+  console.log(data);
+});
+#+END_SRC
++ Items needed for successful attack
+  1. Placing untrusted data into an execution context
+     + Untrusted
+       + User data
+         + Includes persisted user data
+       + Any data that isn't under your control
+       + Data from 3rd party APIs
+  2. The command/process has enough privileges to execute the unexpected command/s
+
+* Injection Mitigation: The Basics
++ To the extent possible, don't place untrusted data into an execution context
+  + Maybe there's already a mapping within the application which provides the given information
+  + Attach data to a user's server-side session object
++ Let your framework be a buffer between you and your user
+  + Ex: Leverage a RESTFul API for all CRUD actions
+    + Let your framework inform your code what RESTFul method was invoked
+    + I.e., don't place user-provided CRUD actions directly into an execution context
+
+* Injection Mitigation: The Basics (CONT.)
++ Enforce principal of least privilege
+  + Server
+    + Instantiate all server processes with a highly restricted user
+      + Disable write access to code
+      + Supplementary tutorial
+  + Code
+    + Ex: RESTFul Role Based Access Control (RBAC)
+      + Each user is assigned a role
+      + A given role is restricted to different API routes and RESTFul methods
+  + Leverage code analysis tools to flag potential issues
+    + IDE Integration
+      + Tutorial notes
+
+* Injection Mitigation: Compensating Controls (CONT.)
+  + What is a compensating control?
+  + Leverage programs that limit the injection risk
+    + ~paranoid-request~
+      + Helps mitigate injection based risks
+        + E.g., ~curl context~ with ~localhost~
+      + https://github.com/uber-common/paranoid-request
+    + ~execFile~
+      #+BEGIN_SRC javascript
+      var execFile = require('child_process').execFile;
+      var user_defined_url = "example.com/callback"
+      execFile("/usr/bin/curl", [user_defined_url]);
+      curl.stdout.on('data', function(data) {
+        console.log(data);
+      });
+      #+END_SRC
+      + Doesn't directly spawn a shell (interpreter)
+      + Invokes ~curl~ as a new process
+      + Only leverage if a module like ~paranoid-request~ doesn't exist
+
+* Injection Mitigation: Compensating Controls (CONT.)
+  + Whitelist expected application values
+    + https://validatejs.org/
+      + Share validations between client/server
+      + Declare validations at json attribute level
+        + Ex: https://validatejs.org/#examples
+      + Validators
+        + ~inclusion~
+          + whitelist
+        + ~format~
+          + If a predefined list isn't possible possible, validate by regex
+        + Validate expected length
+      + Supplementary notes for other validation libraries
+  + Whitelist expected character encoding
+    1. Validate the character encoding that's coming from the client
+       + Certain estimates place ~UTF-8~ usage at 90% (Dec, 2017)
+       + Python ex.
+        #+BEGIN_SRC python
+        "localhost".encode("utf-8")
+        "localhost".encode("utf-32")
+        #+END_SRC
+       + Assume that ~exec~ or ~curl~ could automatically decode other character sets
+         + Could be a way to bypass input validation
+       + https://github.com/sonicdoe/detect-character-encoding
+         + Ex: Reject a string if not 90% confident that the string is ~UTF-8~
+  + Accepting special characters within the input
+    + Different run contexts have different escape sequences
+
+
+  + Crash gracefully
+    + Especially with risky input
+
+** Blogs
++ For all OWASP Top Ten
+  ([[https://www.owasp.org/index.php/Source_Code_Analysis_Tools][SAST]])
+  and dynamic application test
+  ([[https://www.owasp.org/index.php/Category:Vulnerability_Scanning_Tools][DAST]])
+  tools into the CI/CD pipeline to identify newly introduced injection
+  flaws prior to production deployment.
+** Injection Tutorial
+- Dynamic queries or non-parameterized calls without context-aware
+  escaping are used directly in the interpreter.\\
+- Hostile data is used within object-relational mapping (ORM) search
+  parameters to extract additional, sensitive records.
+- Hostile data is directly used or concatenated, such that the SQL or
+  command contains both structure and hostile data in dynamic queries,
+  commands, or stored procedures.
+
+** How To Prevent
+   :PROPERTIES:
+   :CUSTOM_ID: how-to-prevent
+   :END:
+
+Preventing injection requires keeping data separate from commands and
+queries.
+
+- The preferred option is to use a safe API, which avoids the use of the
+  interpreter entirely or provides a parameterized interface, or migrate
+  to use Object Relational Mapping Tools (ORMs). *Note*: Even when
+  parameterized, stored procedures can still introduce SQL injection if
+  PL/SQL or T-SQL concatenates queries and data, or executes hostile
+  data with EXECUTE IMMEDIATE or exec().
+  - This mitigates untrusted DELETE/PUT operations from being directly added to
+    any statements
+- Use positive or "whitelist" server-side input validation. This is not
+  a complete defense as many applications require special characters,
+  such as text areas or APIs for mobile applications.
+  - Do so via regex
+- For any residual dynamic queries, escape special characters using the
+  specific escape syntax for that interpreter. *Note*: SQL structure
+  such as table names, column names, and so on cannot be escaped, and
+  thus user-supplied structure names are dangerous. This is a common
+  issue in report-writing software.
+  - Special characters can also be keywords, etc.
+- Use LIMIT and other SQL controls within queries to prevent mass
+  disclosure of records in case of SQL injection.
+
+
+** References
+   :PROPERTIES:
+   :CUSTOM_ID: references
+   :END:
+
+*** OWASP
+    :PROPERTIES:
+    :CUSTOM_ID: owasp
+    :END:
+
+- [[https://www.owasp.org/index.php/OWASP_Proactive_Controls#2:_Parameterize_Queries][OWASP
+  Proactive Controls: Parameterize Queries]]
+- [[https://www.owasp.org/index.php/ASVS_V5_Input_validation_and_output_encoding][OWASP
+  ASVS: V5 Input Validation and Encoding]]
+- [[https://www.owasp.org/index.php/Testing_for_SQL_Injection_(OTG-INPVAL-005)][OWASP
+  Testing Guide: SQL Injection]],
+  [[https://www.owasp.org/index.php/Testing_for_Command_Injection_(OTG-INPVAL-013)][Command
+  Injection]],
+  [[https://www.owasp.org/index.php/Testing_for_ORM_Injection_(OTG-INPVAL-007)][ORM
+  injection]]
+- [[https://www.owasp.org/index.php/Injection_Prevention_Cheat_Sheet][OWASP
+  Cheat Sheet: Injection Prevention]]
+- [[https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet][OWASP
+  Cheat Sheet: SQL Injection Prevention]]
+- [[https://www.owasp.org/index.php/Injection_Prevention_Cheat_Sheet_in_Java][OWASP
+  Cheat Sheet: Injection Prevention in Java]]
+- [[https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet][OWASP
+  Cheat Sheet: Query Parameterization]]
+- [[https://www.owasp.org/index.php/OWASP_Automated_Threats_to_Web_Applications][OWASP
+  Automated Threats to Web Applications -- OAT-014]]
+
+*** External
+    :PROPERTIES:
+    :CUSTOM_ID: external
+    :END:
+
+- [[https://cwe.mitre.org/data/definitions/77.html][CWE-77: Command
+  Injection]]
+- [[https://cwe.mitre.org/data/definitions/89.html][CWE-89: SQL
+  Injection]]
+- [[https://cwe.mitre.org/data/definitions/564.html][CWE-564: Hibernate
+  Injection]]
+- [[https://cwe.mitre.org/data/definitions/917.html][CWE-917: Expression
+  Language Injection]]
+- [[https://portswigger.net/kb/issues/00101080_serversidetemplateinjection][PortSwigger:
+  Server-side template injection]]
+
+* Local Vars                                                       :noexport:
+# Local variables:
+# before-save-hook: org-reveal-export-current-subtree
+# end:
