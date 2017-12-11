@@ -1,7 +1,7 @@
-#+TITLE: Injection Fundamentals
-#+DATE: Practical Search Operators For Recon
+#+TITLE: Injection 
+#+DATE: Fundamentals
 #+AUTHOR: Zach Roof
-#+OPTIONS: num:nil toc:nil
+#+OPTIONS: num:nil toc:t
 #+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
 #+OPTIONS: reveal_history:nil reveal_keyboard:t reveal_overview:t
 #+OPTIONS: reveal_slide_number:"c"
@@ -17,10 +17,14 @@
 #+REVEAL_THEME: laravel
 #+REVEAL_PLUGINS: notes
 #+REVEAL_EXTRA_CSS: css/local.css
-** BEFORE RELEASE
+* BEFORE RELEASE                                                   :noexport:
 + Create Errata and Tutorial Notes.  Link to them in slides with the format...
   + Course [[https://sts.wiki/google-hacking-1][Notes]] and [[https://sts.wiki/google-hacking-1-errata][Errata]]
     + Make sure these links are in every video's description area
+   + Automation
+     + For any slide with an errata, do a subheading called "errata"
+     + Export these errata to given page that is correlated to the overarching
+       tutorial series
 + Confirm level (Beg, Int, Advanced, or All)
 + Create "Base" Tutorial
   + Explains a concept with very concise examples
@@ -38,79 +42,20 @@
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
 
-** Todo
-   :LOGBOOK:
-   CLOCK: [2017-11-23 Thu 03:26]--[2017-11-23 Thu 03:51] =>  0:25
-   :END:
-   + show AND/OR syntax with certs heh
-   + https://github.com/cujanovic/SSRF-Testing/
-   + Find shodan searches via popular lists on shodan.io and through book
-     + Integrate them into this tutorial
-   + Track how hackthissite has been patched over time?
-   + Make sure that all links in github are resolving correctly for ALL tutorials
-   + Searches
-     + Search for juicy response codes: 500, etc
-     + scans.io
-     + censys maltago transformations
-   + Automation
-     + Within weekly sts
-       + Automate current tutorial going into this repo
-       + Publish to various formats
-       + Trigger browser refresh on save
-   + "Censys Additional Information" tutorial
-     + Academic paper
-     + https://scans.io/
-     + https://groups.google.com/a/censys.io/forum/#!forumsearch/
-   + In Chrome Lecture (Part 7), I made the argument that on the redirect,
-     google should be setting the HSTS header... actually, the spec recommends
-     otherwise. You shouldn't be settings it on unencrypted connections
-   + Say that there might be some changes once Censys becomes commerical
-   + Errata:
-     + In this doc, every lecture will have a parent bullet-point.
-     + For any slide with an errata, do a subheading called "errata"
-     + Export these errata to given page that is correlated to the overarching
-       tutorial series
-
-   + Categories
-     + Directly from a user
-     + Has been touched by a user at some point (form field at signup)
-     + Remote File inclusion
-     + Server side request forgery
-     + Mitigations
-       + Look for groupings within AVFS
-   + TODO Update all examples for syntax highlighting
-   +
-* Supplementary tutorials
-+ Running as nobody user
-  + This is insecure if multiple processes are running as this user
-+ Local/unicode attacks
-+ Directory traversal
-* Future OWASP Tutorials
-+ Go through these for each area
-+ https://github.com/OWASP/ASVS/tree/master/3.1/en
-+ https://f1.holisticinfosecforwebdevelopers.com/chap06.html#web-applications-identify-risks-lack-of-input-validation-and-sanitisation
-* TODO before launch
-http://scottksmith.com/blog/2015/06/08/secure-node-apps-against-owasp-top-10-injection/
-https://github.com/mysqljs/mysql#escaping-query-values
-* OWASP
-  + Open Web Application Security Project (OWASP) (owasp.org)
-  + Notable Content
-    + [[https://www.youtube.com/user/OWASPGLOBAL][Videos]]
-    + [[https://www.owasp.org/index.php/OWASP_Cheat_Sheet_Series][Cheatsheets]]
-  + OWASP Top 10
-    + Top 10 security threats to web applications
-      + Crowd sourced metadata
-      + TODO Insert license?
 
 * Injection: Intro
 + 2017 OWASP Top 10
-  + #1 Risk
-+ General overview
-  + 80/20
+  + Top 10 security threats to web applications
+  + Injection is #1 Risk
++ 80/20 Analysis
++ Goals
+  + Up and running ASAP
+    + Watch this tutorial (can also browse notes)
+    + Read supplementary material
+      + Recommendations for other programming languages
 + Supplementary material
-  + Find these in the course notes
-  + Code
-    + Granular coding example/s
+  + Coding Examples
+    + Take concepts to
   + Article/s
     + Recommendations for other programming languages
 
@@ -211,6 +156,8 @@ curl.stdout.on('data', function(data) {
   + Leverage code analysis tools to flag potential issues
     + IDE Integration
       + Tutorial notes
++ Crash gracefully
+  + Especially with risky input
 
 * Injection: Compensating Controls (Alt. Execution)
 + What is a compensating control?
@@ -274,19 +221,17 @@ curl.stdout.on('data', function(data) {
 * Injection: Compensating Controls (Special Characters)
 + Accepting special characters within the input
   + Must account for escape sequences within all execution contexts
-    + Does curl
+    + ~curl~, ~exec~ (~/bin/sh~ and javascript)
 
-+ Crash gracefully
-  + Especially with risky input
 
-** Blogs
+** Blogs :noexport:
 + For all OWASP Top Ten
   ([[https://www.owasp.org/index.php/Source_Code_Analysis_Tools][SAST]])
   and dynamic application test
   ([[https://www.owasp.org/index.php/Category:Vulnerability_Scanning_Tools][DAST]])
   tools into the CI/CD pipeline to identify newly introduced injection
   flaws prior to production deployment.
-** Injection Tutorial
+** Injection Tutorial :noexport:
 - Dynamic queries or non-parameterized calls without context-aware
   escaping are used directly in the interpreter.\\
 - Hostile data is used within object-relational mapping (ORM) search
@@ -295,7 +240,7 @@ curl.stdout.on('data', function(data) {
   command contains both structure and hostile data in dynamic queries,
   commands, or stored procedures.
 
-** How To Prevent
+** How To Prevent :noexport:
    :PROPERTIES:
    :CUSTOM_ID: how-to-prevent
    :END:
@@ -324,21 +269,13 @@ queries.
 - Use LIMIT and other SQL controls within queries to prevent mass
   disclosure of records in case of SQL injection.
 
-(defun reveal-sync ()
-  "Asks for a command and executes it in inferior shell with current buffer
-as input."
-  (interactive)
-  (set-mark-co)
-  (shell-command-on-region
-   (point-min) (point-max)
-   (read-shell-command "Shell command on buffer: ")))
 
-** References
+** References :noexport:
    :PROPERTIES:
    :CUSTOM_ID: references
    :END:
 
-*** OWASP
+*** OWASP :noexport:
     :PROPERTIES:
     :CUSTOM_ID: owasp
     :END:
@@ -364,7 +301,7 @@ as input."
 - [[https://www.owasp.org/index.php/OWASP_Automated_Threats_to_Web_Applications][OWASP
   Automated Threats to Web Applications -- OAT-014]]
 
-*** External
+*** External :noexport:
     :PROPERTIES:
     :CUSTOM_ID: external
     :END:
@@ -380,7 +317,7 @@ as input."
 - [[https://portswigger.net/kb/issues/00101080_serversidetemplateinjection][PortSwigger:
   Server-side template injection]]
 
-* Local Vars
+* Local Vars :noexport:
 # Local variables:
 # before-save-hook: org-reveal-export-current-subtree
 # end:
