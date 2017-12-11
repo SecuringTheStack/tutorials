@@ -17,7 +17,7 @@
 #+REVEAL_THEME: laravel
 #+REVEAL_PLUGINS: notes
 #+REVEAL_EXTRA_CSS: css/local.css
-** BEFORE RELEASE                                                  :noexport:
+** BEFORE RELEASE
 + Create Errata and Tutorial Notes.  Link to them in slides with the format...
   + Course [[https://sts.wiki/google-hacking-1][Notes]] and [[https://sts.wiki/google-hacking-1-errata][Errata]]
     + Make sure these links are in every video's description area
@@ -38,7 +38,7 @@
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
 
-** Todo                                                            :noexport:
+** Todo
    :LOGBOOK:
    CLOCK: [2017-11-23 Thu 03:26]--[2017-11-23 Thu 03:51] =>  0:25
    :END:
@@ -102,7 +102,7 @@ https://github.com/mysqljs/mysql#escaping-query-values
       + Crowd sourced metadata
       + TODO Insert license?
 
-* Injection Intro
+* Injection: Intro
 + 2017 OWASP Top 10
   + #1 Risk
 + General overview
@@ -114,7 +114,7 @@ https://github.com/mysqljs/mysql#escaping-query-values
   + Article/s
     + Recommendations for other programming languages
 
-* User Defined Callback URL
+* Injection Ex: Callback Functionality
 + Webhook functionality within node.js application
   + Leveraging ~GET~ for simplicity
   #+BEGIN_SRC javascript
@@ -132,7 +132,7 @@ https://github.com/mysqljs/mysql#escaping-query-values
      + ~exec~ and ~curl~ contexts
       + syntax and semantics
 
-* User Defined Callback URL: Exec Context
+* Injection Ex: Callback Functionality (Exec Context)
 #+BEGIN_SRC javascript
 var exec = require('child_process').exec;
 var user_defined_url = "example.com/callback"
@@ -151,7 +151,7 @@ curl.stdout.on('data', function(data) {
       + Exploiting "special characters" for a given intrepreter
         + ~exec()~ leverages ~/bin/sh~ on unix based systems
 
-* User Defined Callback URL: Curl Context
+* Injection Ex: Callback Functionality (Curl Context)
 #+BEGIN_SRC javascript
 var exec = require('child_process').exec;
 var user_defined_url = "example.com/callback"
@@ -169,7 +169,7 @@ curl.stdout.on('data', function(data) {
     + Exploiting the underlying /meaning/
       + Not the syntax
 
-* Identifying Injection Risks
+* Injection: Identifying Risks
 #+BEGIN_SRC javascript
 var exec = require('child_process').exec;
 var user_defined_url = "example.com/callback"
@@ -187,7 +187,7 @@ curl.stdout.on('data', function(data) {
        + Data from 3rd party APIs
   2. The command/process has enough privileges to execute the unexpected command/s
 
-* Injection Controls: The Basics
+* Injection: Basic Controls
 + Security Control
   + Countermeasure
 + To the extent possible, don't place untrusted data into an execution context
@@ -198,7 +198,7 @@ curl.stdout.on('data', function(data) {
     + Let your framework inform your code what RESTFul method was invoked
     + I.e., don't place user-provided CRUD actions directly into an execution context
 
-* Injection Controls: The Basics (CONT.)
+* Injection: Basic Controls (CONT.)
 + Enforce principal of least privilege
   + Server
     + Instantiate all server processes with a highly restricted user
@@ -212,7 +212,7 @@ curl.stdout.on('data', function(data) {
     + IDE Integration
       + Tutorial notes
 
-* Injection Compensating Controls: Alt. Execution
+* Injection: Compensating Controls (Alt. Execution)
 + What is a compensating control?
 + Leverage programs that limit the injection risk
   + ~paranoid-request~
@@ -232,7 +232,7 @@ curl.stdout.on('data', function(data) {
     + Invokes ~curl~ as a new process
     + Only leverage if a module like ~paranoid-request~ doesn't exist
 
-* Injection Compensating Controls: Whitelisting
+* Injection: Compensating Controls (Whitelisting)
 + Whitelist expected application values
   + https://validatejs.org
     + Share validations between client/server (if running node.js)
@@ -246,7 +246,7 @@ curl.stdout.on('data', function(data) {
       + ~length~
         + Unintended behavior of whitelisted values
 
-* Injection Compensating Controls: Whitelisting (CONT.)
+* Injection: Compensating Controls (Whitelisting CONT.)
 + Utilities
   + ~cleanAttributes~
     + Returns an object that only contains the whitelisted attributes. It
@@ -254,14 +254,21 @@ curl.stdout.on('data', function(data) {
     + Helps mitigate mass assignment risks
 + Supplementary notes for other validation libraries
 
-* Injection Compensating Controls: Character Encoding
-+ Certain estimates place ~UTF-8~ usage at 90% (Dec, 2017)
+* Injection: Compensating Controls (Character Encoding)
++ Regex Whitelisting Review
+  + Are you validating against the correct encoding scheme?
+  + Python ex.
+   #+BEGIN_SRC python :results output
+   print "localhost".encode("utf-8")
+   print "localhost".encode("utf-32")
+   #+END_SRC
++ Certain estimates place ~UTF-8~ usage at ~90% (Dec, 2017)
 + Whitelist expected character encoding
   1. Validate the character encoding that's coming from the client
      + Python ex.
-      #+BEGIN_SRC python
-      "localhost".encode("utf-8")
-      "localhost".encode("utf-32")
+      #+BEGIN_SRC python :results output
+      print "localhost".encode("utf-8")
+      print "localhost".encode("utf-32")
       #+END_SRC
      + Assume that ~exec~ or ~curl~ could automatically decode other character sets
        + Could be a way to bypass input validation
@@ -319,6 +326,14 @@ queries.
 - Use LIMIT and other SQL controls within queries to prevent mass
   disclosure of records in case of SQL injection.
 
+(defun reveal-sync ()
+  "Asks for a command and executes it in inferior shell with current buffer
+as input."
+  (interactive)
+  (set-mark-co)
+  (shell-command-on-region
+   (point-min) (point-max)
+   (read-shell-command "Shell command on buffer: ")))
 
 ** References
    :PROPERTIES:
@@ -365,13 +380,15 @@ queries.
 - [[https://cwe.mitre.org/data/definitions/917.html][CWE-917: Expression
   Language Injection]]
 - [[https://portswigger.net/kb/issues/00101080_serversidetemplateinjection][PortSwigger:
-  Server-side template injection]] * Local Vars                                                       :noexport: # Local variables: # before-save-hook: org-reveal-export-current-subtree # end:
+  Server-side template injection]]
 
-* Local Vars                                                       :noexport:
+* Local Vars
 # Local variables:
 # before-save-hook: org-reveal-export-current-subtree
 # end:
 
   #+BEGIN_SRC shell
-ls -la
+    cp -R notes.html $HOME/repos/sts-reveal.js/index.html
   #+END_SRC
+
+  #+RESULTS:
