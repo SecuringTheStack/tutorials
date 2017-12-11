@@ -42,6 +42,8 @@
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
 
+* TODO
++ Styles of TOC
 
 * Injection: Intro
 + 2017 OWASP Top 10
@@ -51,13 +53,28 @@
 + Goals
   + Up and running ASAP
     + Watch this tutorial (can also browse notes)
-    + Read supplementary material
-      + Recommendations for other programming languages
+    + Read ~recommendations~ material
+      + Includes recommendations for other programming languages
 + Supplementary material
   + Coding Examples
     + Take concepts to
   + Article/s
     + Recommendations for other programming languages
+* Intro                                                           :TOC_1_GH:
+- [[#todo][TODO]]
+- [[#injection-intro][Injection: Intro]]
+- [[#injection-ex-callback-functionality][Injection Ex: Callback Functionality]]
+- [[#injection-ex-callback-functionality-exec-context][Injection Ex: Callback Functionality (Exec Context)]]
+- [[#injection-ex-callback-functionality-curl-context][Injection Ex: Callback Functionality (Curl Context)]]
+- [[#injection-identifying-risks][Injection: Identifying Risks]]
+- [[#injection-basic-controls][Injection: Basic Controls]]
+- [[#injection-basic-controls-cont][Injection: Basic Controls (CONT.)]]
+- [[#injection-compensating-controls-alt-execution][Injection: Compensating Controls (Alt. Execution)]]
+- [[#injection-compensating-controls-whitelisting][Injection: Compensating Controls (Whitelisting)]]
+- [[#injection-compensating-controls-whitelisting-cont][Injection: Compensating Controls (Whitelisting CONT.)]]
+- [[#injection-compensating-controls-character-encoding][Injection: Compensating Controls (Character Encoding)]]
+- [[#injection-compensating-controls-detect-character-encoding][Injection: Compensating Controls (Detect Character Encoding)]]
+- [[#injection-compensating-controls-special-characters][Injection: Compensating Controls (Special Characters)]]
 
 * Injection Ex: Callback Functionality
 + Webhook functionality within node.js application
@@ -317,10 +334,10 @@ queries.
 - [[https://portswigger.net/kb/issues/00101080_serversidetemplateinjection][PortSwigger:
   Server-side template injection]]
 
-* Local Vars :noexport:
-# Local variables:
-# before-save-hook: org-reveal-export-current-subtree
-# end:
+# * Local Vars 
+# # Local variables:
+# # before-save-hook: org-reveal-export-current-subtree
+# # end:
 
   #+BEGIN_SRC shell
     cp -R notes.html $HOME/repos/sts-reveal.js/index.html
