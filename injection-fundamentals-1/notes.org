@@ -129,8 +129,8 @@ https://github.com/mysqljs/mysql#escaping-query-values
   + This data could include unexpected commands that the program runs
   + Main question to ask
     + What malicious data could be /injected/ into ~user_defined_url~?
-     + ~exec~ and ~curl~ contexts
-      + syntax and semantics
+      + ~exec~ (javascript), ~/bin/sh~, ~curl~ contexts
+        + syntax and semantics
 
 * Injection Ex: Callback Functionality (Exec Context)
 #+BEGIN_SRC javascript
@@ -256,27 +256,25 @@ curl.stdout.on('data', function(data) {
 
 * Injection: Compensating Controls (Character Encoding)
 + Regex Whitelisting Review
-  + Are you validating against the correct encoding scheme?
+  + Is the regex validating against the correct encoding scheme?
+    + Certain estimates place ~UTF-8~ usage at ~90% on the internet (Dec, 2017)
   + Python ex.
    #+BEGIN_SRC python :results output
-   print "localhost".encode("utf-8")
-   print "localhost".encode("utf-32")
+   "localhost".encode("utf-8")
+   "localhost".encode("utf-32")
    #+END_SRC
-+ Certain estimates place ~UTF-8~ usage at ~90% (Dec, 2017)
-+ Whitelist expected character encoding
-  1. Validate the character encoding that's coming from the client
-     + Python ex.
-      #+BEGIN_SRC python :results output
-      print "localhost".encode("utf-8")
-      print "localhost".encode("utf-32")
-      #+END_SRC
-     + Assume that ~exec~ or ~curl~ could automatically decode other character sets
-       + Could be a way to bypass input validation
-     + https://github.com/sonicdoe/detect-character-encoding
-       + Ex: Reject a string if not 90% confident that the string is ~UTF-8~
-+ Accepting special characters within the input
-  + Different run contexts have different escape sequences
+  + This is why we don't blacklist
++ Assume that ~exec~ or ~curl~ could automatically decode other character sets
+  + Could be a way to bypass input validation
 
+* Injection: Compensating Controls (Detect Character Encoding)
++ https://github.com/sonicdoe/detect-character-encoding
+  + Ex: Accept a string if ~UTF-8~ confidence is greater-than 90% 
+
+* Injection: Compensating Controls (Special Characters)
++ Accepting special characters within the input
+  + Must account for escape sequences within all execution contexts
+    + Does curl
 
 + Crash gracefully
   + Especially with risky input
