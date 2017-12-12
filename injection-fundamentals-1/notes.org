@@ -2,9 +2,9 @@
 #+DATE: Fundamentals
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:nil
-#+OPTIONS: reveal_center:nil reveal_control:t width:100% height:100%
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100%
 #+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
-#+OPTIONS: reveal_slide_number:"c"
+#+OPTIONS: reveal_slide_number:nil
 #+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
 #+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
 #+OPTIONS: auto-id:t
@@ -16,9 +16,11 @@
 #+REVEAL_TRANS: default
 #+REVEAL_SPEED: default
 #+REVEAL_THEME: sts
-#+REVEAL_PLUGINS: notes
 #+REVEAL_EXTRA_CSS: css/local.css
-#+REVEAL_INIT_SCRIPT: previewLinks: false, fragments:true
+#+REVEAL_INIT_SCRIPT: previewLinks: false
+#+REVEAL_PLUGINS: (classList highlight)
+#+REVEAL_HIGHLIGHT_CSS:%r/lib/highlight.js/src/styles/monokai-sublime.css
+ 
 * BEFORE RELEASE                                                   :noexport:
   :PROPERTIES:
   :CUSTOM_ID: h-F33CD0CF-52F6-4E52-8641-05726982504F
@@ -47,6 +49,7 @@
     + PHP
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
+  + Look at TODO buffer
 
 
 * TOC                                                     :TOC_1_org:noexport:
@@ -119,7 +122,9 @@
 #+ATTR_REVEAL: :frag (default)
 - Injection Ex: Callback Functionality
   - Introduction through pragmatic example
-    - Server Side Request Forgery
+    - Webhook functionality within node.js
+      - Server Side Request Forgery (SSRF)
+      - Invoke a kernel panic
 - Evaluate injection vulnerabilities through different perspectives
   - Semantic vs Syntactic injection
   - Inspecting execution contexts
