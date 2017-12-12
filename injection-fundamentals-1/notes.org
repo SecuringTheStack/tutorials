@@ -73,7 +73,7 @@
       + Labs
     + Read ~Recommendations~ material
       + Includes mitigation recommendations for other programming languages
-* Intro                                                           :TOC_1:
+* Intro                                                           :TOC_1_gh:noexport:
   :PROPERTIES:
   :CUSTOM_ID: h-58C02028-EAE0-4FA5-B90E-ACBECD619AF9
   :END:
