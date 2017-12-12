@@ -73,7 +73,7 @@
       + Labs
     + Read ~Recommendations~ material
       + Includes mitigation recommendations for other programming languages
-* Intro                                                           :TOC_1_org:noexport:
+* Intro                                                           :TOC_1_org
   :PROPERTIES:
   :CUSTOM_ID: h-E749D5CE-5E17-4B65-B10A-CD06638F38DD
   :END:
@@ -96,10 +96,9 @@
   :PROPERTIES:
   :CUSTOM_ID: h-B92D58BA-2582-4577-9151-1287B661AB6E
   :END:
-- If you're in rush skip this
-- This is flexible based on student input into the future, will probably add to
-  this contentjk
 - [[Injection: Intro][Injection: Intro]]
+- [[Injection: Intro (ASAP Mode)][Injection: Intro (ASAP Mode)]]
+- [[Intro                                                           :TOC_1_org][Intro                                                           :TOC_1_org]]
 - [[Injection Ex: Callback Functionality][Injection Ex: Callback Functionality]]
 - [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
 - [[Injection Ex: Callback Functionality (Curl Context)][Injection Ex: Callback Functionality (Curl Context)]]
@@ -110,10 +109,8 @@
 - [[Injection: Compensating Controls (Whitelisting)][Injection: Compensating Controls (Whitelisting)]]
 - [[Injection: Compensating Controls (Whitelisting CONT.)][Injection: Compensating Controls (Whitelisting CONT.)]]
 - [[Injection: Compensating Controls (Character Encoding)][Injection: Compensating Controls (Character Encoding)]]
-#+REVEAL: split
 - [[Injection: Compensating Controls (Detect Character Encoding)][Injection: Compensating Controls (Detect Character Encoding)]]
 - [[Injection: Compensating Controls (Special Characters)][Injection: Compensating Controls (Special Characters)]]
-- Indepth Coding Examples
 
 * Injection Ex: Callback Functionality
   :PROPERTIES:
