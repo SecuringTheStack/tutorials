@@ -98,10 +98,15 @@
         + Labs
       + Read ~Recommendations~ material
         + Includes mitigation recommendations for other programming languages
-- Beginner
-  - Skip the rest of
+- Security Beginner
+  - Skip the rest of ~Intro~ modules
+
+* Injection: Intro (Learning Options - CONT.)
+  :PROPERTIES:
+  :CUSTOM_ID: h-22D31A31-3E4C-4139-9DB9-C1E8F0673A5D
+  :END:
 - Intermediate/Advanced security knowledge
-  - Watch ~Main Topics Overview~ (next slide)
+  - Watch ~Intro (Main Topics Overview)~ (next tutorial)
     - Watch tutorial OR
     - Skip directly to labs OR
     - Move to another series
@@ -111,28 +116,19 @@
   :PROPERTIES:
   :CUSTOM_ID: h-2AC8FF8E-A442-4DF3-9CA5-738C22B88DB8
   :END:
+#+ATTR_REVEAL: :frag (default)
 - Injection Ex: Callback Functionality
-  - Introduction through pragmatic example (SSRF)
-- Evaluate injection vulnerabilities
-  - Execution contexts
-  - Semantic vs Syntactic
-- Mitigate injection vulnerabilities by inspecting
-  - Filesystem Access
-    - Code access of process
-    -
-  -
-- Injection Ex: Callback Functionality (Exec Context)
-- Injection Ex: Callback Functionality (Curl Context)
-- Injection: Identifying Risks
-- Injection: Basic Controls
-- Injection: Basic Controls (CONT.)
-- Injection: Compensating Controls (Alt. Execution)
-- Injection: Compensating Controls (Whitelisting)
-- Injection: Compensating Controls (Whitelisting CONT.)
-- Injection: Compensating Controls (Character Encoding)
-- Injection: Compensating Controls (Detect Character Encoding)
-- Injection: Compensating Controls (Special Characters)
-- Looking forward to learning with you!
+  - Introduction through pragmatic example
+    - Server Side Request Forgery
+- Evaluate injection vulnerabilities through different perspectives
+  - Semantic vs Syntactic injection
+  - Inspecting execution contexts
+  - Filesystem access
+    - Could injection force a process to rewrite its own code?
+  - Whitelisting strategies
+    - validate.js
+  - Character encoding injection
+- If this is for you, please join me :)
 
 * Injection Ex: Callback Functionality
   :PROPERTIES:
