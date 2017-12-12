@@ -54,7 +54,7 @@
   :CUSTOM_ID: h-58C02028-EAE0-4FA5-B90E-ACBECD619AF9
   :END:
 - [[Injection: Intro][Injection: Intro]]
-- [[Injection: Intro (ASAP Mode)][Injection: Intro (ASAP Mode)]]
+- [[Injection: Intro (Learning Options)][Injection: Intro (Learning Options)]]
 - [[Injection: Intro (Main Topics Overview)][Injection: Intro (Main Topics Overview)]]
 - [[Injection Ex: Callback Functionality][Injection Ex: Callback Functionality]]
 - [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
@@ -76,31 +76,51 @@
 + 2017 OWASP Top 10
   + Top 10 security threats to web applications
     + Injection is #1 Risk
-+ 80/20 Analysis
-+ Help me improve
-  + Make PR on errata/notes link
-    + All courses resources available below video area
-  + I'll reshoot if significant
++ Concise 80/20 Analysis
++ Prerequisites: None
+  + Devs with novice/intermediate security knowledge
++ Navigating securingthestack.com
+  + All course resources available below video area
+  + Help me improve
+    + Make PR on links
+    + I'll recreate video if significant
 
-* Injection: Intro (ASAP Mode)
+* Injection: Intro (Learning Options)
   :PROPERTIES:
   :CUSTOM_ID: h-55F87165-EFAA-4B6F-AFDE-9DC11EEAF79A
   :END:
 #+ATTR_REVEAL: :frag (default)
-- Up and running ASAP
-  + Watch this tutorial (can also browse notes)
-    + Skip
-      + The rest of Intro section
-      + Labs
-    + Read ~Recommendations~ material
-      + Includes mitigation recommendations for other programming languages
+- Rush Mode
+  - All content is useful, but if you're in an extreme rush
+    + Watch this tutorial (or browse notes)
+      + Skip
+        + The rest of Intro section
+        + Labs
+      + Read ~Recommendations~ material
+        + Includes mitigation recommendations for other programming languages
+- Beginner
+  - Skip the rest of
+- Intermediate/Advanced security knowledge
+  - Watch ~Main Topics Overview~ (next slide)
+    - Watch tutorial OR
+    - Skip directly to labs OR
+    - Move to another series
 
+# Create independent tutorial for teaser
 * Injection: Intro (Main Topics Overview)
   :PROPERTIES:
   :CUSTOM_ID: h-2AC8FF8E-A442-4DF3-9CA5-738C22B88DB8
   :END:
-- Injection: Intro (ASAP Mode)
 - Injection Ex: Callback Functionality
+  - Introduction through pragmatic example (SSRF)
+- Evaluate injection vulnerabilities
+  - Execution contexts
+  - Semantic vs Syntactic
+- Mitigate injection vulnerabilities by inspecting
+  - Filesystem Access
+    - Code access of process
+    -
+  -
 - Injection Ex: Callback Functionality (Exec Context)
 - Injection Ex: Callback Functionality (Curl Context)
 - Injection: Identifying Risks
@@ -112,6 +132,7 @@
 - Injection: Compensating Controls (Character Encoding)
 - Injection: Compensating Controls (Detect Character Encoding)
 - Injection: Compensating Controls (Special Characters)
+- Looking forward to learning with you!
 
 * Injection Ex: Callback Functionality
   :PROPERTIES:
