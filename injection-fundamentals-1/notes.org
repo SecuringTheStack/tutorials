@@ -15,7 +15,7 @@
 #+REVEAL_ROOT: .
 #+REVEAL_TRANS: default
 #+REVEAL_SPEED: default
-#+REVEAL_THEME: laravel
+#+REVEAL_THEME: sts
 #+REVEAL_PLUGINS: notes
 #+REVEAL_EXTRA_CSS: css/local.css
 #+REVEAL_INIT_SCRIPT: previewLinks: false, fragments:true
@@ -24,12 +24,12 @@
   :CUSTOM_ID: h-F33CD0CF-52F6-4E52-8641-05726982504F
   :END:
 + Create Errata and Tutorial Notes.  Link to them in slides with the format...
-  + Course [[https://sts.wiki/google-hacking-1][Notes]] and [[https://sts.wiki/google-hacking-1-errata][Errata]]
+  + Course [[https://sts.wiki/google-hacking-1][Notes]] and [[https://sts.wiki/google-hacking-1-errata][Errata]], Recommendations
     + Make sure these links are in every video's description area
-   + Automation
-     + For any slide with an errata, do a subheading called "errata"
-     + Export these errata to given page that is correlated to the overarching
-       tutorial series
+  + Automation
+    + For any slide with an errata, do a subheading called "errata"
+    + Export these errata to given page that is correlated to the overarching
+      tutorial series
 + Confirm level (Beg, Int, Advanced, or All)
 + Create "Base" Tutorial
   + Explains a concept with very concise examples
@@ -37,6 +37,7 @@
       + Seperate tutorial contains
         + A live app that users can exploit a given vulnerability
         + Code examples
+        + Must be named "lab"
   + Links to frameworks that can mitigate a given area in (Put in show notes
     area under each tutorial)
     + Javascript
@@ -47,33 +48,38 @@
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
 
-* Injection: Intro FOO
+* Injection: Intro
   :PROPERTIES:
   :CUSTOM_ID: h-624742E6-E748-4F1B-80F7-6560C2C7AD25
   :END:
 + 2017 OWASP Top 10
- + Top 10 security threats to web applications
-  + Injection is #1 Risk
+  + Top 10 security threats to web applications
+    + Injection is #1 Risk
 + 80/20 Analysis
-+ Goals
-  + Up and running ASAP
-    + Watch this tutorial (can also browse notes)
-    + Skip Intro tutorial
-    + Read ~recommendations~ material
-      + Includes recommendations for other programming languages
-+ Supplementary material (Look in area below)
-  + Coding Examples
-    + Take concepts to
-  + Article/s
-    + Recommendations for other programming languages
-  + If not r
-+ If you want to improve this. Make PR on notes and I'll reshoot if significant
++ Help me improve
+  + Make PR on errata/notes link
+    + All courses resources available below video area
+  + I'll reshoot if significant
+
+* Injection: Intro (ASAP Mode)
+  :PROPERTIES:
+  :CUSTOM_ID: h-55F87165-EFAA-4B6F-AFDE-9DC11EEAF79A
+  :END:
+#+ATTR_REVEAL: :frag (default)
+- Up and running ASAP
+  + Watch this tutorial (can also browse notes)
+    + Skip
+      + The rest of Intro section
+      + Labs
+    + Read ~Recommendations~ material
+      + Includes mitigation recommendations for other programming languages
 * Intro                                                           :TOC_1_org:noexport:
   :PROPERTIES:
   :CUSTOM_ID: h-E749D5CE-5E17-4B65-B10A-CD06638F38DD
   :END:
-- [[Injection: Intro FOO][Injection: Intro FOO]]
-- [[Injection Ex: Callback Functionality done][Injection Ex: Callback Functionality done]]
+- [[Injection: Intro][Injection: Intro]]
+- [[Injection: Intro (ASAP Mode)][Injection: Intro (ASAP Mode)]]
+- [[Injection Ex: Callback Functionality][Injection Ex: Callback Functionality]]
 - [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
 - [[Injection Ex: Callback Functionality (Curl Context)][Injection Ex: Callback Functionality (Curl Context)]]
 - [[Injection: Identifying Risks][Injection: Identifying Risks]]
@@ -109,7 +115,7 @@
 - [[Injection: Compensating Controls (Special Characters)][Injection: Compensating Controls (Special Characters)]]
 - Indepth Coding Examples
 
-* Injection Ex: Callback Functionality done
+* Injection Ex: Callback Functionality
   :PROPERTIES:
   :CUSTOM_ID: h-4C29D42A-C347-4934-ADD0-656912762CD9
   :END:
@@ -316,103 +322,5 @@ curl.stdout.on('data', function(data) {
 + Accepting special characters within the input
   + Must account for escape sequences within all execution contexts
     + ~curl~, ~exec~ (~/bin/sh~ and javascript)
-
-
-** Blogs :noexport:
-   :PROPERTIES:
-   :CUSTOM_ID: h-AA291E01-1B72-4352-A72C-9CE167EF4F67
+    :CUSTOM_ID: references
    :END:
-+ For all OWASP Top Ten
-  ([[https://www.owasp.org/index.php/Source_Code_Analysis_Tools][SAST]])
-  and dynamic application test
-  ([[https://www.owasp.org/index.php/Category:Vulnerability_Scanning_Tools][DAST]])
-  tools into the CI/CD pipeline to identify newly introduced injection
-  flaws prior to production deployment.
-** Injection Tutorial :noexport:
-   :PROPERTIES:
-   :CUSTOM_ID: h-7E020F7C-6488-4A35-A53A-84055D7E3289
-   :END:
-- Dynamic queries or non-parameterized calls without context-aware
-  escaping are used directly in the interpreter.\\
-- Hostile data is used within object-relational mapping (ORM) search
-  parameters to extract additional, sensitive records.
-- Hostile data is directly used or concatenated, such that the SQL or
-  command contains both structure and hostile data in dynamic queries,
-  commands, or stored procedures.
-
-** How To Prevent :noexport:
-   :PROPERTIES:
-   :CUSTOM_ID: how-to-prevent
-   :END:
-
-Preventing injection requires keeping data separate from commands and
-queries.
-
-- The preferred option is to use a safe API, which avoids the use of the
-  interpreter entirely or provides a parameterized interface, or migrate
-  to use Object Relational Mapping Tools (ORMs). *Note*: Even when
-  parameterized, stored procedures can still introduce SQL injection if
-  PL/SQL or T-SQL concatenates queries and data, or executes hostile
-  data with EXECUTE IMMEDIATE or exec().
-  - This mitigates untrusted DELETE/PUT operations from being directly added to
-    any statements
-- Use positive or "whitelist" server-side input validation. This is not
-  a complete defense as many applications require special characters,
-  such as text areas or APIs for mobile applications.
-  - Do so via regex
-- For any residual dynamic queries, escape special characters using the
-  specific escape syntax for that interpreter. *Note*: SQL structure
-  such as table names, column names, and so on cannot be escaped, and
-  thus user-supplied structure names are dangerous. This is a common
-  issue in report-writing software.
-  - Special characters can also be keywords, etc.
-- Use LIMIT and other SQL controls within queries to prevent mass
-  disclosure of records in case of SQL injection.
-
-
-** References :noexport:
-   :PROPERTIES:
-   :CUSTOM_ID: references
-   :END:
-
-*** OWASP :noexport:
-    :PROPERTIES:
-    :CUSTOM_ID: owasp
-    :END:
-
-- [[https://www.owasp.org/index.php/OWASP_Proactive_Controls#2:_Parameterize_Queries][OWASP
-  Proactive Controls: Parameterize Queries]]
-- [[https://www.owasp.org/index.php/ASVS_V5_Input_validation_and_output_encoding][OWASP
-  ASVS: V5 Input Validation and Encoding]]
-- [[https://www.owasp.org/index.php/Testing_for_SQL_Injection_(OTG-INPVAL-005)][OWASP
-  Testing Guide: SQL Injection]],
-  [[https://www.owasp.org/index.php/Testing_for_Command_Injection_(OTG-INPVAL-013)][Command
-  Injection]],
-  [[https://www.owasp.org/index.php/Testing_for_ORM_Injection_(OTG-INPVAL-007)][ORM
-  injection]]
-- [[https://www.owasp.org/index.php/Injection_Prevention_Cheat_Sheet][OWASP
-  Cheat Sheet: Injection Prevention]]
-- [[https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet][OWASP
-  Cheat Sheet: SQL Injection Prevention]]
-- [[https://www.owasp.org/index.php/Injection_Prevention_Cheat_Sheet_in_Java][OWASP
-  Cheat Sheet: Injection Prevention in Java]]
-- [[https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet][OWASP
-  Cheat Sheet: Query Parameterization]]
-- [[https://www.owasp.org/index.php/OWASP_Automated_Threats_to_Web_Applications][OWASP
-  Automated Threats to Web Applications -- OAT-014]]
-
-*** External :noexport:
-    :PROPERTIES:
-    :CUSTOM_ID: external
-    :END:
-
-- [[https://cwe.mitre.org/data/definitions/77.html][CWE-77: Command
-  Injection]]
-- [[https://cwe.mitre.org/data/definitions/89.html][CWE-89: SQL
-  Injection]]
-- [[https://cwe.mitre.org/data/definitions/564.html][CWE-564: Hibernate
-  Injection]]
-- [[https://cwe.mitre.org/data/definitions/917.html][CWE-917: Expression
-  Language Injection]]
-- [[https://portswigger.net/kb/issues/00101080_serversidetemplateinjection][PortSwigger:
-  Server-side template injection]]
