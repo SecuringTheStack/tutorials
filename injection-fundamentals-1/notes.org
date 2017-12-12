@@ -48,6 +48,27 @@
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
 
+
+* TOC                                                     :TOC_1_org:noexport:
+  :PROPERTIES:
+  :CUSTOM_ID: h-58C02028-EAE0-4FA5-B90E-ACBECD619AF9
+  :END:
+- [[Injection: Intro][Injection: Intro]]
+- [[Injection: Intro (ASAP Mode)][Injection: Intro (ASAP Mode)]]
+- [[Injection: Intro (Main Topics Overview)][Injection: Intro (Main Topics Overview)]]
+- [[Injection Ex: Callback Functionality][Injection Ex: Callback Functionality]]
+- [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
+- [[Injection Ex: Callback Functionality (Curl Context)][Injection Ex: Callback Functionality (Curl Context)]]
+- [[Injection: Identifying Risks][Injection: Identifying Risks]]
+- [[Injection: Basic Controls][Injection: Basic Controls]]
+- [[Injection: Basic Controls (CONT.)][Injection: Basic Controls (CONT.)]]
+- [[Injection: Compensating Controls (Alt. Execution)][Injection: Compensating Controls (Alt. Execution)]]
+- [[Injection: Compensating Controls (Whitelisting)][Injection: Compensating Controls (Whitelisting)]]
+- [[Injection: Compensating Controls (Whitelisting CONT.)][Injection: Compensating Controls (Whitelisting CONT.)]]
+- [[Injection: Compensating Controls (Character Encoding)][Injection: Compensating Controls (Character Encoding)]]
+- [[Injection: Compensating Controls (Detect Character Encoding)][Injection: Compensating Controls (Detect Character Encoding)]]
+- [[Injection: Compensating Controls (Special Characters)][Injection: Compensating Controls (Special Characters)]]
+
 * Injection: Intro
   :PROPERTIES:
   :CUSTOM_ID: h-624742E6-E748-4F1B-80F7-6560C2C7AD25
@@ -73,24 +94,24 @@
       + Labs
     + Read ~Recommendations~ material
       + Includes mitigation recommendations for other programming languages
-* Intro                                                           :TOC_1_gh:noexport:
+
+* Injection: Intro (Main Topics Overview)
   :PROPERTIES:
-  :CUSTOM_ID: h-58C02028-EAE0-4FA5-B90E-ACBECD619AF9
+  :CUSTOM_ID: h-2AC8FF8E-A442-4DF3-9CA5-738C22B88DB8
   :END:
-- [[#injection-intro][Injection: Intro]]
-- [[#injection-intro-asap-mode][Injection: Intro (ASAP Mode)]]
-- [[#injection-ex-callback-functionality][Injection Ex: Callback Functionality]]
-- [[#injection-ex-callback-functionality-exec-context][Injection Ex: Callback Functionality (Exec Context)]]
-- [[#injection-ex-callback-functionality-curl-context][Injection Ex: Callback Functionality (Curl Context)]]
-- [[#injection-identifying-risks][Injection: Identifying Risks]]
-- [[#injection-basic-controls][Injection: Basic Controls]]
-- [[#injection-basic-controls-cont][Injection: Basic Controls (CONT.)]]
-- [[#injection-compensating-controls-alt-execution][Injection: Compensating Controls (Alt. Execution)]]
-- [[#injection-compensating-controls-whitelisting][Injection: Compensating Controls (Whitelisting)]]
-- [[#injection-compensating-controls-whitelisting-cont][Injection: Compensating Controls (Whitelisting CONT.)]]
-- [[#injection-compensating-controls-character-encoding][Injection: Compensating Controls (Character Encoding)]]
-- [[#injection-compensating-controls-detect-character-encoding][Injection: Compensating Controls (Detect Character Encoding)]]
-- [[#injection-compensating-controls-special-characters][Injection: Compensating Controls (Special Characters)]]
+- Injection: Intro (ASAP Mode)
+- Injection Ex: Callback Functionality
+- Injection Ex: Callback Functionality (Exec Context)
+- Injection Ex: Callback Functionality (Curl Context)
+- Injection: Identifying Risks
+- Injection: Basic Controls
+- Injection: Basic Controls (CONT.)
+- Injection: Compensating Controls (Alt. Execution)
+- Injection: Compensating Controls (Whitelisting)
+- Injection: Compensating Controls (Whitelisting CONT.)
+- Injection: Compensating Controls (Character Encoding)
+- Injection: Compensating Controls (Detect Character Encoding)
+- Injection: Compensating Controls (Special Characters)
 
 * Injection Ex: Callback Functionality
   :PROPERTIES:
