@@ -92,26 +92,6 @@
 - [[Injection: Compensating Controls (Detect Character Encoding)][Injection: Compensating Controls (Detect Character Encoding)]]
 - [[Injection: Compensating Controls (Special Characters)][Injection: Compensating Controls (Special Characters)]]
 
-* Intro                                                           :TOC_1_org:noexport:
-  :PROPERTIES:
-  :CUSTOM_ID: h-B92D58BA-2582-4577-9151-1287B661AB6E
-  :END:
-- [[Injection: Intro][Injection: Intro]]
-- [[Injection: Intro (ASAP Mode)][Injection: Intro (ASAP Mode)]]
-- [[Intro                                                           :TOC_1_org][Intro                                                           :TOC_1_org]]
-- [[Injection Ex: Callback Functionality][Injection Ex: Callback Functionality]]
-- [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
-- [[Injection Ex: Callback Functionality (Curl Context)][Injection Ex: Callback Functionality (Curl Context)]]
-- [[Injection: Identifying Risks][Injection: Identifying Risks]]
-- [[Injection: Basic Controls][Injection: Basic Controls]]
-- [[Injection: Basic Controls (CONT.)][Injection: Basic Controls (CONT.)]]
-- [[Injection: Compensating Controls (Alt. Execution)][Injection: Compensating Controls (Alt. Execution)]]
-- [[Injection: Compensating Controls (Whitelisting)][Injection: Compensating Controls (Whitelisting)]]
-- [[Injection: Compensating Controls (Whitelisting CONT.)][Injection: Compensating Controls (Whitelisting CONT.)]]
-- [[Injection: Compensating Controls (Character Encoding)][Injection: Compensating Controls (Character Encoding)]]
-- [[Injection: Compensating Controls (Detect Character Encoding)][Injection: Compensating Controls (Detect Character Encoding)]]
-- [[Injection: Compensating Controls (Special Characters)][Injection: Compensating Controls (Special Characters)]]
-
 * Injection Ex: Callback Functionality
   :PROPERTIES:
   :CUSTOM_ID: h-4C29D42A-C347-4934-ADD0-656912762CD9
