@@ -47,7 +47,7 @@
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
 
-* Injection: Intro
+* Injection: Intro FOO
   :PROPERTIES:
   :CUSTOM_ID: h-624742E6-E748-4F1B-80F7-6560C2C7AD25
   :END:
@@ -72,7 +72,7 @@
   :PROPERTIES:
   :CUSTOM_ID: h-E749D5CE-5E17-4B65-B10A-CD06638F38DD
   :END:
-- [[Injection: Intro][Injection: Intro]]
+- [[Injection: Intro FOO][Injection: Intro FOO]]
 - [[Injection Ex: Callback Functionality done][Injection Ex: Callback Functionality done]]
 - [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
 - [[Injection Ex: Callback Functionality (Curl Context)][Injection Ex: Callback Functionality (Curl Context)]]
