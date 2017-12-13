@@ -40,16 +40,25 @@
         + A live app that users can exploit a given vulnerability
         + Code examples
         + Must be named "lab"
++ Recommendations.org
   + Links to frameworks that can mitigate a given area in (Put in show notes
     area under each tutorial)
-    + Javascript
-    + Python
-    + Java
-    + Ruby
-    + PHP
+    + Languages
+      + Javascript
+      + Python
+      + Java
+      + Ruby
+      + PHP
+    + Will provide packages that solve common issues
+      + Ex: Injection
+        + "If you're accepting requests", look at these packages to mitigate
+          against SSRF
   + Make fonts better for code examples.  Look at original css from web.  Fix
     width of code window in css
   + Look at TODO buffer
+  + Final Review
+    + Spell checking
++ Create Quiz
 
 
 * TOC                                                     :TOC_1_org:noexport:
@@ -76,19 +85,19 @@
   :PROPERTIES:
   :CUSTOM_ID: h-624742E6-E748-4F1B-80F7-6560C2C7AD25
   :END:
+#+ATTR_REVEAL: :frag (default)
 + 2017 OWASP Top 10
   + Top 10 security threats to web applications
     + Injection is #1 Risk
 + Concise 80/20 Analysis
 + Prerequisites: None
-  + Devs with novice/intermediate security knowledge
-+ Navigating securingthestack.com
++ Navigating SecuringTheStack.com
   + All course resources available below video area
   + Help me improve
     + Make PR on links
     + I'll recreate video if significant
 
-* Injection: Intro (Learning Options)
+* Injection: Intro (Learning Paths)
   :PROPERTIES:
   :CUSTOM_ID: h-55F87165-EFAA-4B6F-AFDE-9DC11EEAF79A
   :END:
@@ -96,23 +105,25 @@
 - Rush Mode
   - All content is useful, but if you're in an extreme rush
     + Watch this tutorial (or browse notes)
-      + Skip
-        + The rest of Intro section
+      + Optional
+        + The rest of the Intro section
         + Labs
-      + Read ~Recommendations~ material
-        + Includes mitigation recommendations for other programming languages
+    + Read ~Recommendations~ material
+      + Includes mitigation libraries for multiple programming languages
 - Security Beginner
-  - Skip the rest of ~Intro~ modules
+  - Optional
+    - The rest of ~Intro~ videos
 
-* Injection: Intro (Learning Options - CONT.)
+* Injection: Intro (Learning Paths - CONT.)
   :PROPERTIES:
   :CUSTOM_ID: h-22D31A31-3E4C-4139-9DB9-C1E8F0673A5D
   :END:
 - Intermediate/Advanced security knowledge
-  - Watch ~Intro (Main Topics Overview)~ (next tutorial)
-    - Watch tutorial OR
-    - Skip directly to labs OR
-    - Move to another series
+  - Watch ~Intro (Main Topics Overview)~ (next slide)
+    - Based on familiarity
+      - Skip directly to the labs
+        - Use main tutorial (or notes) as a reference
+      - Read ~Recommendations~
 
 # Create independent tutorial for teaser
 * Injection: Intro (Main Topics Overview)
