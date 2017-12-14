@@ -48,7 +48,7 @@
 #+END_SRC
 
 #+name: docker-node-dockerfile
-#+BEGIN_SRC dockerfile :exports none :padline no :tangle src/node-dockerfile :mkdirp t
+#+BEGIN_SRC dockerfile :exports none :padline no :tangle src/Dockerfile-node :mkdirp t
   FROM node
   # For simplicity, we're keeping this Dockerfile very small.
   # From a security perspective, this Dockerfile shouldn't
@@ -69,13 +69,13 @@
     node:
       build:
         context: .
-        dockerfile: node-dockerfile
+        dockerfile: Dockerfile-node
       image: "injection-fundamentals"
       user: "node"
       working_dir: /home/node/app
       environment:
         - NODE_ENV=dev
-        - NPM_CONFIG_LOGLEVEL info
+        - NPM_CONFIG_LOGLEVEL "${LOG_LEVEL}"
       volumes:
         - ./:/home/node/app
       expose:
@@ -83,11 +83,14 @@
       command: ["npx", "${EXEC_MODE}", "${LESSON}"]
 #+END_SRC
 
-#+name: docker-build
-#+BEGIN_SRC sh :results code
-docker-compose -f src/docker-compose.yml build 
-LESSON=execfile EXEC_MODE=node docker-compose -f src/docker-compose.yml up 
+
+#+BEGIN_SRC sh :results none :tangle readme.org
+  # Must be in the root of the current tutorial
+  # Ex ~cd sts-tutorials/injection-fundamentals-1~
+  LESSON=execfile EXEC_MODE=nodemon LOG_LEVEL=info docker-compose -f src/docker-compose.yml up
 #+END_SRC
+
+
 
 #+RESULTS: docker-build
 #+BEGIN_SRC sh
@@ -299,7 +302,7 @@ Attaching to src_node_1
 + Webhook functionality within node.js application
   + Leveraging ~GET~ for simplicity
   #+NAME: VULN_CALLBACK
-  #+BEGIN_SRC javascript :tangle src/foo.js :mkdirp yes
+  #+BEGIN_SRC javascript :tangle src/foo1.js :mkdirp yes
   var exec = require('child_process').exec;
   var user_defined_url = "example.com/callback";
   var curl = exec("curl " + user_defined_url);

@@ -6,13 +6,13 @@ services:
   node:
     build:
       context: .
-      dockerfile: node-dockerfile
+      dockerfile: Dockerfile-node
     image: "injection-fundamentals"
     user: "node"
     working_dir: /home/node/app
     environment:
       - NODE_ENV=dev
-      - NPM_CONFIG_LOGLEVEL info
+      - NPM_CONFIG_LOGLEVEL "${LOG_LEVEL}"
     volumes:
       - ./:/home/node/app
     expose:
