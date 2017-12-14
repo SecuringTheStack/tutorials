@@ -1,0 +1,3 @@
+# Must be in the root of the current tutorial
+# Ex ~cd sts-tutorials/injection-fundamentals-1~
+LESSON=execfile EXEC_MODE=nodemon LOG_LEVEL=info docker-compose -f src/docker-compose.yml up
