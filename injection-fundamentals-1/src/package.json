@@ -1,0 +1,22 @@
+{
+  "name": "securingthestack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachroof/sts-tutorials.git"
+  },
+  "author": "Zach Roof",
+  "license": "SEE LICENSE IN license.org",
+  "bugs": {
+    "url": "https://github.com/zachroof/sts-tutorials/issues"
+  },
+  "homepage": "https://github.com/zachroof/sts-tutorials#readme",
+  "devDependencies": {
+    "nodemon": "^1.12.7"
+  }
+}

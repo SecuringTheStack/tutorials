@@ -20,7 +20,150 @@
 #+REVEAL_INIT_SCRIPT: previewLinks: false
 #+REVEAL_PLUGINS: (classList highlight)
 #+REVEAL_HIGHLIGHT_CSS:%r/lib/highlight.js/src/styles/monokai-sublime.css
- 
+
+#+name: package.json
+#+BEGIN_SRC json :exports none :tangle src/package.json :mkdirp t
+{
+  "name": "securingthestack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachroof/sts-tutorials.git"
+  },
+  "author": "Zach Roof",
+  "license": "SEE LICENSE IN license.org",
+  "bugs": {
+    "url": "https://github.com/zachroof/sts-tutorials/issues"
+  },
+  "homepage": "https://github.com/zachroof/sts-tutorials#readme",
+  "devDependencies": {
+    "nodemon": "^1.12.7"
+  }
+}
+#+END_SRC
+
+#+name: docker-node-dockerfile
+#+BEGIN_SRC dockerfile :exports none :padline no :tangle src/node-dockerfile :mkdirp t
+  FROM node
+  # For simplicity, we're keeping this Dockerfile very small.
+  # From a security perspective, this Dockerfile shouldn't
+  # be considered "production ready".
+  COPY *.js /home/node/app/
+  COPY *.json /home/node/app/
+  RUN cd /home/node/app && npm install
+  CMD ["node", "${LESSON}"]
+#+END_SRC
+
+#+name: docker-node-docker-compose
+#+BEGIN_SRC yaml :exports code :padline no :tangle src/docker-compose.yml :mkdirp t
+  version: "3"
+  # For simplicity, we're keeping this file very small.
+  # From a security perspective, this docker compose shouldn't
+  # be considered "production ready".
+  services:
+    node:
+      build:
+        context: .
+        dockerfile: node-dockerfile
+      image: "injection-fundamentals"
+      user: "node"
+      working_dir: /home/node/app
+      environment:
+        - NODE_ENV=dev
+        - NPM_CONFIG_LOGLEVEL info
+      volumes:
+        - ./:/home/node/app
+      expose:
+        - "8080"
+      command: ["npx", "${EXEC_MODE}", "${LESSON}"]
+#+END_SRC
+
+#+name: docker-build
+#+BEGIN_SRC sh :results code
+docker-compose -f src/docker-compose.yml build 
+LESSON=execfile EXEC_MODE=node docker-compose -f src/docker-compose.yml up 
+#+END_SRC
+
+#+RESULTS: docker-build
+#+BEGIN_SRC sh
+Step 1/5 : FROM node
+ ---> cb4c45f7a9e3
+Step 2/5 : COPY *.js /home/node/app/
+ ---> Using cache
+ ---> 6153a8d2e590
+Step 3/5 : COPY *.json /home/node/app/
+ ---> Using cache
+ ---> ed5110dec55d
+Step 4/5 : RUN cd /home/node/app && npm install
+ ---> Using cache
+ ---> 4415d7c5616a
+Step 5/5 : CMD node ${LESSON}
+ ---> Using cache
+ ---> 0c2859ed2732
+Successfully built 0c2859ed2732
+Successfully tagged injection-fundamentals:latest
+Attaching to src_node_1
+[36mnode_1  |[0m <!doctype html>
+[36mnode_1  |[0m <html>
+[36mnode_1  |[0m <head>
+[36mnode_1  |[0m     <title>Example Domain</title>
+[36mnode_1  |[0m 
+[36mnode_1  |[0m     <meta charset="utf-8" />
+[36mnode_1  |[0m     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+[36mnode_1  |[0m     <meta name="viewport" content="width=device-width, initial-scale=1" />
+[36mnode_1  |[0m     <style type="text/css">
+[36mnode_1  |[0m     body {
+[36mnode_1  |[0m         background-color: #f0f0f2;
+[36mnode_1  |[0m         margin: 0;
+[36mnode_1  |[0m         padding: 0;
+[36mnode_1  |[0m         font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+[36mnode_1  |[0m         
+[36mnode_1  |[0m     }
+[36mnode_1  |[0m     div {
+[36mnode_1  |[0m         width: 600px;
+[36mnode_1  |[0m         margin: 5em auto;
+[36mnode_1  |[0m         padding: 50px;
+[36mnode_1  |[0m         background-color: #fff;
+[36mnode_1  |[0m         border-radius: 1em;
+[36mnode_1  |[0m     }
+[36mnode_1  |[0m     a:link, a:visited {
+[36mnode_1  |[0m         color: #38488f;
+[36mnode_1  |[0m         text-decoration: none;
+[36mnode_1  |[0m     }
+[36mnode_1  |[0m     @media (max-width: 700px) {
+[36mnode_1  |[0m         body {
+[36mnode_1  |[0m             background-color: #fff;
+[36mnode_1  |[0m         }
+[36mnode_1  |[0m         div {
+[36mnode_1  |[0m             width: auto;
+[36mnode_1  |[0m             margin: 0 auto;
+[36mnode_1  |[0m             border-radius: 0;
+[36mnode_1  |[0m             padding: 1em;
+[36mnode_1  |[0m         }
+[36mnode_1  |[0m     }
+[36mnode_1  |[0m     </style>    
+[36mnode_1  |[0m </head>
+[36mnode_1  |[0m 
+[36mnode_1  |[0m <body>
+[36mnode_1  |[0m <div>
+[36mnode_1  |[0m     <h1>Example Domain</h1>
+[36mnode_1  |[0m     <p>This domain is established to be used for illustrative examples in documents. You may use this
+[36mnode_1  |[0m     domain in examples without prior coordination or asking for permission.</p>
+[36mnode_1  |[0m     <p><a href="http://www.iana.org/domains/example">More information...</a></p>
+[36mnode_1  |[0m </div>
+[36mnode_1  |[0m </body>
+[36mnode_1  |[0m </html>
+[36mnode_1  |[0m 
+[36msrc_node_1 exited with code 0
+[0m
+#+END_SRC
+
+
 * BEFORE RELEASE                                                   :noexport:
   :PROPERTIES:
   :CUSTOM_ID: h-F33CD0CF-52F6-4E52-8641-05726982504F
@@ -105,6 +248,7 @@
 - Rush Mode
   - All content is useful, but if you're in an extreme rush
     + Watch this tutorial (or browse notes)
+    + Recommended section
       + Optional
         + The rest of the Intro section
         + Labs
@@ -132,7 +276,7 @@
   :END:
 #+ATTR_REVEAL: :frag (default)
 - Injection Ex: Callback Functionality
-  - Introduction through pragmatic example
+  - Introduction through pragmatic examples
     - Webhook functionality within node.js
       - Server Side Request Forgery (SSRF)
       - Invoke a kernel panic
@@ -142,24 +286,28 @@
   - Filesystem access
     - Could injection force a process to rewrite its own code?
   - Whitelisting strategies
-    - validate.js
+    - ~validate.js~
   - Character encoding injection
 - If this is for you, please join me :)
+- Labs
 
 * Injection Ex: Callback Functionality
   :PROPERTIES:
   :CUSTOM_ID: h-4C29D42A-C347-4934-ADD0-656912762CD9
   :END:
+#+ATTR_REVEAL: :frag (default)
 + Webhook functionality within node.js application
   + Leveraging ~GET~ for simplicity
-  #+BEGIN_SRC javascript
+  #+NAME: VULN_CALLBACK
+  #+BEGIN_SRC javascript :tangle src/foo.js :mkdirp yes
   var exec = require('child_process').exec;
-  var user_defined_url = "example.com/callback"
+  var user_defined_url = "example.com/callback";
   var curl = exec("curl " + user_defined_url);
   curl.stdout.on('data', function(data) {
     console.log(data);
   });
   #+END_SRC
+
 + Injection is introducing data with malicous intent
   + This data could include unexpected commands that the program runs
   + Main question to ask
@@ -171,13 +319,8 @@
   :PROPERTIES:
   :CUSTOM_ID: h-DE8297A9-5548-4D83-934A-D2090C632246
   :END:
-#+BEGIN_SRC javascript
-var exec = require('child_process').exec;
-var user_defined_url = "example.com/callback"
-var curl = exec("curl " + user_defined_url);
-curl.stdout.on('data', function(data) {
-  console.log(data);
-});
+#+BEGIN_SRC javascript :noweb yes
+<<VULN_CALLBACK>>
 #+END_SRC
 + What input could be inserted into ~user_defined_url~ to exploit the ~exec~ context?
   + Hint: Think about the syntax
@@ -193,17 +336,13 @@ curl.stdout.on('data', function(data) {
   :PROPERTIES:
   :CUSTOM_ID: h-BBB9335B-85DD-41B3-86FC-3A6CE8101A91
   :END:
-#+BEGIN_SRC javascript
-var exec = require('child_process').exec;
-var user_defined_url = "example.com/callback"
-var curl = exec("curl " + user_defined_url);
-curl.stdout.on('data', function(data) {
-  console.log(data);
-});
+#+BEGIN_SRC javascript :noweb yes
+<<VULN_CALLBACK>>
 #+END_SRC
+
 + What input could be inserted into ~user_defined_url~ to exploit the ~curl~ context?
 + ~curl~ context
-  + ~user_defined_url~ == ~localhost~
+  + ~user_defined_url~ == ~localhost:27017~
   + ~user_defined_url~ == ~http://169.254.169.254/latest/meta-data/~
     + EC2 metadata
   + Semantic injection
@@ -215,12 +354,7 @@ curl.stdout.on('data', function(data) {
   :CUSTOM_ID: h-D2B4807F-E322-46CC-B555-86889F8B4715
   :END:
 #+BEGIN_SRC javascript
-var exec = require('child_process').exec;
-var user_defined_url = "example.com/callback"
-var curl = exec("curl " + user_defined_url);
-curl.stdout.on('data', function(data) {
-  console.log(data);
-});
+<<VULN_CALLBACK>>
 #+END_SRC
 + Items needed for successful attack
   1. Placing untrusted data into an execution context
@@ -275,10 +409,11 @@ curl.stdout.on('data', function(data) {
       + E.g., ~curl context~ with ~localhost~
     + https://github.com/uber-common/paranoid-request
   + ~execFile~
-    #+BEGIN_SRC javascript
-    var execFile = require('child_process').execFile;
-    var user_defined_url = "example.com/callback"
-    execFile("/usr/bin/curl", [user_defined_url]);
+    #+NAME: EXECFILE
+    #+BEGIN_SRC javascript :tangle src/execfile.js :mkdirp yes
+    var execFile = require('child_process').execFile; 
+    var user_defined_url = "example.com/callback";
+    var curl = execFile("/usr/bin/curl", [user_defined_url]);
     curl.stdout.on('data', function(data) {
       console.log(data);
     });
