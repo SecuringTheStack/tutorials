@@ -36,6 +36,17 @@
     tutorialName:"injection-fundamentals-1",
     dockerBinding
   }
+  var meta = function (o) {
+    // when using "new" the fn implicityly creates "this = {}";
+    Object.assign(this, o); // copy vals from argument
+    this.courage = 100 + this.armor;
+    // when using "new" the fn implicitly returns "this"
+  };
+
+  // call the Card fn as a "constructor" with "new"
+  var cardOne = new Card({name: "example", armor: 70});
+
+  console.log(cardOne);
 #+END_SRC
 
 #+RESULTS: some-code
