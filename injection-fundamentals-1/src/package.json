@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zachroof/sts-tutorials.git"
+    "url": "git+https://github.com/SecuringTheStack/tutorials.git"
   },
   "author": "Zach Roof",
   "license": "SEE LICENSE IN license.org",
   "bugs": {
-    "url": "https://github.com/zachroof/sts-tutorials/issues"
+    "url": "https://github.com/SecuringTheStack/tutorials/issues"
   },
-  "homepage": "https://github.com/zachroof/sts-tutorials#readme",
+  "homepage": "https://github.com/SecuringTheStack/tutorials#readme",
   "devDependencies": {
     "nodemon": "^1.12.7"
   }

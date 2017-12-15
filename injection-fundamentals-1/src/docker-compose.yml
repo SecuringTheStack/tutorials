@@ -6,8 +6,8 @@ services:
   node:
     build:
       context: .
-      dockerfile: Dockerfile-node
-    image: "injection-fundamentals"
+      dockerfile: node-dockerfile
+    image: "${TUTORIAL_NAME}"
     user: "node"
     working_dir: /home/node/app
     environment:

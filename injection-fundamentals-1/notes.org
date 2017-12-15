@@ -1,8 +1,12 @@
+* Metadata                                                         :noexport:
+  :PROPERTIES:
+  :CUSTOM_ID: h-C67FD755-F402-4E6A-8139-2EF89C13CA0C
+  :END:
 #+TITLE: Injection
 #+DATE: Fundamentals
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:nil
-#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100%
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
 #+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
 #+OPTIONS: reveal_slide_number:nil
 #+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
@@ -21,7 +25,40 @@
 #+REVEAL_PLUGINS: (classList highlight)
 #+REVEAL_HIGHLIGHT_CSS:%r/lib/highlight.js/src/styles/monokai-sublime.css
 
-#+name: package.json
+* Bootstrap                                                        :noexport:
+#+begin_src emacs-lisp :results none
+(setq org-babel-python-command "python3")
+#+end_src
+
+#+NAME:some-code
+#+BEGIN_SRC javascript :results output :exports none :babel
+  const meta = {
+    tutorialName:"injection-fundamentals-1",
+    dockerBinding
+  }
+#+END_SRC
+
+#+RESULTS: some-code
+: foo
+
+#+BEGIN_SRC org :noweb yes :results both :tangle tester.txt
+<<some-code(x="jtutorialname")>>
+#+END_SRC
+
+#+RESULTS:
+
+
+#+begin_src emacs-lisp :output both
+(describe-variable foo)
+(setq foo 'money)
+#+end_src
+
+#+RESULTS:
+: test is void as a variable.
+:
+: Documentation:
+: Not documented as a variable.
+
 #+BEGIN_SRC json :exports none :tangle src/package.json :mkdirp t
 {
   "name": "securingthestack",
@@ -33,22 +70,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zachroof/sts-tutorials.git"
+    "url": "git+https://github.com/SecuringTheStack/tutorials.git"
   },
   "author": "Zach Roof",
   "license": "SEE LICENSE IN license.org",
   "bugs": {
-    "url": "https://github.com/zachroof/sts-tutorials/issues"
+    "url": "https://github.com/SecuringTheStack/tutorials/issues"
   },
-  "homepage": "https://github.com/zachroof/sts-tutorials#readme",
+  "homepage": "https://github.com/SecuringTheStack/tutorials#readme",
   "devDependencies": {
     "nodemon": "^1.12.7"
   }
 }
 #+END_SRC
 
-#+name: docker-node-dockerfile
-#+BEGIN_SRC dockerfile :exports none :padline no :tangle src/Dockerfile-node :mkdirp t
+#+BEGIN_SRC dockerfile :exports none :padline no :tangle src/node-dockerfile :mkdirp t
   FROM node
   # For simplicity, we're keeping this Dockerfile very small.
   # From a security perspective, this Dockerfile shouldn't
@@ -60,7 +96,7 @@
 #+END_SRC
 
 #+name: docker-node-docker-compose
-#+BEGIN_SRC yaml :exports code :padline no :tangle src/docker-compose.yml :mkdirp t
+#+BEGIN_SRC yaml :exports none :padline no :tangle src/docker-compose.yml :mkdirp t :var TUTORIAL_NAME=(file-name-sans-extension buffer-file-name)
   version: "3"
   # For simplicity, we're keeping this file very small.
   # From a security perspective, this docker compose shouldn't
@@ -69,18 +105,18 @@
     node:
       build:
         context: .
-        dockerfile: Dockerfile-node
-      image: "injection-fundamentals"
+        dockerfile: node-dockerfile
+      image: "${TUTORIAL_NAME}"
       user: "node"
       working_dir: /home/node/app
       environment:
         - NODE_ENV=dev
-        - NPM_CONFIG_LOGLEVEL "${LOG_LEVEL}"
+        - NPM_CONFIG_LOGLEVEL "${LOG_LEVEL:+info}"
       volumes:
         - ./:/home/node/app
       expose:
         - "8080"
-      command: ["npx", "${EXEC_MODE}", "${LESSON}"]
+      command: ["npx", "${EXEC_MODE:+node}", "${LESSON}"]
 #+END_SRC
 
 
@@ -89,83 +125,6 @@
   # Ex ~cd sts-tutorials/injection-fundamentals-1~
   LESSON=execfile EXEC_MODE=nodemon LOG_LEVEL=info docker-compose -f src/docker-compose.yml up
 #+END_SRC
-
-
-
-#+RESULTS: docker-build
-#+BEGIN_SRC sh
-Step 1/5 : FROM node
- ---> cb4c45f7a9e3
-Step 2/5 : COPY *.js /home/node/app/
- ---> Using cache
- ---> 6153a8d2e590
-Step 3/5 : COPY *.json /home/node/app/
- ---> Using cache
- ---> ed5110dec55d
-Step 4/5 : RUN cd /home/node/app && npm install
- ---> Using cache
- ---> 4415d7c5616a
-Step 5/5 : CMD node ${LESSON}
- ---> Using cache
- ---> 0c2859ed2732
-Successfully built 0c2859ed2732
-Successfully tagged injection-fundamentals:latest
-Attaching to src_node_1
-[36mnode_1  |[0m <!doctype html>
-[36mnode_1  |[0m <html>
-[36mnode_1  |[0m <head>
-[36mnode_1  |[0m     <title>Example Domain</title>
-[36mnode_1  |[0m 
-[36mnode_1  |[0m     <meta charset="utf-8" />
-[36mnode_1  |[0m     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-[36mnode_1  |[0m     <meta name="viewport" content="width=device-width, initial-scale=1" />
-[36mnode_1  |[0m     <style type="text/css">
-[36mnode_1  |[0m     body {
-[36mnode_1  |[0m         background-color: #f0f0f2;
-[36mnode_1  |[0m         margin: 0;
-[36mnode_1  |[0m         padding: 0;
-[36mnode_1  |[0m         font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-[36mnode_1  |[0m         
-[36mnode_1  |[0m     }
-[36mnode_1  |[0m     div {
-[36mnode_1  |[0m         width: 600px;
-[36mnode_1  |[0m         margin: 5em auto;
-[36mnode_1  |[0m         padding: 50px;
-[36mnode_1  |[0m         background-color: #fff;
-[36mnode_1  |[0m         border-radius: 1em;
-[36mnode_1  |[0m     }
-[36mnode_1  |[0m     a:link, a:visited {
-[36mnode_1  |[0m         color: #38488f;
-[36mnode_1  |[0m         text-decoration: none;
-[36mnode_1  |[0m     }
-[36mnode_1  |[0m     @media (max-width: 700px) {
-[36mnode_1  |[0m         body {
-[36mnode_1  |[0m             background-color: #fff;
-[36mnode_1  |[0m         }
-[36mnode_1  |[0m         div {
-[36mnode_1  |[0m             width: auto;
-[36mnode_1  |[0m             margin: 0 auto;
-[36mnode_1  |[0m             border-radius: 0;
-[36mnode_1  |[0m             padding: 1em;
-[36mnode_1  |[0m         }
-[36mnode_1  |[0m     }
-[36mnode_1  |[0m     </style>    
-[36mnode_1  |[0m </head>
-[36mnode_1  |[0m 
-[36mnode_1  |[0m <body>
-[36mnode_1  |[0m <div>
-[36mnode_1  |[0m     <h1>Example Domain</h1>
-[36mnode_1  |[0m     <p>This domain is established to be used for illustrative examples in documents. You may use this
-[36mnode_1  |[0m     domain in examples without prior coordination or asking for permission.</p>
-[36mnode_1  |[0m     <p><a href="http://www.iana.org/domains/example">More information...</a></p>
-[36mnode_1  |[0m </div>
-[36mnode_1  |[0m </body>
-[36mnode_1  |[0m </html>
-[36mnode_1  |[0m 
-[36msrc_node_1 exited with code 0
-[0m
-#+END_SRC
-
 
 * BEFORE RELEASE                                                   :noexport:
   :PROPERTIES:
@@ -212,7 +171,8 @@ Attaching to src_node_1
   :CUSTOM_ID: h-58C02028-EAE0-4FA5-B90E-ACBECD619AF9
   :END:
 - [[Injection: Intro][Injection: Intro]]
-- [[Injection: Intro (Learning Options)][Injection: Intro (Learning Options)]]
+- [[Injection: Intro (Learning Paths)][Injection: Intro (Learning Paths)]]
+- [[Injection: Intro (Learning Paths - CONT.)][Injection: Intro (Learning Paths - CONT.)]]
 - [[Injection: Intro (Main Topics Overview)][Injection: Intro (Main Topics Overview)]]
 - [[Injection Ex: Callback Functionality][Injection Ex: Callback Functionality]]
 - [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
@@ -322,7 +282,7 @@ Attaching to src_node_1
   :PROPERTIES:
   :CUSTOM_ID: h-DE8297A9-5548-4D83-934A-D2090C632246
   :END:
-#+BEGIN_SRC javascript :noweb yes
+#+BEGIN_SRC javascript :noweb yes :export code
 <<VULN_CALLBACK>>
 #+END_SRC
 + What input could be inserted into ~user_defined_url~ to exploit the ~exec~ context?
@@ -413,14 +373,16 @@ Attaching to src_node_1
     + https://github.com/uber-common/paranoid-request
   + ~execFile~
     #+NAME: EXECFILE
-    #+BEGIN_SRC javascript :tangle src/execfile.js :mkdirp yes
-    var execFile = require('child_process').execFile; 
-    var user_defined_url = "example.com/callback";
-    var curl = execFile("/usr/bin/curl", [user_defined_url]);
-    curl.stdout.on('data', function(data) {
-      console.log(data);
-    });
+    #+BEGIN_SRC javascript :tangle src/execfile.js :mkdirp yes :comments link
+        var execFile = require('child_process').execFile;
+        var user_defined_url = "example.com/callback";
+        var curl = execFile("/usr/bin/curl", [user_defined_url]);
+        curl.stdout.on('data', function(data) {
+          console.log(data);
+        }) %name on dockerhub
     #+END_SRC
+    #+CAPTION: FILE
+
     + Doesn't directly spawn a shell (interpreter)
     + Invokes ~curl~ as a new process
     + Only leverage if a module like ~paranoid-request~ doesn't exist
@@ -476,10 +438,6 @@ Attaching to src_node_1
 + https://github.com/sonicdoe/detect-character-encoding
   + Ex: Accept a string if ~UTF-8~ confidence is greater-than 90%
 
-# * Local Vars
-# # Local variables:
-# # before-save-hook: org-reveal-export-current-subtree
-# # end:
 
 
   #+RESULTS:
@@ -493,3 +451,7 @@ Attaching to src_node_1
     + ~curl~, ~exec~ (~/bin/sh~ and javascript)
     :CUSTOM_ID: references
    :END:
+
+# Local Variables:
+# foo: test
+# End:
