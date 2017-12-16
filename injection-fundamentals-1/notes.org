@@ -71,7 +71,7 @@
       build:
         context: .
         dockerfile: node-dockerfile
-      image: "injection-fundamentals"
+      image: "securingthestack/injection-fundamentals-1"
       user: "node"
       working_dir: /home/node/app
       environment:
@@ -82,6 +82,11 @@
       expose:
         - "8080"
       command: ["npx", "${EXEC_MODE}", "${FILE}"]
+#+END_SRC
+
+#+BEGIN_SRC sh
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --window-size=720,826 --headless --disable-gpu --screenshot http://localhost:8000/#/sec-title-slide
+docker push securingthestack/injection-fundamentals-1
 #+END_SRC
 
 * BEFORE RELEASE                                                   :noexport:
@@ -124,27 +129,27 @@
 + Create Quiz
 
 
-* TOC                                                     :TOC_1_org:
+* TOC                                                     :TOC_1_gh:noexport:
   :PROPERTIES:
   :CUSTOM_ID: h-58C02028-EAE0-4FA5-B90E-ACBECD619AF9
   :END:
-- [[Injection: Intro][Injection: Intro]]
-- [[Injection: Intro (Learning Paths)][Injection: Intro (Learning Paths)]]
-- [[Injection: Intro (Learning Paths - CONT.)][Injection: Intro (Learning Paths - CONT.)]]
-- [[Injection: Intro (Main Topics Overview)][Injection: Intro (Main Topics Overview)]]
-- [[Injection Ex: Callback Functionality][Injection Ex: Callback Functionality]]
-- [[Expolit Me][Expolit Me]]
-- [[Injection Ex: Callback Functionality (Exec Context)][Injection Ex: Callback Functionality (Exec Context)]]
-- [[Injection Ex: Callback Functionality (Curl Context)][Injection Ex: Callback Functionality (Curl Context)]]
-- [[Injection: Identifying Risks][Injection: Identifying Risks]]
-- [[Injection: Basic Controls][Injection: Basic Controls]]
-- [[Injection: Basic Controls (CONT.)][Injection: Basic Controls (CONT.)]]
-- [[Injection: Compensating Controls (Alt. Execution)][Injection: Compensating Controls (Alt. Execution)]]
-- [[Injection: Compensating Controls (Whitelisting)][Injection: Compensating Controls (Whitelisting)]]
-- [[Injection: Compensating Controls (Whitelisting CONT.)][Injection: Compensating Controls (Whitelisting CONT.)]]
-- [[Injection: Compensating Controls (Character Encoding)][Injection: Compensating Controls (Character Encoding)]]
-- [[Injection: Compensating Controls (Detect Character Encoding)][Injection: Compensating Controls (Detect Character Encoding)]]
-- [[Injection: Compensating Controls (Special Characters)][Injection: Compensating Controls (Special Characters)]]
+- [[#injection-intro][Injection: Intro]]
+- [[#injection-intro-learning-paths][Injection: Intro (Learning Paths)]]
+- [[#injection-intro-learning-paths---cont][Injection: Intro (Learning Paths - CONT.)]]
+- [[#injection-intro-main-topics-overview][Injection: Intro (Main Topics Overview)]]
+- [[#injection-ex-callback-functionality][Injection Ex: Callback Functionality]]
+- [[#expolit-me][Expolit Me]]
+- [[#injection-ex-callback-functionality-exec-context][Injection Ex: Callback Functionality (Exec Context)]]
+- [[#injection-ex-callback-functionality-curl-context][Injection Ex: Callback Functionality (Curl Context)]]
+- [[#injection-identifying-risks][Injection: Identifying Risks]]
+- [[#injection-basic-controls][Injection: Basic Controls]]
+- [[#injection-basic-controls-cont][Injection: Basic Controls (CONT.)]]
+- [[#injection-compensating-controls-alt-execution][Injection: Compensating Controls (Alt. Execution)]]
+- [[#injection-compensating-controls-whitelisting][Injection: Compensating Controls (Whitelisting)]]
+- [[#injection-compensating-controls-whitelisting-cont][Injection: Compensating Controls (Whitelisting CONT.)]]
+- [[#injection-compensating-controls-character-encoding][Injection: Compensating Controls (Character Encoding)]]
+- [[#injection-compensating-controls-detect-character-encoding][Injection: Compensating Controls (Detect Character Encoding)]]
+- [[#injection-compensating-controls-special-characters][Injection: Compensating Controls (Special Characters)]]
 
 * Injection: Intro
   :PROPERTIES:
@@ -409,3 +414,10 @@
 + Accepting special characters within the input
   + Must account for escape sequences within all execution contexts
     + ~curl~, ~exec~ (~/bin/sh~ and javascript)
+
+#+BEGIN_SRC browser :out demo.png
+<i>foooo</i>
+#+END_SRC
+
+#+RESULTS:
+[[file:demo.png]]
