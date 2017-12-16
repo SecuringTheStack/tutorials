@@ -94,7 +94,7 @@ docker push securingthestack/injection-fundamentals-1
   + Just 3-5 points
 + One skill per section
   + 3-5 lectures
-+ Sections map to "overarching adjectives" that are placed in the intro
++ Sections map to "overarching objectives" that are placed in the intro
 + Address 80/20 student
 * BEFORE RELEASE                                                   :noexport:
   :PROPERTIES:
