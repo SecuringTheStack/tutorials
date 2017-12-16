@@ -1,5 +1,5 @@
-#+TITLE: Injection
-#+DATE: Fundamentals
+#+TITLE: Securing Coding Fundamentals
+#+DATE: Injection
 #+AUTHOR: Zach Roof
 #+OPTIONS: num:nil toc:nil
 #+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
@@ -89,6 +89,13 @@
 docker push securingthestack/injection-fundamentals-1
 #+END_SRC
 
+* Before Creation :noexport:
++ Stick to one concept per lecture.
+  + Just 3-5 points
++ One skill per section
+  + 3-5 lectures
++ Sections map to "overarching adjectives" that are placed in the intro
++ Address 80/20 student
 * BEFORE RELEASE                                                   :noexport:
   :PROPERTIES:
   :CUSTOM_ID: h-F33CD0CF-52F6-4E52-8641-05726982504F
@@ -128,7 +135,9 @@ docker push securingthestack/injection-fundamentals-1
     + Spell checking
 + Create Quiz
 
-
+* Course Notes                                                     :noexport:
++ Main Course Title
+  + Secure Coding Fundamentals: Injection
 * TOC                                                     :TOC_1_gh:noexport:
   :PROPERTIES:
   :CUSTOM_ID: h-58C02028-EAE0-4FA5-B90E-ACBECD619AF9
@@ -160,6 +169,9 @@ docker push securingthestack/injection-fundamentals-1
   + Top 10 security threats to web applications
     + Injection is #1 Risk
 + Concise 80/20 Analysis
+  + Who is this course for? Busy Developer
+    + Course is designed to be skippable
+    + You have 1 hr a week for prof development, do this course
 + Prerequisites: None
 + Navigating SecuringTheStack.com
   + All course resources available below video area
@@ -202,6 +214,7 @@ docker push securingthestack/injection-fundamentals-1
   :CUSTOM_ID: h-2AC8FF8E-A442-4DF3-9CA5-738C22B88DB8
   :END:
 #+ATTR_REVEAL: :frag (default)
+- Lab Environment
 - Injection Ex: Callback Functionality
   - Introduction through pragmatic examples
     - Webhook functionality within node.js
@@ -241,6 +254,9 @@ docker push securingthestack/injection-fundamentals-1
       + ~exec~ (javascript), ~/bin/sh~, ~curl~ contexts
         + syntax and semantics
 * Expolit Me
+  :PROPERTIES:
+  :CUSTOM_ID: h-722A5951-C636-48BD-ACF6-BCCA0CA551EF
+  :END:
 + Go into ~/src/exex.js~ and try to inject ~user_defined_url~
   + Make the docker container crash
 #+BEGIN_SRC sh :results value html :exports code
