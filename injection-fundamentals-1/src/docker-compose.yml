@@ -7,14 +7,14 @@ services:
     build:
       context: .
       dockerfile: node-dockerfile
-    image: "${TUTORIAL_NAME}"
+    image: "injection-fundamentals"
     user: "node"
     working_dir: /home/node/app
     environment:
       - NODE_ENV=dev
-      - NPM_CONFIG_LOGLEVEL "${LOG_LEVEL}"
+      - NPM_CONFIG_LOGLEVEL info
     volumes:
       - ./:/home/node/app
     expose:
       - "8080"
-    command: ["npx", "${EXEC_MODE}", "${LESSON}"]
+    command: ["npx", "${EXEC_MODE}", "${FILE}"]
