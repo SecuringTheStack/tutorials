@@ -1,3 +1,0 @@
-* Recommendations (Coming by January 7th, 2017)
-+ Will house various tools for different programming languages
-  + Tools will help mitigate the risk of a given tutorial series

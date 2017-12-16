@@ -1,8 +1,0 @@
-FROM node
-# For simplicity, we're keeping this Dockerfile very small.
-# From a security perspective, this Dockerfile shouldn't
-# be considered "production ready".
-COPY *.js /home/node/app/
-COPY *.json /home/node/app/
-RUN cd /home/node/app && npm install
-CMD ["node", "${LESSON}"]
