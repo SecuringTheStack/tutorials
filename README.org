@@ -4,12 +4,12 @@
 2. ~git clone git@github.com:SecuringTheStack/tutorials.git~
 3. ~cd~ into a tutorial's directory
 4. ~EX_NUM_NO_PATH=%number docker-compose -f src/docker-compose.yml up~
-   1. Depending on the example you'd like to run, input a ~%number~ (with no path)
-      1. ~%number~ maps to a directory within a tutorial's ~src~ directory
-   2. To launch with ~node~ instead of ~nodemon~ simply prepend ~EXEC_MODE=node~
-      to the ~docker-compose~ invocation
-   3. For your confidence, this command will be populated with the correct value
-      in the slides
+   - Depending on the example you'd like to run, input a ~%number~ (with no path)
+     - ~%number~ maps to a directory within a tutorial's ~src~ directory
+   - To launch with ~node~ instead of ~nodemon~ simply prepend ~EXEC_MODE=node~
+     to the ~docker-compose~ invocation
+   - For your confidence, this command will be populated with the correct value
+     in the slides
 5. The next steps will depend on the example in question
    1. Please refer to a tutorial's ~README.org~ (or video)
 * TOS
