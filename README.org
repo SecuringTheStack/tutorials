@@ -1,4 +1,16 @@
-* Navigating
-1. Find a given tutorial with the root
+* Environment Setup
+
+1. Download [[https://www.docker.com/community-edition][docker]]
+2. ~git clone git@github.com:SecuringTheStack/tutorials.git~
+3. ~cd~ into a tutorial's directory
+4. ~EX_NUM_NO_PATH=%number docker-compose -f src/docker-compose.yml up~
+   1. Depending on the example you'd like to run, input a ~%number~ (with no path)
+      1. ~%number~ maps to a directory within a tutorial's ~src~ directory
+   2. To launch with ~node~ instead of ~nodemon~ simply prepend ~EXEC_MODE=node~
+      to the ~docker-compose~ invocation
+   3. For your confidence, this command will be populated with the correct value
+      in the slides
+5. The next steps will depend on the example in question
+   1. Please refer to a tutorial's ~README.org~ (or video)
 * TOS
 Limit of Liability/Disclaimer of Warranty: The information in this site is distributed on an “As Is” basis, without warranty. While every precaution has been taken in the preparation of this work, the author shall NOT have any liability to any person or entity with respect to any loss or damage caused or alleged to be caused directly or indirectly by the information contained in it.
