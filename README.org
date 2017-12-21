@@ -8,7 +8,7 @@
      - ~%number~ maps to a directory within a tutorial's ~src~ directory
    - To launch with ~node~ instead of ~nodemon~ simply prepend ~EXEC_MODE=node~
      to the ~docker-compose~ invocation
-   - For your confidence, this command will be populated with the correct value
+   - For your convenience, this command will be populated with the correct value
      in the slides
 5. The next steps will depend on the example in question
    1. Please refer to a tutorial's ~README.org~ (or video)
