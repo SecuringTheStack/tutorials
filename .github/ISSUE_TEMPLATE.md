@@ -9,6 +9,7 @@
     3.  Similarly, click `closed` to view answered questions
 3.  Cant find anything? Input your question below
     1.  Please find your tutorial topic in the `labels` section
+    2.  For the issue's `title`, please enter a concise version of your question
 
 # Question Area
 Why is StS so amazing? ;)
