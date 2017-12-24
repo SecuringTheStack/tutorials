@@ -4,6 +4,7 @@
     2.  View open/closed issues within [sts.tools/general](https://sts.tools/general)
     3.  Cant find anything?
         1.  Visit [sts.tools/general-questions](https://sts.tools/general-questions)
+            -  This will prepopulate an issue with the correct labels
 2.  Is this a tutorial specific question?
     1.  Click on a tutorial topic within [sts.tools/topics](https://sts.tools/topics)
         -   All topics are in green
