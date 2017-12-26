@@ -1,19 +1,26 @@
-* Environment Setup
+* Environment Setup/Navigation
 1. Download [[https://www.docker.com/community-edition][docker]]
 2. ~git clone git@github.com:SecuringTheStack/tutorials.git~
-3. ~cd~ into a tutorial's directory
-   - Each coding example within the slides/notes should contain the directory
+3. ~cd tutorials~
+4. ~cd~ into a tutorial's directory
+   - Each coding example within a tutorial's slides/notes should contain the directory
+     within the ~File:~ path
    - Ex: ~// File: "injection-fundamentals-1/src/1/app.js"~
-     - So we'd ~cd injection-fundamentals-1~
-4. ~EX_NUM=%number docker-compose up~
+     - So we would ~cd injection-fundamentals-1~
+5. ~EX_NUM=%number docker-compose up~
    - Depending on the example you'd like to run, input a ~%number~ (with no path)
      - ~%number~ maps to a directory within a tutorial's ~src~ directory
+   - For your convenience, each coding example contains the correct shell
+     command in the comments
+     - Ex: ~// Run: "EX_NUM=1 docker-compose up"~
    - To launch with ~node~ instead of ~nodemon~ simply prepend ~EXEC_MODE=node~
      to the ~docker-compose~ invocation
-   - For your convenience, this command will be prepopulated with the correct value
-     in the videos
-5. The next steps will depend on the example in question
+6. The next steps will depend on the example in question
    1. Please refer to a tutorial's ~README.org~ (or video)
+   2. For many examples, changes in your local environment will be automatically
+      mapped into the docker container created via ~docker-compose~
+      2. For example, if you ~EX_NUM=1 docker-compose up~ any changes within ~src/1~
+* Navigating The
 * Community Contributions
 + Errata
 * Additional Help
