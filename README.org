@@ -12,14 +12,14 @@
      - ~%number~ maps to a directory within a tutorial's ~src~ directory
    - For your convenience, each coding example contains the correct shell
      command in the comments
-     - ~EX_NUM=1 docker-compose up"~
+     1. ~EX_NUM=1 docker-compose up"~
    - To launch with ~node~ instead of ~nodemon~ simply prepend ~EXEC_MODE=node~
      to the ~docker-compose~ invocation
 6. The next steps will depend on the example in question
    1. Please refer to a tutorial's ~README.org~ (or video)
    2. For many examples, changes in your local environment will be automatically
       mapped into the docker container created via ~docker-compose~
-      2. For example, if you ~EX_NUM=1 docker-compose up~ any changes within ~src/1~
+      1. For example, if you ~EX_NUM=1 docker-compose up~ any changes within ~src/1~
 * Navigating The
 * Community Contributions
 + Errata
