@@ -21,7 +21,6 @@
       mapped into the docker container created via ~docker-compose~
       1. For example, if you make changes within a tutorial's directory locally,
          the container will automatically be restarted with those changes
-* Navigating The
 * Community Contributions
 + Errata
 * Additional Help
