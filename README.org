@@ -4,8 +4,8 @@
 3. ~cd tutorials~
 4. ~cd~ into a tutorial's directory
    - Each coding example within a tutorial's slides/notes should contain the directory
-     within the ~File:~ path
-   - Ex: ~// File: "injection-fundamentals-1/src/1/app.js"~
+     within the comments
+   - Ex: ~// File: injection-fundamentals-1/src/1/app.js~
      - So we would ~cd injection-fundamentals-1~
 5. ~EX_NUM=%number docker-compose up~
    - Depending on the example you'd like to run, input a ~%number~ (with no path)
@@ -19,7 +19,8 @@
    1. Please refer to a tutorial's ~README.org~ (or video)
    2. For many examples, changes in your local environment will be automatically
       mapped into the docker container created via ~docker-compose~
-      1. For example, if you ~EX_NUM=1 docker-compose up~ any changes within ~src/1~
+      1. For example, if you make changes within a tutorial's directory locally,
+         the container will automatically be restarted with those changes
 * Navigating The
 * Community Contributions
 + Errata
