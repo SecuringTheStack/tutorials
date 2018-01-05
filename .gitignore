@@ -84,3 +84,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# Custom files not needed
+*-base*
