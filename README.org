@@ -33,14 +33,14 @@
 1. Find the tutorial within the root directory of this repo
 2. Submit a PR with the fix
    1. Make a comment above your fix with a brief description of the change
-   2. Prepend `FIXED-ERROR` to this comment
+   2. Prepend ~FIXED-ERROR~ to this comment
 3. Please do a global search of the repo to see other areas that might have this error
 
 ** The error is NOT related to a tutorial's code/configs
 1. Find the tutorial within the root directory of this repo
-2. Within the repo's `readme.md`, find the slide in question
-3. Add a `FIXED-ERROR` bullet under the problematic text
-   - As a sub-bullet of `FIXED-ERROR`, explain the correction
+2. Within the repo's ~readme.md~, find the slide in question
+3. Add a ~FIXED-ERROR~ bullet under the problematic text
+   - As a sub-bullet of ~FIXED-ERROR~, explain the correction
 * Additional Help
 + Feel free to open an issue
 * TOS
