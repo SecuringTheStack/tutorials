@@ -29,14 +29,14 @@
       1. For example, if you make changes within a tutorial's directory locally,
          the container will automatically be restarted with those changes
 * Errors
-** Is it related to a tutorial's code/configs?
+** The error is related to a tutorial's code/configs
 1. Find the tutorial within the root directory of this repo
 2. Submit a PR with the fix
    1. Make a comment above your fix with a brief description of the change
    2. Prepend `FIXED-ERROR` to this comment
 3. Please do a global search of the repo to see other areas that might have this error
 
-** Is it NOT related to a tutorial's code/configs
+** The error is NOT related to a tutorial's code/configs
 1. Find the tutorial within the root directory of this repo
 2. Within the repo's `readme.md`, find the slide in question
 3. Add a `FIXED-ERROR` bullet under the problematic text
