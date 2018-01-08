@@ -30,6 +30,9 @@
       1. For example, if you make changes within a tutorial's directory locally,
          the container will automatically be restarted with those changes
 * Errors
++ To easily see if an error has been previously reported
+  1. Find the tutorial's directory within this repo
+  2. Review the ~readme.md~'s ~Error Log~ section
 ** The error is NOT related to a tutorial's code/configs
 1. Find the tutorial's directory within this repo
 2. Review ~readme.md~ and find the slide with the error
