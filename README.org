@@ -1,10 +1,37 @@
 #+OPTIONS: tags:nil
-* TOC :TOC_1_gh:
+* TL;DR
++ Securing The Stack (StS) provides developers with concise information security tutorials
++ Go to [[https://securingthestack.com][Securing The Stack]] and watch a tutorial :)
+
+* Table Of Contents                                                :TOC_1_gh:
+- [[#tldr][TL;DR]]
+- [[#securing-the-stack-sts-core-values][Securing The Stack (StS) Core Values]]
 - [[#environment-setupnavigation][Environment Setup/Navigation]]
 - [[#errors][Errors]]
 - [[#additional-help][Additional Help]]
 - [[#tos][TOS]]
 
+* Securing The Stack (StS) Core Values
+1. Developer-Focused
+   + StS provides developers with information security tutorials
+   + Tutorials are aimed at developers who have beginning/intermediate security knowledge
+2. Learning-By-Doing
+   - Most tutorials provide a local environment for developers to practice what
+     they've learned
+3. Concise
+   - Most tutorials are less than 15 minutes
+4. Frequent
+   - Multiple releases per month
+     + Starting Jan 2018
+5. Multi-Disciplinary
+   - While coding examples are written in Javascript, each tutorial's ~additional-resources.md~ allows developers to explore the
+     topic from other popular languages
+     - Where applicable
+6. Intuitive
+   - Each tutorial has a ~~
+
+7. Written in Javascript but each tutorial gives ways to drill down into other languages
+8. Dependency chain of knowlesge
 * Environment Setup/Navigation
 1. Download [[https://www.docker.com/community-edition][docker]]
    1. NOTE: If you're on Windows, please setup your environment to support linux-based containers
