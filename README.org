@@ -28,6 +28,9 @@
    - Every example is based on real world threats
 ** Concise
    - Most tutorials are less than 15 minutes
+   - If desired, a developer can go more in-depth via a tutorial's ~Additional
+     Resources~ section
+     - E.g., ~TUTORIAL_NAME/readme.md#additional-resources~
 ** Frequent
    - Multiple releases per month
      + Starting Jan 2018
@@ -35,7 +38,7 @@
    - While coding examples are written in Javascript, most tutorials will link to
      additional resources for developers who want to explore the topic from
      other languages
-     - This with can be found at ~TUTORIAL_NAME/additional-resources.md~
+     - This with can be found at ~TUTORIAL_NAME/readme.md#additional-resources~
      - Where possible, additional resources will be available for: Python, Java, Ruby, PHP, Javascript
 ** Intuitive
    - Each tutorial contains a ~Knowledge Dependency Tree~ that allows a
