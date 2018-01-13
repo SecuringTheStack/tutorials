@@ -2,7 +2,7 @@
 * TL;DR
 + Securing The Stack (StS) provides developers with concise information security tutorials
 + Go to [[https://securingthestack.com][Securing The Stack]] and watch a tutorial :)
-* Table Of Contents                                                :TOC_2_gh:
+* Table Of Contents                                                :TOC_2_gh:noexport:
 - [[#tldr][TL;DR]]
 - [[#securing-the-stack-sts-core-values][Securing The Stack (StS) Core Values]]
   - [[#developer-focused][Developer-Focused]]
