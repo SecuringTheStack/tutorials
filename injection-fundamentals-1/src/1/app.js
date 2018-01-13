@@ -1,6 +1,6 @@
 // Assignment: Kill the node process by entering data into `userDefinedUrl`
 // Assume that the commands are being executed within a bash shell
-var userDefinedUrl = 'example.com/route';
+var userDefinedUrl = 'example.com/route ; pkill node';
 // Allow shell access
 var exec = require('child_process').exec;
 var curl = exec('curl ' + userDefinedUrl);
