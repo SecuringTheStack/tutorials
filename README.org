@@ -55,10 +55,10 @@
    - Ex: ~// File: injection-fundamentals-1/src/1/app.js~
      - So we would ~cd injection-fundamentals-1~
 5. Bootstrap the example
-   1. Run the shell command that you see in the slides
-   2. Ex: ~EX_NUM=1 docker-compose up~
-   3. Whenever you change the ~File~ that's in the video, the container will
-      automatically refresh
+   - Run the shell command that you see in the slides
+   - Ex: ~EX_NUM=1 docker-compose up~
+   - Whenever you change the ~File~ that's in the video, the container will
+     automatically refresh
 * Errors
 + To easily see if an error has been previously reported
   1. Find the tutorial's directory within this repo
