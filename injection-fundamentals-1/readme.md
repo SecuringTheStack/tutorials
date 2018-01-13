@@ -161,9 +161,9 @@ var curl = exec('curl ' + userDefinedUrl);
 Next Steps
 ----------
 
--   Additional assignment: Look for file minipulation within a codebase
+-   Additional assignment: Look for file manipulation within a codebase
     and identify potential injection issues
-    -   Sometimes file minipulations occur within a shell context
+    -   Sometimes file manipulations occur within a shell context
 -   Review video notes for links to
     -   Other/future episodes
     -   Additional resources
