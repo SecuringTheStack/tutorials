@@ -57,7 +57,7 @@
 5. Bootstrap the example
    - Run the shell command that you see in the slides
    - Ex: ~EX_NUM=1 docker-compose up~
-   - Whenever you change the ~File~ that's in the video, the container will
+   - Whenever you change the ~File~ (from step 4), the container will
      automatically refresh
 * Errors
 + To easily see if an error has been previously reported
