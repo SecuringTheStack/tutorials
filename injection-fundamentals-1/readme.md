@@ -33,7 +33,7 @@ Intro
 -   OWASP Top 10 2017
     -   Top 10 security threats to web applications
         -   Injection is \#1 risk
--   Who this is for?
+-   Who is this course for?
     -   Developers who have novice injection/security knowledge
 -   Prerequisites: None
 -   At the end of this episode, you'll be able to
