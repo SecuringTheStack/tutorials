@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: node-dockerfile
-    image: "securingthestack/injection-fundamentals"
+    image: "securingthestack/injection-fundamentals-1"
     user: "node"
     working_dir: /home/node/app
     environment:
