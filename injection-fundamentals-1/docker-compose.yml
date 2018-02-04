@@ -8,7 +8,6 @@ services:
       context: .
       dockerfile: node-dockerfile
     image: "securingthestack/injection-fundamentals"
-    container_name: "sts-node"
     user: "node"
     working_dir: /home/node/app
     environment:
