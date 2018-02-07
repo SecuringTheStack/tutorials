@@ -93,8 +93,6 @@ curl.stdout.on('data', function(data) {
 });
 // Run: "EX_NUM=1 docker-compose up"
 // File: "injection-fundamentals-2/src/1/app.js"
-// Run: "EX_NUM=1 docker-compose up"
-// File: "injection-fundamentals-2/src/1/app.js"
 ```
 
 -   Hints
@@ -115,8 +113,6 @@ curl.stdout.on('data', function(data) {
   // Mock response
   console.log(data);
 });
-// Run: "EX_NUM=2 docker-compose up"
-// File: "injection-fundamentals-2/src/2/app.js"
 // Run: "EX_NUM=2 docker-compose up"
 // File: "injection-fundamentals-2/src/2/app.js"
 ```
