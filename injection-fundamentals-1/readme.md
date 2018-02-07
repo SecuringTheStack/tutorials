@@ -6,7 +6,7 @@ Injection Fundamentals: What Is Injection?
 -   Video: <https://securingthestack.com/p/injection-fundamentals-1>
 -   Ask A Question: <https://sts.tools/injection-question>
 -   Speak To Human: <https://sts.tools/live-support>
--   Overarching Playlist: <https://securingthestack.com/courses/category/Injection>
+-   Overarching Playlist: <https://securingthestack.com/p/injection-playlist>
 
 Table Of Contents
 -----------------
