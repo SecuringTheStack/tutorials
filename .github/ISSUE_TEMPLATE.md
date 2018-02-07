@@ -17,7 +17,8 @@
         1.  This might be prepopulated for you
     2.  For the issue's `title`, please enter a concise version of your
         question
-
+5.  Feel like this is the incorrect place for your question?
+    1.  Talk to a human: <https://sts.tools/live-support>
 # Question Area
 
 Why is StS so amazing? ;)
