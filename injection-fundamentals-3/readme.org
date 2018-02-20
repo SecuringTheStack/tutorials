@@ -1,4 +1,4 @@
-# Created 2018-02-19 Mon 20:24
+# Created 2018-02-19 Mon 20:55
 #+TITLE: Injection Fundamentals
 #+DATE: What Is ReDoS?
 #+AUTHOR: Zach Roof
@@ -8,24 +8,33 @@
   :CUSTOM_ID: h-CF80E32A-A437-49F9-B392-7CDA7A51D79A
   :END:
 ** Table Of Contents
-- [[#injection-fundamentals-what-is-redos][Injection Fundamentals: What Is ReDoS]]
-  - [[#intro][Intro]]
-  - [[#injection-discovery][Injection Discovery]]
-  - [[#injection-discovery-linear-approach][Injection Discovery (Linear Approach)]]
-  - [[#injection-discovery-three-questions-approach][Injection Discovery (Three Questions Approach)]]
-  - [[#redos-ex-assignment-prep][ReDoS Ex. (Assignment Prep)]]
-  - [[#redos-ex-assignment-prep-cont][ReDoS Ex. (Assignment Prep CONT.)]]
-  - [[#redos-ex-javascript-context-assignment][ReDoS Ex. (Javascript Context Assignment)]]
-  - [[#redos-ex-javascript-context-answers][ReDoS Ex. (Javascript Context Answers)]]
-  - [[#course-takeaways][Course Takeaways]]
-  - [[#next-steps][Next Steps]]
-  - [[#error-log][Error Log]]
-  - [[#additional-resources][Additional Resources]]
-    - [[#referenced-in-tutorial][Referenced In Tutorial]]
-    - [[#general][General]]
-    - [[#javascript][Javascript]]
-    - [[#java][Java]]
-  - [[#knowledge-dependency-tree][Knowledge Dependency Tree]]
+- [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#injection-fundamentals-what-is-redos][Injection Fundamentals: What Is ReDoS]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#help-meimportant-sts-links][Help Me/Important StS Links]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#intro][Intro]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#injection-discovery][Injection Discovery]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#injection-discovery-linear-approach][Injection Discovery (Linear Approach)]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#injection-discovery-three-questions-approach][Injection Discovery (Three Questions Approach)]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#redos-ex-assignment-prep][ReDoS Ex. (Assignment Prep)]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#redos-ex-assignment-prep-cont][ReDoS Ex. (Assignment Prep CONT.)]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#redos-ex-javascript-context-assignment][ReDoS Ex. (Javascript Context Assignment)]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#redos-ex-javascript-context-answers][ReDoS Ex. (Javascript Context Answers)]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#course-takeaways][Course Takeaways]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#next-steps][Next Steps]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#error-log][Error Log]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#additional-resources][Additional Resources]]
+    - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#referenced-in-tutorial][Referenced In Tutorial]]
+    - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#general][General]]
+    - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#javascript][Javascript]]
+    - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#java][Java]]
+  - [[https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-3/readme.org#knowledge-dependency-tree][Knowledge Dependency Tree]]
+
+** Help Me/Important StS Links
+- [[https://securingthestack.com/p/injection-fundamentals-3][Video]]
+- [[#knowledge-dependency-tree][Prerequisites]]
+- [[https://sts.tools/setup][Env Setup]]
+- [[https://sts.tools/injection-question][Ask A Question In Forums]]
+- [[https://sts.tools/live-support][Chat Support]]
+- [[https://securingthestack.com/p/injection-playlist][Overarching Playlist]]
 
 ** Intro
 - Who is this for?
@@ -148,4 +157,4 @@
 *** Java
 - https://dzone.com/articles/regular-expressions-denial
 ** Knowledge Dependency Tree
-+ Coming Soon!
++ Coming soon!
