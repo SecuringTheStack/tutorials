@@ -1,0 +1,150 @@
+# Created 2018-02-19 Mon 20:24
+#+TITLE: Injection Fundamentals
+#+DATE: What Is ReDoS?
+#+AUTHOR: Zach Roof
+* Injection Fundamentals: What Is ReDoS
+  :PROPERTIES:
+  :header-args: :tangle (src_path :tutorial 'injection-fundamentals-3) :mkdirp yes :noweb yes :exports code :src_dir (src_parse :tutorial 'injection-fundamentals-3) :filename (src_path :tutorial 'injection-fundamentals-3)
+  :CUSTOM_ID: h-CF80E32A-A437-49F9-B392-7CDA7A51D79A
+  :END:
+** Table Of Contents
+- [[#injection-fundamentals-what-is-redos][Injection Fundamentals: What Is ReDoS]]
+  - [[#intro][Intro]]
+  - [[#injection-discovery][Injection Discovery]]
+  - [[#injection-discovery-linear-approach][Injection Discovery (Linear Approach)]]
+  - [[#injection-discovery-three-questions-approach][Injection Discovery (Three Questions Approach)]]
+  - [[#redos-ex-assignment-prep][ReDoS Ex. (Assignment Prep)]]
+  - [[#redos-ex-assignment-prep-cont][ReDoS Ex. (Assignment Prep CONT.)]]
+  - [[#redos-ex-javascript-context-assignment][ReDoS Ex. (Javascript Context Assignment)]]
+  - [[#redos-ex-javascript-context-answers][ReDoS Ex. (Javascript Context Answers)]]
+  - [[#course-takeaways][Course Takeaways]]
+  - [[#next-steps][Next Steps]]
+  - [[#error-log][Error Log]]
+  - [[#additional-resources][Additional Resources]]
+    - [[#referenced-in-tutorial][Referenced In Tutorial]]
+    - [[#general][General]]
+    - [[#javascript][Javascript]]
+    - [[#java][Java]]
+  - [[#knowledge-dependency-tree][Knowledge Dependency Tree]]
+
+** Intro
+- Who is this for?
+  - Developers who have novice injection/security knowledge
+- Link area (below video)
+  - Prerequisites
+  - ~Injection Fundamentals Playlist~
+- At the end of this experience, you'll be able to
+  1. Evaluate the programming language's execution context for Regular Expression Denial Of Service
+     (ReDoS) vulnerabilities
+  2. Inject a docker container to witness ReDoS
+  3. Leverage the "Three Questions" approach to spot major injection issues
+  4. Understand how injection mitigations (i.e., whitelisting) can actually create vulnerabilities
+- Ready? Come join me!
+
+** Injection Discovery
+- When reviewing code, you can spot major injection risks by
+  1. Linear Approach
+  2. "Three Questions" Approach
+** Injection Discovery (Linear Approach)
+1. List execution contexts for a given piece of code
+2. For each execution context in the list, find syntactic and semantic injection risks
+** Injection Discovery (Three Questions Approach)
+- Are there any injection risks that...
+  1. Would allow remote code execution (RCE)?
+     - Ex: Syntactic injection within the shell context
+  2. Would allow sensitive data disclosure?
+     - Ex: Semantic injection within the curl context (SSRF)
+  3. Would allow my mitigations to be used against me?
+     - Usually found within the programming language's execution context (Ex:
+       Javascript Context)
+     - New code example
+       - Mitigation transition
+** ReDoS Ex. (Assignment Prep)
+#+NAME: 1/app-base.js
+#+BEGIN_SRC js
+  var userDefinedEmail= 'AAAAAAAAAAAAAAAAAA';
+  var whitelistRegex = /^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$/;
+  console.time('Email Regex Took');
+  var isValid = whitelistRegex.test(userDefinedEmail);
+  console.timeEnd('Email Regex Took');
+  // If isValid is false, halt execution of input
+#+END_SRC
+- Intent of code
+  - Mitigate injection risks by whitelisting accepted characters
+- Assignment scenario
+  - Assume that ~whitelistRegex~ doesn't accept any "malicious" characters from ~userDefinedEmail~
+  - How else can ~userDefinedEmail~ be exploited?
+    - Hints
+      1. What other string property should be validated?
+      2. Denial of Service (DoS) takes place when input is too ______?
+** ReDoS Ex. (Assignment Prep CONT.)
+- Answers
+  - Denial Of Service (DoS) takes place when input is too large
+  - ~whitelistRegex~ is vulnerable to Regular Express Denial Of Service (ReDoS)
+    - Learn ReDoS by example
+
+** ReDoS Ex. (Javascript Context Assignment)
+#+NAME: 1/app.js
+#+BEGIN_SRC js
+  // Warning: Be very careful while doing this assignment, it can stall your computer!
+  // Assignment 1: Set `userDefinedEmail` to `A` and note the time. Then, repeat with 3
+  // `A`s.  What pattern do you notice with the time?
+
+  // Assignment 2: Set `userDefinedEmail` to 18 `A`s and note the time. Then, repeat with 20
+  // `A`s.  What pattern do you notice with the time?
+
+  // Assignment 3: Approximately how many characters should we allow in `userDefinedEmail`?
+  // --------------------------------------------------------------------------------------
+  var userDefinedEmail= 'AAAAAAAAAAAAAAAAAA';
+  var whitelistRegex = /^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$/;
+  console.time('Email Regex Took');
+  var isValid = whitelistRegex.test(userDefinedEmail);
+  console.timeEnd('Email Regex Took');
+  // If isValid is false, halt execution of input
+
+  // Run: "EX_NUM=1 docker-compose up"
+  // File: "injection-fundamentals-3/src/1/app.js"
+#+END_SRC
+** ReDoS Ex. (Javascript Context Answers)
+- Assignment 1
+  - It decreases
+- Assignment 2
+  - As a percentage increase, the processing time drastically increases
+- Assignment 3
+  - We should approximately allow 18 characters (at a minimum)
+    - CPU dependent
+    - The preferable solution is to restrict the email length to a sane number AND leverage an input
+      validation library (i.e. ~validate.js~)
+      - More to come in the injection mitigation tutorials
+
+** Course Takeaways
+- ReDoS (Regular Expression Denial Of Service) is a key risk within the programming language's
+  execution context (E.g., Javascript Execution Context)
+- To mitigate injection, we must
+  - Validate any inputs through a whitelist
+  - Look for edge cases within that whitelist
+
+** Next Steps
+- Additional assignment:
+  - Read ~snyk.io/blog/redos-and-catastrophic-backtracking~
+    - Link within ~Additional Resources~
+  - Find any custom regexs in a codebase that are vulnerable
+- Review links below video
+  - ~Additional resources~
+** Error Log
+- None so far :)
+** Additional Resources
+- Please submit a PR with any additional resources
+*** Referenced In Tutorial
+- https://validatejs.org/
+- https://snyk.io/blog/redos-and-catastrophic-backtracking/
+*** General
+- https://www.owasp.org/download/jmanico/owasp_podcast_56.mp3
+- https://www.checkmarx.com/wp-content/uploads/2015/03/ReDoS-Attacks.pdf
+- https://stackoverflow.com/questions/12841970/how-can-i-recognize-an-evil-regex
+*** Javascript
+- https://github.com/jagracey/RegEx-DoS
+- https://github.com/substack/safe-regex
+*** Java
+- https://dzone.com/articles/regular-expressions-denial
+** Knowledge Dependency Tree
