@@ -1,0 +1,145 @@
+#+TITLE: Same-Origin Policy
+#+DATE: Fundamentals
+#+AUTHOR: Zach Roof
+* Ep-3: Same-Origin Policy
+** Table Of Contents
+- [[#ep-3-same-origin-policy][Ep-3: Same-Origin Policy]]
+  - [[#key-questions][Key Questions]]
+  - [[#what-is-the-origin][What Is The Origin?]]
+  - [[#remember-me-login-functionality]["Remember Me" Login Functionality]]
+  - [[#why-we-need-sop][Why We Need SOP]]
+  - [[#sop-definition][SOP Definition]]
+  - [[#sop-definition-cont][SOP Definition (CONT)]]
+  - [[#sop-edge-cases][SOP Edge Cases]]
+  - [[#sop-rules][SOP Rules]]
+  - [[#sop-rules-cross-origin-embedding-examples][SOP Rules: Cross-Origin Embedding Examples]]
+  - [[#sop-rules-cross-origin-embedding-examples-cont][SOP Rules: Cross-Origin Embedding Examples (CONT.)]]
+  - [[#how-to-prevent-cross-origin-writes][How To Prevent Cross-Origin Writes?]]
+  - [[#synchronizer-token-pattern][Synchronizer Token Pattern]]
+  - [[#how-to-allow-cross-origin-access][How To Allow Cross-Origin Access?]]
+  - [[#additional-resources][Additional Resources]]
+  - [[#error-log][Error Log]]
+  - [[#knowledge-dependency-tree][Knowledge Dependency Tree]]
+
+** Key Questions
+- What is the Same-Origin Policy (SOP)?
+  - What attacks does it prevent?
+  - How does SOP relate to CORS?
+- 80/20 Analysis
+
+** What Is The Origin?
+- Where did the request /originate/ from?
+- If you're on ~google.com~'s homepage
+  - For outgoing requests, ~google.com~ is the "origin"
+- What if ~google.com~'s javascript could make requests to any site on the internet?
+  - How could this be a problem?
+    - Hint: "Remember Me" login functionality
+
+** "Remember Me" Login Functionality
+1. You authenticate to ~bank.com~
+2. ~bank.com~ sends an authentication cookie to your browser
+   - ~Set-Cookie: auth=RANDOM_CHARS; Domain=bank.com~
+3. You close your browser
+4. When you revisit ~bank.com~, you don't have to reenter your credentials
+   - Any request to ~bank.com~ will contain the authentication cookie
+
+** Why We Need SOP
+1. Visit ~evil.com~
+2. What prevents ~evil.com~'s javascript from interacting with ~bank.com~?
+   - Same-Origin Policy helps scope ~evil.com~'s requests to ~evil.com~
+     - One layer of defense
+
+** SOP Definition
+- Restricts how a document or script loaded from one origin (~evil.com~) can interact with
+  a resource from another origin (~bank.com~)
+- The Same-Origin Policy helps protect sites that use authenticated sessions
+- SOP Focus
+  - Keeping privileged information safe
+    - Helps prevent unauthorized read access
+  - Does other items
+- Source: [[https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy][MDN]]
+
+** SOP Definition (CONT)
+- Browser Url: ~http://store.company.com/dir/page.html~
+  - ~Origin: <scheme> "://" <hostname> [ ":" <port> ]~
+    - Origin: ~http://store.company.com~
+    - Port: TCP port number on which the server is listening
+      - If no port is given, fallback to scheme port
+- MDN Origin Comparison
+#+CAPTION: Comparison
+| URL                                               | SOP Violation?          |
+| ~http://store.company.com/dir2/other.html~        | No                      |
+| ~http://store.company.com/dir/inner/another.html~ | No                      |
+| ~https://store.company.com/secure.html~           | Yes  (Different scheme) |
+| ~http://store.company.com:81/dir/etc.html~        | Yes  (Different port)   |
+| ~http://news.company.com/dir/other.html~          | Yes (Different host)    |
+
+** SOP Edge Cases
+- What?! I embed ~<img>~ tags that don't follow the SOP all the time!
+  - These requests are going cross-origin
+- Ex:
+#+BEGIN_SRC html
+  <img src="http://catphotos.example.com/dir/cat.gif" alt="He so puuurrrdy" height="42" width="42">
+#+END_SRC
+
+** SOP Rules
+- Cross-origin writes are /typically/ allowed
+  - Ex: ~POST~ form submissions
+- Cross-origin embedding is /typically/ allowed
+  - Examples to come
+- Cross-origin reads are /typically/ not allowed
+  - SOP core functionality
+    - Preventing unauthorized reads
+- Source: [[https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy][MDN]]
+
+** SOP Rules: Cross-Origin Embedding Examples
+- Javascript
+  - ~<script src="..."></script>~
+- CSS
+  - ~<link rel="stylesheet" href="...">~
+- Images
+  - ~<img>~
+- Media files
+  - ~<video>~, ~<audio>~
+- Plug-ins
+  - ~<object>~, ~<embed>~, ~<applet>~
+- Source: [[https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy][MDN]]
+
+** SOP Rules: Cross-Origin Embedding Examples (CONT.)
+- Fonts
+  - ~@font-face~
+    - Some browsers allow cross-origin fonts, others require same-origin fonts
+- iframes
+  - ~<frame>~, ~<iframe>~
+    - ~X-Frame-Options~ header mitigation
+      - Prevent cross-origin embedding
+- Source: [[https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy][MDN]]
+
+** How To Prevent Cross-Origin Writes?
+- What prevents ~evil.com~ javascript from submitting a bank transfer to ~bank.com~?
+  - Nothing from the SOP
+    - If done via form ~POST~
+  - ~bank.com~ must implement a synchronizer token
+** Synchronizer Token Pattern
+#+BEGIN_SRC html
+  <form action="http://bank.com/transfer" method="post">
+    <input type="hidden" name="sync_token" value="j/DcoJ2VZvr7vdf8CHKsvjdlDbmiizaOb5B8DMALg6s=" >
+    <!-- Rest of form -->
+  </form>
+#+END_SRC
+- For every state changing action (Ex: ~POST~ bank transfer)
+  1. ~bank.com~ embeds a unique ~sync_token~
+     - Unique on every response to the browser
+  2. Before proceeding with action from browser request
+     - ~bank.com~ validates the ~sync_token~
+- How does the SOP interact with this?
+  - ~evil.com~ can't read ~sync_token~ due to SOP
+** How To Allow Cross-Origin Access?
+- Cross Origin Resource Sharing (CORS)
+  - Header sent in HTTP Response
+    - Instructs browser to relax the SOP
+
+** Additional Resources
+** Error Log
+:PROPERTIES:
+** Knowledge Dependency Tree
