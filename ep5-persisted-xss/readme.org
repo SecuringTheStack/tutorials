@@ -132,3 +132,4 @@
 - https://blog.github.com/2017-11-16-introducing-security-alerts-on-github/
 - Persisted XSS could give attackers code execution on all of your users' browsers
 ** Knowledge Dependency Tree
++ [[https://securing-the-stack.teachable.com/p/reflected-cross-site-scripting][Reflected Xss]]
