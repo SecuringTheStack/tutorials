@@ -1,0 +1,132 @@
+#+TITLE: Persistent XSS
+* Ep-5: What is Persistent XSS
+** Table Of Contents
+- [[#ep-5-what-is-persistent-xss][Ep-5: What is Persistent XSS]]
+  - [[#scope][Scope]]
+  - [[#xss-types][XSS Types]]
+  - [[#persistent-xss][Persistent XSS]]
+  - [[#persistent-xss-vs-reflected-xss][Persistent XSS vs Reflected XSS]]
+  - [[#assignment-scenario][Assignment Scenario]]
+  - [[#assignment-1-persistent-xss][Assignment 1: Persistent XSS]]
+  - [[#assignment-1-persistent-xss-answer][Assignment 1: Persistent XSS (Answer)]]
+  - [[#assignment-2-xss-sanitization-issues][Assignment 2: XSS Sanitization Issues]]
+  - [[#assignment-3-information-leakage][Assignment 3: Information Leakage]]
+  - [[#assignment-3-information-leakage-answer][Assignment 3: Information Leakage (Answer)]]
+  - [[#assignment-4-reconnaissance-through-npm-audit][Assignment 4: Reconnaissance Through Npm Audit]]
+  - [[#assignment-4-recon-through-npm-audit-answer][Assignment 4: Recon Through Npm Audit (Answer)]]
+  - [[#assignment-5-persistent-xss][Assignment 5: Persistent XSS]]
+  - [[#assignment-5-persistent-xss-answer][Assignment 5: Persistent XSS (Answer)]]
+  - [[#persistent-xss-summation][Persistent XSS Summation]]
+
+** Scope
+- What is Persistent XSS (Cross-Site Scripting)?
+- Where are common locations for Persistent XSS?
+- How can XSS defenses be exploited?
+  - Live example via OWASP Juice Shop!
+- Learn to leverage ~npm audit~ to check for node.js vulnerabilities
+- Persistent XSS vs Reflected XSS
+** XSS Types
+- Persistent
+  - Stored XSS
+- Non-Persistent
+  - Reflected XSS
+  - DOM XSS
+** Persistent XSS
+- Typically stored in the database
+  - username ~<script src='evil.com'></script>~
+  - Also in local storage
+- Very problematic when shared across multiple users
+  - Ex: Chat application where ~username~ is sent to multiple clients
+- Other high risk areas
+  - Functionality that allows users to submit html markup
+    - Web forums
+  - Comments
+** Persistent XSS vs Reflected XSS
+- Persistent XSS
+  - Much more dangerous
+  - Can attack all users of a site
+  - Doesn't have to involve an action from a user
+- Reflected XSS
+  - Often requires an action from the victim
+    - Clicking on malicious link with XSS payload
+      - Payload is reflected back to the user
+  - Typically involves one victim
+** Assignment Scenario
+- Exploit a Persistent XSS flaw by taking advantage of a XSS defense
+- Aside: All assignment instructions assume Linux/macOS
+- OWASP Juice Shop
+  - Intentionally vulnerable web app
+  - https://github.com/securingthestack/juice-shop
+    - ~persistent-xss-1~ branch
+  - ~docker run --rm -p 3000:3000 securingthestack/juice-shop:persistent-xss-1~
+** Assignment 1: Persistent XSS
+1. /Try/ to obtain Persistent XSS within http://localhost:3000/#/contact
+   - Port assumes that you leveraged the docker command
+   - Input (http://localhost:3000/#/contact)
+     - ~<script>alert("I have XSS")</script>Outside Text~ within the ~Comment~ field
+     - Make sure to leave rating
+   - Output
+     - Within the ~Customer Feedback~ section within http://localhost:3000/#/about
+2. Given the output in the ~Customer Feedback~ section, how is the application
+   handling XSS attacks?
+   - Within the context of this feature, why is this a bad practice?
+
+** Assignment 1: Persistent XSS (Answer)
+1. Instead of rejecting unexpected input, the application is sanitizing it
+   - This is very difficult to implement properly
+     - Hmm... How can this step be exploited?
+2. Alert
+   - If input is unexpected, fully reject it
+     - There is no reason why html markup should be placed within the ~Comment~ field
+
+** Assignment 2: XSS Sanitization Issues
+- Given the application sanitizes the ~script~ tags within ~<script>alert("I
+    have XSS")</script>~...
+- Can you insert anything /around/ the ~script~ tags that would allow the XSS to continue?
+- Lets explore how attackers could find this flaw
+  - Answer will be within the final assignment
+
+** Assignment 3: Information Leakage
+1. Through the browser, view Juice Shop's ~package.json~
+   - Unfortunately, this file is often easily available
+   - Hint
+     - ~app.use(express.static(applicationRoot))~
+
+** Assignment 3: Information Leakage (Answer)
+- http://localhost:3000/package.json
+  - "This isn't a vulnerability!"
+- Place ~package.json~ into a directory of your choice
+  - You'll be leveraging it within the next assignment
+
+** Assignment 4: Reconnaissance Through Npm Audit
+1. Upgrade npm to npm@6+
+   - ~npm install npm@latest -g~
+2. ~cd~ into the directory with the ~package.json~
+3. ~npm i --package-lock-only~
+4. ~npm audit > audit.txt~
+5. What vulnerability within ~sanitize-html~ can be leveraged to exploit
+   Assignment 2?
+
+** Assignment 4: Recon Through Npm Audit (Answer)
+- ~sanitize-html~ doesn't sanitize recursively
+  - https://nodesecurity.io/advisories/135
+  - https://github.com/punkave/sanitize-html/issues/29
+
+** Assignment 5: Persistent XSS
+- Obtain persistent XSS within http://localhost:3000/#/about
+- XSS Input
+  - Within the ~Comment~ field of http://localhost:3000/#/contact
+  - Leave rating
+
+** Assignment 5: Persistent XSS (Answer)
+- ~<<script>Foo</script>script>alert("XSS")</script>~
+- Alternative that doesn't work
+- ~<script<script>>alert("I stole your auth cookie")<</script>/script>~
+
+** Persistent XSS Summation
+- If input is unexpected, halt execution
+  - Dont try to sanitize
+- Exploitation process started with "harmless" information leakage
+- ~Npm audit~ is your friend
+- https://blog.github.com/2017-11-16-introducing-security-alerts-on-github/
+- Persisted XSS could give attackers code execution on all of your users' browsers
