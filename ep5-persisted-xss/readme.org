@@ -17,6 +17,7 @@
   - [[#assignment-5-persistent-xss][Assignment 5: Persistent XSS]]
   - [[#assignment-5-persistent-xss-answer][Assignment 5: Persistent XSS (Answer)]]
   - [[#persistent-xss-summation][Persistent XSS Summation]]
+  - [[#knowledge-dependency-tree][Knowledge Dependency Tree]]
 
 ** Scope
 - What is Persistent XSS (Cross-Site Scripting)?
@@ -130,3 +131,4 @@
 - ~Npm audit~ is your friend
 - https://blog.github.com/2017-11-16-introducing-security-alerts-on-github/
 - Persisted XSS could give attackers code execution on all of your users' browsers
+** Knowledge Dependency Tree
