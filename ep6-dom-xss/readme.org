@@ -1,0 +1,133 @@
+#+TITLE: DOM XSS
+* Ep-5: What is DOM XSS
+** Table Of Contents
+- [[#ep-5-what-is-dom-xss][Ep-5: What is DOM XSS]]
+  - [[#scope][Scope]]
+  - [[#xss-types][XSS Types]]
+  - [[#traditional-approaches-to-input-validation][Traditional Approaches To Input Validation]]
+  - [[#assignment-1-exploiting-dom-xss-scenario][Assignment 1: Exploiting DOM XSS (Scenario)]]
+  - [[#assignment-1-exploiting-dom-xss][Assignment 1: Exploiting DOM XSS]]
+  - [[#assignment-1-exploiting-dom-xss-hints][Assignment 1: Exploiting DOM XSS (Hints)]]
+  - [[#assignment-1-exploiting-dom-xss-answer][Assignment 1: Exploiting DOM XSS (Answer)]]
+  - [[#assignment-1-exploiting-dom-xss-answer-exploration][Assignment 1: Exploiting DOM XSS (Answer Exploration)]]
+  - [[#assignment-1-exploiting-dom-xss-answer-exploration-cont][Assignment 1: Exploiting DOM XSS (Answer Exploration) CONT]]
+  - [[#persistentreflected-xss-vs-dom-xss][Persistent/Reflected XSS vs DOM XSS]]
+  - [[#persistentreflected-xss-vs-dom-xss-cont][Persistent/Reflected XSS vs DOM XSS (CONT)]]
+  - [[#knowledge-dependency-tree][Knowledge Dependency Tree]]
+    - [[https://securing-the-stack.teachable.com/p/reflected-cross-site-scripting][Reflected XSS]]
+    - [[https://securing-the-stack.teachable.com/p/persistent-cross-site-scripting][Persistent XSS]]
+
+** Scope
+- What is DOM XSS (Cross-Site Scripting)?
+- How is DOM XSS different from Reflected/Persistent XSS?
+- Live Assignment: Exploit DOM XSS within OWASP's Juice Shop!
+- Why is DOM XSS so difficult to detect?
+** XSS Types
+- Persistent
+  - Stored XSS
+- Non-Persistent
+  - Reflected XSS
+  - DOM XSS
+    - Type 0 XSS
+** Traditional Approaches To Input Validation
+- Building up to ~XSS Mitigations~ module
+- Server-side Validation
+  - Reject user input if it contains unexpected characters/strings
+    - Result: Response to browser doesn't contain XSS
+- Client-side Validation
+  - Validate user input before sending to the server
+    - Ex: Check form fields for unexpected input before sending information
+      to the server
+      - Only deters the most novice "hackers"
+  - Is this the only client-side validation that should occur?
+    - Of course not... :)
+
+** Assignment 1: Exploiting DOM XSS (Scenario)
+- OWASP Juice Shop
+  - Intentionally vulnerable web app
+  - https://github.com/securingthestack/juice-shop
+    - ~dom-xss-1~ branch
+- ~docker run --rm -p 3000:3000 securingthestack/juice-shop:dom-xss-1~
+- Navigate browser to ~http://localhost:3000~
+
+** Assignment 1: Exploiting DOM XSS
+- Assignment Assumptions
+  1. The application vigoriously monitors server logs for XSS and patches immediately
+     - Result: Assume server-side validation of XSS is correctly occurring
+       - No Reflected XSS in server response
+  2. No form of client-side validation is occurring
+     - "Client-side validation is useless because we validate on the server"
+  3. The browser has loaded all front-end code
+- Find an XSS flaw within ~http://localhost:3000~ without submitting a request
+  to the server
+  - Hints on next slide if you're stuck
+
+** Assignment 1: Exploiting DOM XSS (Hints)
+- Where do many front-end frameworks store client-side state?
+  - If ~x~ character is in the url, ~xFOO~ doesn't invoke a request to the server
+- Look in ~localhost:3000/dist/juice-shop.min.js~ for ~trustAsHtml~
+  - Google Chrome Ex for Pretty Printing
+- How can malicious input come into the client?
+  - Reflected XSS Module Ex.
+
+** Assignment 1: Exploiting DOM XSS (Answer)
+- ~<script>alert("Evil Code Is Running")</script>~ within Search field
+- Url inspection
+  - ~q~ is after ~#~ so the browser won't initiate a request
+- Imagine payload spreading via a malicious link
+
+** Assignment 1: Exploiting DOM XSS (Answer Exploration)
+- Strict Contextual Escaping (SCE)
+  - Is a mode in which AngularJS constrains bindings to only render trusted values
+- Javascript Source
+  #+BEGIN_SRC javascript
+    $scope.searchQuery = $sce.trustAsHtml($location.search().q)
+  #+END_SRC
+- juice-shop.min.js
+  #+BEGIN_SRC javascript
+    r.searchQuery = e.trustAsHtml(n.search().q);
+  #+END_SRC
+- HTML
+  - ~$sce.trustAsHtml~ will pass unsanitisized input to ~ng-bind-html~
+    #+BEGIN_SRC html
+      <h3 ng-show="searchQuery">
+        <span translate="TITLE_SEARCH_RESULTS"></span>
+        <span ng-bind-html="searchQuery"></span>
+      </h3>
+    #+END_SRC
+** Assignment 1: Exploiting DOM XSS (Answer Exploration) CONT
+- juice-shop.min.js
+  #+BEGIN_SRC javascript
+    angular.module("juiceShop").config(["$sceProvider", function(e) {
+        e.enabled(!1)
+    }])
+  #+END_SRC
+** Persistent/Reflected XSS vs DOM XSS
+- Propigation
+  - Persistent/Reflected XSS
+    - XSS payload is embedded in server's response to the client
+  - DOM XSS
+    - XSS payload stays within the browser
+- Mitigations
+  - Persistent/Reflected XSS
+    - Can be mitigated by server-side/client-side input validation
+    - Client-side validation
+      - Native Angular functionality
+      - Don't want to rely on this
+  - DOM XSS
+    - Client-side validation
+
+** Persistent/Reflected XSS vs DOM XSS (CONT)
+- Detectability
+  - Persistent/Reflected XSS
+    - Relatively easy to detect due to server logging
+  - DOM XSS
+    - No detectability
+- Done :D
+
+** Additional Resources
+:PROPERTIES:
+:CUSTOM_ID: h-758E5075-EB7E-4F7E-832D-F74618B2E718
+:END:
+** Error Log
+** Knowledge Dependency Tree
