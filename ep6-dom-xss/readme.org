@@ -131,3 +131,5 @@
 :END:
 ** Error Log
 ** Knowledge Dependency Tree
++ https://securing-the-stack.teachable.com/p/persistent-cross-site-scripting
++ https://securing-the-stack.teachable.com/p/reflected-cross-site-scripting
