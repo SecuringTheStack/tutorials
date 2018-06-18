@@ -1,0 +1,26 @@
+engines:
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+    - '**.js'
+    - '**.css'
+checks:
+  method-complexity:
+    config:
+      threshold: 7
+  similar-code:
+    enabled: false
+  identical-code:
+    enabled: false
+exclude_paths:
+  - 'app/private/**/*'
+  - 'app/css/geo-bootstrap/**/*'
+  - 'data/datacreator.js'
+  - 'vagrant/shake.js'
+  - 'Gruntfile.js'
+  - '*conf.js'

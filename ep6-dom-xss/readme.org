@@ -18,10 +18,10 @@
     - [[https://securing-the-stack.teachable.com/p/persistent-cross-site-scripting][Persistent XSS]]
 
 ** Scope
-- What is DOM XSS (Cross-Site Scripting)?
-- How is DOM XSS different from Reflected/Persistent XSS?
-- Live Assignment: Exploit DOM XSS within OWASP's Juice Shop!
-- Why is DOM XSS so difficult to detect?
+1. What is DOM XSS (Cross-Site Scripting)?
+2. How is DOM XSS different from Reflected/Persistent XSS?
+3. Live Assignment: Exploit DOM XSS within OWASP's Juice Shop!
+4. Why is DOM XSS so difficult to detect?
 ** XSS Types
 - Persistent
   - Stored XSS
