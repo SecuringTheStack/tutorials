@@ -100,7 +100,7 @@ curl.stdout.on('data', function(data) {
   console.log(data);
 });
 // Run: "EX_NUM=1 docker-compose up"
-// File: "ep10-injection-fundamentals-2/src/1/app.js"
+// File: "ep10-injection-fundamentals-part-2/src/1/app.js"
 ```
 
 -   Hints
@@ -122,7 +122,7 @@ curl.stdout.on('data', function(data) {
   console.log(data);
 });
 // Run: "EX_NUM=2 docker-compose up"
-// File: "ep10-injection-fundamentals-2/src/2/app.js"
+// File: "ep10-injection-fundamentals-part-2/src/2/app.js"
 ```
 
 -   This is an example of Server Side Request Forgery (SSRF)

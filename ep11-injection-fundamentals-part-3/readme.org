@@ -103,7 +103,7 @@
   // If isValid is false, halt execution of input
 
   // Run: "EX_NUM=1 docker-compose up"
-  // File: "ep11-injection-fundamentals-3/src/1/app.js"
+  // File: "ep11-injection-fundamentals-part-3/src/1/app.js"
 #+END_SRC
 ** ReDoS Ex. (Javascript Context Answers)
 - Assignment 1
