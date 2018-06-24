@@ -1,0 +1,18 @@
+version: "3"
+# For simplicity, we're keeping this file very small.
+# From a security perspective, this docker compose shouldn't
+# be considered "production ready".
+services:
+  node:
+    build:
+      context: .
+      dockerfile: node-dockerfile
+    image: "securingthestack/injection-fundamentals-1"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=dev
+      - NPM_CONFIG_LOGLEVEL=info
+    volumes:
+      - ./src:/home/node/app/src
+    command: ["./node-dockerfile-wrapper.sh", "$EX_NUM", "$EXEC_MODE"]
