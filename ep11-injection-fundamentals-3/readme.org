@@ -9,7 +9,6 @@
   :END:
 ** Table Of Contents                                                    :toc:
 - [[#injection-fundamentals-what-is-redos][Injection Fundamentals: What Is ReDoS]]
-  - [[#help-meimportant-sts-links][Help Me/Important StS Links]]
   - [[#intro][Intro]]
   - [[#injection-discovery][Injection Discovery]]
   - [[#injection-discovery-linear-approach][Injection Discovery (Linear Approach)]]
@@ -27,14 +26,6 @@
     - [[#javascript][Javascript]]
     - [[#java][Java]]
   - [[#knowledge-dependency-tree][Knowledge Dependency Tree]]
-
-** Help Me/Important StS Links
-- [[https://securingthestack.com/p/injection-fundamentals-3][Video]]
-- [[#knowledge-dependency-tree][Prerequisites]]
-- [[https://sts.tools/setup][Env Setup]]
-- [[https://sts.tools/injection-question][Ask A Question In Forums]]
-- [[https://sts.tools/live-support][Chat Support]]
-- [[https://securingthestack.com/p/injection-playlist][Overarching Playlist]]
 
 ** Intro
 - Who is this for?
@@ -112,7 +103,7 @@
   // If isValid is false, halt execution of input
 
   // Run: "EX_NUM=1 docker-compose up"
-  // File: "injection-fundamentals-3/src/1/app.js"
+  // File: "ep11-injection-fundamentals-3/src/1/app.js"
 #+END_SRC
 ** ReDoS Ex. (Javascript Context Answers)
 - Assignment 1

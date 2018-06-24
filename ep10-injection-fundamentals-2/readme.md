@@ -100,7 +100,7 @@ curl.stdout.on('data', function(data) {
   console.log(data);
 });
 // Run: "EX_NUM=1 docker-compose up"
-// File: "injection-fundamentals-2/src/1/app.js"
+// File: "ep10-injection-fundamentals-2/src/1/app.js"
 ```
 
 -   Hints
@@ -122,7 +122,7 @@ curl.stdout.on('data', function(data) {
   console.log(data);
 });
 // Run: "EX_NUM=2 docker-compose up"
-// File: "injection-fundamentals-2/src/2/app.js"
+// File: "ep10-injection-fundamentals-2/src/2/app.js"
 ```
 
 -   This is an example of Server Side Request Forgery (SSRF)
@@ -321,19 +321,19 @@ Knowledge Dependency Tree
 -------------------------
 
 -   [Injection Fundamentals: What Is
-    Injection?](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#injection-fundamentals-what-is-injectionv)
-    -   [Intro](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#intro)
+    Injection?](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#injection-fundamentals-what-is-injectionv)
+    -   [Intro](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#intro)
     -   [What Is
-        Injection?](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#what-is-injection)
+        Injection?](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#what-is-injection)
     -   [Inject The Shell Context
-        (Assignment)](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#inject-the-shell-context-assignment)
+        (Assignment)](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#inject-the-shell-context-assignment)
     -   [Inject The Shell Context
-        (Answer)](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#inject-the-shell-context-answer)
+        (Answer)](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#inject-the-shell-context-answer)
     -   [Inject The Shell Context
-        (Takeaways)](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#inject-the-shell-context-takeaways)
+        (Takeaways)](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#inject-the-shell-context-takeaways)
     -   [Syntactic
-        Injection](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#syntactic-injection)
+        Injection](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#syntactic-injection)
     -   [Evaluating Execution
-        Contexts](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#evaluating-execution-contexts)
+        Contexts](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#evaluating-execution-contexts)
     -   [Next
-        Steps](https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-1/readme.md#next-steps)
+        Steps](https://github.com/SecuringTheStack/tutorials/tree/master/ep9-injection-fundamentals-part-1/readme.md#next-steps)
