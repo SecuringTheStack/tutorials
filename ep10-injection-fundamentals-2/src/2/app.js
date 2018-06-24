@@ -10,4 +10,4 @@ curl.stdout.on('data', function(data) {
   console.log(data);
 });
 // Run: "EX_NUM=2 docker-compose up"
-// File: "injection-fundamentals-2/src/2/app.js"
+// File: "ep10-injection-fundamentals-part-2/src/2/app.js"

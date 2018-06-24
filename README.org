@@ -52,8 +52,8 @@
 3. ~cd tutorials~
 4. ~cd~ into a tutorial's directory
    - Each coding example should contain the directory within the comments
-   - Ex: ~// File: injection-fundamentals-1/src/1/app.js~
-     - So we would ~cd injection-fundamentals-1~
+   - Ex: ~// File: ep9-injection-fundamentals-part-1/src/1/app.js~
+     - So we would ~cd ep9-injection-fundamentals-part-1~
 5. Bootstrap the example
    - Run the shell command that you see in the slides
    - Ex: ~EX_NUM=1 docker-compose up~
