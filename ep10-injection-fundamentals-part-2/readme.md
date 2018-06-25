@@ -2,12 +2,12 @@ Injection Fundamentals: What Is SSRF?
 =====================================
 
 ## Help Me/Important StS Links
--   Video: <https://securingthestack.com/p/injection-fundamentals-2>
+-   Video: <https://securing-the-stack.teachable.com/p/injection-fundamentals-2>
 -   Prerequisites: <https://sts.tools/if2k>
 -   Env Setup: <https://sts.tools/setup>
 -   Ask A Question: <https://sts.tools/injection-question>
 -   Speak To Human: <https://sts.tools/live-support>
--   Overarching Playlist: <https://securingthestack.com/p/injection-playlist>
+-   Overarching Playlist: <https://securing-the-stack.teachable.com/courses/category/injection-fundamentals>
 
 Table Of Contents
 -----------------
