@@ -35,7 +35,6 @@
   - [[#talk-scope][Talk Scope]]
   - [[#what-is-clickjacking][What Is Clickjacking?]]
   - [[#clickjacking-ex-evilcom][Clickjacking Ex: Evil.com]]
-  - [[#][.]]
   - [[#clickjacking-ex-evilcom-cont][Clickjacking Ex: Evil.com (CONT.)]]
   - [[#clickjacking-mitigations][Clickjacking Mitigations]]
   - [[#mitigations-content-security-policy-csp][Mitigations: Content Security Policy (CSP)]]
@@ -46,7 +45,6 @@
   - [[#mitigations-x-frame-options][Mitigations: X-Frame-Options]]
   - [[#mitigations-x-frame-options-compatability][Mitigations: X-Frame-Options (Compatability)]]
   - [[#burp-clickbandit-ex][Burp Clickbandit Ex]]
-  - [[#-1][.]]
   - [[#misc-clickjacking-examples][Misc Clickjacking Examples]]
   - [[#additional-resources][Additional Resources]]
   - [[#error-log][Error Log]]
@@ -85,11 +83,11 @@
 - ~Login Here~ button
   - Something the user is likely to click
 - CSS alterations
-** .
-   :PROPERTIES:
-   :REVEAL_EXTRA_ATTR: data-background-video="./videos/clickjacking.mov"; data-background-video-muted="true"; data-background-size="contain"
-   :CUSTOM_ID: h-3F844F87-F639-4297-9A23-A0A37493138F-hide
-   :END:
+# ** .
+#    :PROPERTIES:
+#    :REVEAL_EXTRA_ATTR: data-background-video="./videos/clickjacking.mov"; data-background-video-muted="true"; data-background-size="contain"
+#    :CUSTOM_ID: h-3F844F87-F639-4297-9A23-A0A37493138F-hide
+#    :END:
 ** Clickjacking Ex: Evil.com (CONT.)
    :PROPERTIES:
    :CUSTOM_ID: h-2CE2A513-0339-44FD-A8D1-9833EC182541
@@ -187,11 +185,11 @@
       cd $TUTORIAL_REPO/ep12-clickjacking
       docker-compose up
       #+END_SRC
-** .
-   :PROPERTIES:
-   :REVEAL_EXTRA_ATTR: data-background-video="./videos/clickjacking-mitigation.mov"; data-background-video-muted="true"; data-background-size="contain"
-   :CUSTOM_ID: h-5296A5D1-D890-4C8A-A276-E365E66477CE-hide
-   :END:
+# ** .
+#    :PROPERTIES:
+#    :REVEAL_EXTRA_ATTR: data-background-video="./videos/clickjacking-mitigation.mov"; data-background-video-muted="true"; data-background-size="contain"
+#    :CUSTOM_ID: h-5296A5D1-D890-4C8A-A276-E365E66477CE-hide
+#    :END:
 
 ** Misc Clickjacking Examples
    :PROPERTIES:
