@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  juiceshop:
+    build: ./juiceshop
+    image: securingthestack/juiceshop:syntaxcon
+    ports:
+      - 3000:3000
+
+networks:
+  vulnerable-net:
+    driver: bridge

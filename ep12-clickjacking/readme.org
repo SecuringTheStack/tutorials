@@ -1,0 +1,470 @@
+#+TITLE: Clickjacking with Burp Suite
+#+DATE: Offensive/Defensive
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:nil
+#+OPTIONS: tags:nil
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
+#+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:nil
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+OPTIONS: auto-id:t
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: .
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: sts
+#+REVEAL_EXTRA_CSS: css/local.css
+#+REVEAL_INIT_SCRIPT: previewLinks: false
+#+REVEAL_PLUGINS: (classList highlight)
+#+REVEAL_HIGHLIGHT_CSS:%r/lib/highlight.js/src/styles/monokai-sublime.css
+#+REVEAL_HLEVEL: 2
+* Global Configs/Files                                             :noexport:
+  :PROPERTIES:
+  :CUSTOM_ID: h-EE06E4BD-EABF-4774-9773-E98783D948CD
+  :END:
+ #+NAME:CURRENT_TUTORIAL
+ #+BEGIN_SRC org :exports none :padline no :tangle no
+injection-fundamentals-4
+ #+END_SRC
+
+ #+NAME:footer
+ #+BEGIN_SRC js :tangle no
+   File: %filename
+   Run: "EX_NUM=%src_dir docker-compose up"
+ #+END_SRC
+
+* Clickjacking With Burp Suite                                         :ep_3:
+  :PROPERTIES:
+  :header-args: :tangle (src_path :tutorial 'injection-fundamentals-4) :mkdirp yes :noweb yes :exports code :src_dir (src_parse :tutorial 'injection-fundamentals-4) :filename (src_path :tutorial 'injection-fundamentals-4)
+  :CUSTOM_ID: h-CF80E32A-A437-49F9-B392-7CDA7A51D79A
+  :END:
+** Metadata                                                        :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-DD1FE88E-6C85-4324-B0F8-B07A67161A6C
+   :END:
+** Config Files                                                    :noexport:
+   :PROPERTIES:
+   :header-args: :tangle (config_path :tutorial 'injection-fundamentals-4) :mkdirp yes :noweb yes :exports no :src_dir (src_parse :tutorial 'injection-fundamentals-4)
+   :CUSTOM_ID: h-7533202F-D026-4986-85B6-D81AF4F47277
+   :END:
+ #+NAME:package.json
+ #+BEGIN_SRC json
+   {
+     "name": "securingthestack",
+     "version": "1.0.0",
+     "description": "Interactive Examples",
+     "main": "",
+     "scripts": {
+       "test": "echo \"Error: no test specified\" && exit 1"
+     },
+     "repository": {
+       "type": "git",
+       "url": "git+https://github.com/SecuringTheStack/tutorials.git"
+     },
+     "author": "Zach Roof",
+     "license": "SEE LICENSE IN license.org",
+     "bugs": {
+       "url": "https://github.com/SecuringTheStack/tutorials/issues"
+     },
+     "homepage": "https://github.com/SecuringTheStack/tutorials/blob/master",
+     "devDependencies": {
+       "nodemon": "^1.12.7"
+     }
+   }
+   #+END_SRC
+
+ #+NAME:node-dockerfile
+ #+BEGIN_SRC dockerfile
+   FROM node
+   # For simplicity, we're keeping this Dockerfile very small.
+   # From a security perspective, this Dockerfile shouldn't
+   # be considered "production ready".
+   ARG NODE_PATH=/home/node/app/
+   COPY package.json $NODE_PATH
+   COPY src $NODE_PATH/src
+   COPY node-dockerfile-wrapper.sh $NODE_PATH
+
+   RUN apt-get update && apt-get install -y \
+     && cd $NODE_PATH \
+     && chown node:node node-dockerfile-wrapper.sh \
+     && chmod +x node-dockerfile-wrapper.sh \
+     && npm install
+
+   CMD ["bash"]
+ #+END_SRC
+
+ #+NAME:node-dockerfile-wrapper.sh
+ #+BEGIN_SRC sh
+   #!/bin/bash
+   EX_NUM=$1
+   EXEC_MODE=$2
+   ENV_SECRET="This is a secret"
+
+   if [[  -z "${EX_NUM// }" ]]; then
+       echo "Please set EX_NUM"
+       echo "Ex: EX_NUM=1 docker-compose up"
+       echo "Additional help: https://sts.tools/setup"
+       exit 1
+   fi
+
+   # Start nodemon
+   npx "${EXEC_MODE:-nodemon}" "src/${EX_NUM}/${FILE:-app.js}"
+   status=$?
+   if [ $status -ne 0 ]; then
+     echo "Failed to start Node: $status"
+     exit $status
+   fi
+ #+END_SRC
+
+ #+NAME:docker-compose.yml
+ #+BEGIN_SRC yaml
+   version: "3"
+   # For simplicity, we're keeping this file very small.
+   # From a security perspective, this docker compose shouldn't
+   # be considered "production ready".
+   services:
+     node:
+       build:
+         context: .
+         dockerfile: node-dockerfile
+       image: "securingthestack/<<CURRENT_TUTORIAL>>"
+       user: "node"
+       working_dir: /home/node/app
+       environment:
+         - NODE_ENV=dev
+         - NPM_CONFIG_LOGLEVEL=info
+       volumes:
+         - ./src:/home/node/app/src
+       command: ["./node-dockerfile-wrapper.sh", "$EX_NUM", "$EXEC_MODE"]
+ #+END_SRC
+** Course Notes                                                    :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-6DA5D248-359E-4D95-B72D-C5D3364F0D05
+   :END:
+  var ps = execFile('ps', ['aux']);
+  ps.stdout.on('data', function(data) {
+    // Add in debugging output to help with exercise
+    console.log(data);
+  });
+** Table Of Contents                            :toc_3_gh:injection:noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-E2FCBD6C-BE30-4131-A6AE-844E0BE39093
+   :END:
+- [[#clickjacking-with-burp-suite][Clickjacking With Burp Suite]]
+  - [[#talk-scope][Talk Scope]]
+  - [[#what-is-clickjacking][What Is Clickjacking?]]
+  - [[#clickjacking-ex-evilcom][Clickjacking Ex: Evil.com]]
+  - [[#][.]]
+  - [[#clickjacking-ex-evilcom-cont][Clickjacking Ex: Evil.com (CONT.)]]
+  - [[#clickjacking-mitigations][Clickjacking Mitigations]]
+  - [[#mitigations-content-security-policy-csp][Mitigations: Content Security Policy (CSP)]]
+  - [[#mitigations-csp-examples][Mitigations: CSP Examples]]
+  - [[#mitigations-csp-examples-cont][Mitigations: CSP Examples (CONT.)]]
+  - [[#mitigations-csp-compatability][Mitigations: CSP Compatability]]
+  - [[#mitigations-csp-vs-x-frame-options][Mitigations: CSP vs X-Frame-Options]]
+  - [[#mitigations-x-frame-options][Mitigations: X-Frame-Options]]
+  - [[#mitigations-x-frame-options-compatability][Mitigations: X-Frame-Options (Compatability)]]
+  - [[#burp-clickbandit-ex][Burp Clickbandit Ex]]
+  - [[#-1][.]]
+  - [[#misc-clickjacking-examples][Misc Clickjacking Examples]]
+  - [[#additional-resources][Additional Resources]]
+  - [[#error-log][Error Log]]
+
+** Help Me/Important StS Links                                     :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-DBE0041D-8E72-4A59-99CB-467436C5F079
+   :END:
+- Video
+- Prerequisites
+- Env Setup
+- Ask A Question In Forums
+- Chat Support
+- Overarching Playlist
+
+** TODO StS Tutorial Description Links                             :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-50911AC2-02C5-4A1D-9588-BFB95BA17C45
+   :END:
++ Course Resources/Notes: https://github.com/SecuringTheStack/tutorials/tree/master/injection-fundamentals-4
++ Environment Setup/Error Reporting: https://sts.tools/setup
++ Prerequisites: https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-4/readme.org#knowledge-dependency-tree
++ Injection Playlist: https://securingthestack.com/p/injection-playlist
++ Additional Resources: https://github.com/SecuringTheStack/tutorials/blob/master/injection-fundamentals-4/readme.org#additional-resources
++ Ask A Question: https://sts.tools/injection-question
+
+** Cross-Site Scripting (XSS) NOTES and MasterClass/SyntaxCon flow :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-E9CAADC9-3E6A-4CA0-A78C-E5DBE5EAE02B
+   :END:
+ + Depends On
+   + SOP Lecture
+ + Make modular enough to be included within the Injection Masterclass
+ + Define injection after you show xss
+ + Overall flow of lectures
+   1. What is XSS?
+      1. NEED a generic INTRO of what XSS is
+   2. DOM XSS
+   3. EXTRA: In-depth exercise
+   4. Reflected XSS
+   5. EXTRA: In-depth exercise
+      1. From juice shop
+   6. What is BeeF?
+   7. EXTRA: Exploit with Redis
+   8. After Syntax
+      1. Create ~XSS Mitigations~ module
+
+** Overall Scope                                                   :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-A0015150-C4F0-4CAE-A649-63BE52B09A34
+   :END:
++ Full-stack Injection: Exploiting Our Security Assumptions
++ We often forget that there's unknown- unknowns
++ XSS
+  + "Client-side validation is silly.  We only do it on the server"!
+  + DOM XSS
+  + BF example.  Payload pulled into localstorage
+  + Dev flawed assumption
+  + Devs/DevOps miscommunications
++ "If we firewall our internal services, we are safe from external connectivity
+  + DevOps flawed assumption
++ "We are safe by segmenting our databases"
+  + elasticsearch restore
+  + but are we segmenting your backups?
+  + put backups in s3 and restore another clusters backups
+  + devops flawed assumption
++ All flawed assumptions equal a complete compromise
++ Allow CORS from localhost
++ https://github.com/spalger/elasticsearch-angular-example/issues/3
++ https://www.elastic.co/guide/en/elasticsearch/reference/6.x/cluster.name.html
+  + Default cluster name `elasticsearch`
++ Flow
+  + Devs enable CORS for local dev envs
+    + Common with elasticsearch/kibana within ELK stack
+    + Could be other envs/overall dev envs
+  + Script
+    + Cross-Origin Scanner to find vulnerable 9200 instances
+      + Check on localhost first, then do LANS including VPC default CIDRs
+    + Find Any ES clusters that have CORS protection
+      + If found
+        + Inject CORS disabled instance
+          + Join cluster of other instance
+          + by default
+
+** Talk Summary                                                    :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-D9EDAA95-63AC-4B1E-9A5D-A27B41998DF1
+   :END:
++ Talk Title: "Exploiting Local Dev Environments"
+
++ When developing locally, we often loosen the security of our local environment
+  to make testing/debugging easier. However, what if others on the public
+  internet could easily access this environment? Further, what if your local
+  environment could be leveraged to steal production data?
+
++ In this talk, we'll sit at the security "intersection" of Developers and
+  DevOps Engineers, and witness how local dev environments can interact with our infrastructure in unintended ways.
+
++ Additionally, we'll explore this topic through a realistic example which includes the following:
+  1. BeEF (Browser Exploitation Framework)
+  2. Cross-Site Scripting (XSS)
+  3. Same Origin Policy (SOP)
+  4. Cross-Origin Resource Sharing (CORS)
+  5. Elasticsearch
+
+** Running Locally                                                 :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-E21B7A9D-3C3C-40D1-9F1C-E1659ACE6C55
+   :END:
++ Update ~/etc/hosts~
+  + ~127.0.0.1	evil.example.com~
+  + ~127.0.0.1	victim.example.com~
+  + ~127.0.0.1	prod.example.com~
++ BeEf Server Credentials
+  + Username/Password: ~beefy~
++ Running
+  + ~git clone https://github.com/zachroof/community.git~
+  + cd $REPO/syntaxcon
+  + ~docker-compose up~
+    + Be careful, this runs an intentionally vulnerable web application
+
+** Who Am I?                                                       :noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-64F7C04A-3B25-4AFD-88AB-D2201D356BA5
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Developer Life
+  + Froliced through Frontend/Backend Code
++ InfoSec Life
+  + AppSec
++ DevOps/Security Life
+  + Current role at Snag
+  + Help build internal DevOps tooling
+  + Security infrastructure
++ Blah Blah Blah.. Dude, what does this have to do with this talk?!
+** Talk Scope
+   :PROPERTIES:
+   :CUSTOM_ID: h-853FB39F-D352-437D-BFA7-1B19A6A40BC7
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Learn Clickjacking through an interactive example
+  + Plunker
++ Leverage Burp Suite to create a Clickjacking PoC
++ Learn to defend against Clickjacking attacks
+  + ~X-Frame-Options~ and ~Content-Security-Policy~
++ Witness how ~helmet~ Express.js middleware can stop Clickjacking attacks
+
+** What Is Clickjacking?
+   :PROPERTIES:
+   :CUSTOM_ID: h-56BCD605-06DD-461E-A408-6F582C179027
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Many sensitive actions (or state changes) require clicks
++ Clickjacking /jacks/ clicks from one part of the application, and applies them
+  to a sensitive/unintended action
++ Occurs because a malicious website makes UI alterations
+  + AKA "UI redress attack"
+** Clickjacking Ex: Evil.com
+   :PROPERTIES:
+   :CUSTOM_ID: h-628D7E90-3BB1-4F5E-8F53-E3D431D538FC
+   :END:
+#+attr_html: :width 500px
+[[file:notes.org_imgs/20180701_055530_3430PGA.png]]
+#+ATTR_REVEAL: :frag (default)
+- iframe
+  - Loads in ~Flash Settings~ page (or other sensitive page)
+- ~Login Here~ button
+  - Something the user is likely to click
+- CSS alterations
+** .
+   :PROPERTIES:
+   :REVEAL_EXTRA_ATTR: data-background-video="./videos/clickjacking.mov"; data-background-video-muted="true"; data-background-size="contain"
+   :CUSTOM_ID: h-3F844F87-F639-4297-9A23-A0A37493138F-hide
+   :END:
+** Clickjacking Ex: Evil.com (CONT.)
+   :PROPERTIES:
+   :CUSTOM_ID: h-2CE2A513-0339-44FD-A8D1-9833EC182541
+   :END:
++ Plunker Example
+  + https://sts.tools/clickjacking
+
+** Clickjacking Mitigations
+   :PROPERTIES:
+   :CUSTOM_ID: h-4C3147B2-B187-4851-A29F-164CDD1C48D6
+   :END:
++ Content-Security-Policy
++ X-Frame-Options
+
+** Mitigations: Content Security Policy (CSP)
+   :PROPERTIES:
+   :CUSTOM_ID: h-DA9843A0-D5E4-4F85-A215-EDDA2454450F
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ HTTP Response Header
++ Controls the browser's security settings for a given website
++ ~frame-ancestors~ directive
+  + Controls if a webpage can be used within a ~frame~ or ~iframe~
+  + Evil.com Ex:
+    + ~<iframe src="https://victim.example.com"></iframe>~
+** Mitigations: CSP Examples
+   :PROPERTIES:
+   :CUSTOM_ID: h-6F382920-2DA9-4A57-86DD-2548684A5E3B
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ ~Content-Security-Policy: frame-ancestors 'none';~
+  + Prevents any domain from framing the content
+  + ~'~ are required
++ ~Content-Security-Policy: frame-ancestors 'self';~
+  + Only allows the current site to frame the content
+    + Everything within the current origin
+** Mitigations: CSP Examples (CONT.)
+   :PROPERTIES:
+   :CUSTOM_ID: h-7CA8E2A7-C2DE-4E57-B33A-65B098D46E66
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ ~Content-Security-Policy: frame-ancestors 'self' '*.somesite.com' 'https://myfriend.site.com';~
+  + Framing access
+    #+ATTR_REVEAL: :frag (default)
+    + Current site
+    + Any page on ~somesite.com~ (using any protocol)
+    + Only the page ~myfriend.site.com~ using https (with the default port 443)
++ Examples via https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet
+
+** Mitigations: CSP Compatability
+   :PROPERTIES:
+   :CUSTOM_ID: h-9C3B2076-44E5-444B-B0BC-633A1018488D
+   :END:
+[[file:notes.org_imgs/20180701_103311_3430DvY.png]]
+  + https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
+  + CSP is relatively new vs ~X-Frame-Options~ HTTP response header
+** Mitigations: CSP vs X-Frame-Options
+   :PROPERTIES:
+   :CUSTOM_ID: h-1837A350-80A1-4877-8203-59161B2AD60D
+   :END:
++ CSP is meant to replace ~X-Frame-Options~ header
+  + Many current defenses still leverage ~X-Frame-Options~ header
+    + Ex: ~helmet~ library for Express.js (Node.js)
+      + https://github.com/helmetjs/helmet
+
+** Mitigations: X-Frame-Options
+   :PROPERTIES:
+   :CUSTOM_ID: h-1AD57405-0325-446F-8CA1-339A859C3270
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ ~X-Frame-Options: DENY~
++ ~X-Frame-Options: SAMEORIGIN~
++ ~X-Frame-Options: ALLOW-FROM https://example.com/~
+** Mitigations: X-Frame-Options (Compatability)
+   :PROPERTIES:
+   :CUSTOM_ID: h-8BFAF88B-3204-4D90-962A-0E330A30518B
+   :END:
+[[file:notes.org_imgs/20180701_110918_3430Q5e.png]]
++ https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+** Burp Clickbandit Ex
+   :PROPERTIES:
+   :CUSTOM_ID: h-E09AA682-8947-44E1-82AA-8126AC0B21B8
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Use Burp Suite to clickjack FAmazon Juice
++ Prerequisites
+  #+ATTR_REVEAL: :frag (default)
+  + Burp Suite
+    + Security testing tool for web applications
+    + https://portswigger.net/burp/communitydownload
+  + FAmazon Juice
+    + Intentionally vulnerable web app
+      #+BEGIN_SRC sh :noweb yes :export code
+      git clone https://github.com/SecuringTheStack/tutorials
+      cd $TUTORIAL_REPO/ep12-clickjacking
+      docker-compose up
+      #+END_SRC
+** .
+   :PROPERTIES:
+   :REVEAL_EXTRA_ATTR: data-background-video="./videos/clickjacking-mitigation.mov"; data-background-video-muted="true"; data-background-size="contain"
+   :CUSTOM_ID: h-5296A5D1-D890-4C8A-A276-E365E66477CE-hide
+   :END:
+
+** Misc Clickjacking Examples
+   :PROPERTIES:
+   :CUSTOM_ID: h-C38AC98B-2693-4B94-853F-0A857B605C36
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Starting a malware download
++ Following someone on Twitter
+  + Variations for Facebook likes, etc.
++ Clicking Google ads to generate pay-per-click revenue
++ https://blog.guya.net/2008/10/07/malicious-camera-spying-using-clickjacking/
+
+** Additional Resources
+   :PROPERTIES:
+   :CUSTOM_ID: h-DE989D32-3328-4765-B4FD-68ADEF38C38A
+   :END:
++ [[https://sts.tools/sop][Same Origin Policy Tutorial]]
+
+** Error Log
+   :PROPERTIES:
+   :CUSTOM_ID: h-3935A200-7815-4F2F-BC9B-37B130D3C9B3
+   :END:
