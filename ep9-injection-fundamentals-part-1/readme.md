@@ -3,11 +3,11 @@ Injection Fundamentals: What Is Injection?
 
 ## Help Me/Important StS Links
 
--   Video: <https://securingthestack.com/p/injection-fundamentals-1>
+-   Video: <https://securing-the-stack.teachable.com/p/injection-fundamentals-1>
 -   Env Setup: <https://sts.tools/setup>
 -   Ask A Question: <https://sts.tools/injection-question>
 -   Speak To Human: <https://sts.tools/live-support>
--   Overarching Playlist: <https://securingthestack.com/p/injection-playlist>
+-   Overarching Playlist: <https://securing-the-stack.teachable.com/p/injection-playlist>
 
 Table Of Contents
 -----------------
