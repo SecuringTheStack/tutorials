@@ -22,21 +22,6 @@
 #+REVEAL_PLUGINS: (classList highlight)
 #+REVEAL_HIGHLIGHT_CSS:%r/lib/highlight.js/src/styles/monokai-sublime.css
 #+REVEAL_HLEVEL: 2
-* Global Configs/Files                                             :noexport:
-  :PROPERTIES:
-  :CUSTOM_ID: h-EE06E4BD-EABF-4774-9773-E98783D948CD
-  :END:
- #+NAME:CURRENT_TUTORIAL
- #+BEGIN_SRC org :exports none :padline no :tangle no
-injection-fundamentals-4
- #+END_SRC
-
- #+NAME:footer
- #+BEGIN_SRC js :tangle no
-   File: %filename
-   Run: "EX_NUM=%src_dir docker-compose up"
- #+END_SRC
-
 * Clickjacking With Burp Suite                                         :ep_3:
   :PROPERTIES:
   :header-args: :tangle (src_path :tutorial 'injection-fundamentals-4) :mkdirp yes :noweb yes :exports code :src_dir (src_parse :tutorial 'injection-fundamentals-4) :filename (src_path :tutorial 'injection-fundamentals-4)
