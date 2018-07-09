@@ -1,0 +1,188 @@
+#+TITLE: Browser Clipboard Attacks
+#+DATE: Attacks/Defense
+#+AUTHOR: Zach Roof
+* Browser Clipboard Attacks/Defense                                    :ep_3:
+  :PROPERTIES:
+  :CUSTOM_ID: h-6C0AE174-9CC6-48AF-9C2D-61D94246BF20
+  :END:
+** Table Of Contents                            :toc_3_gh:injection:noexport:
+   :PROPERTIES:
+   :CUSTOM_ID: h-E2FCBD6C-BE30-4131-A6AE-844E0BE39093
+   :END:
+- [[#browser-clipboard-attacksdefense][Browser Clipboard Attacks/Defense]]
+  - [[#talk-scope][Talk Scope]]
+  - [[#css-attack-ex][CSS Attack Ex]]
+  - [[#css-attack-ex-cont][CSS Attack Ex (CONT.)]]
+  - [[#clipboard-apis-documentexeccommand][Clipboard APIs: document.execCommand()]]
+  - [[#javascript-attack-ex][Javascript Attack Ex]]
+  - [[#clipboard-apis-clipboard-api][Clipboard APIs: Clipboard Api]]
+  - [[#future-js-clipboard-attacks][Future JS Clipboard Attacks?]]
+  - [[#clipboard-fingerprinting][Clipboard Fingerprinting]]
+  - [[#mitigations-zero-width-characters][Mitigations: Zero-width Characters]]
+  - [[#mitigations-terminal-attacks][Mitigations: Terminal Attacks]]
+  - [[#mitigations-terminal-attacks-cont][Mitigations: Terminal Attacks (CONT.)]]
+- [[#other-vectorsissues][Other Vectors/Issues]]
+- [[#additional-resources][Additional Resources]]
+
+** Talk Scope
+   :PROPERTIES:
+   :CUSTOM_ID: h-853FB39F-D352-437D-BFA7-1B19A6A40BC7
+   :END:
+#+ATTR_REVEAL: :frag (default)
+1. Live example of a CSS clipboard attack
+   - Can give the attacker remote code execution
+2. Live example of a Javascript clipboard issue
+   - Understand how invisible characters in your clipboard can invade your privacy
+3. Learn how clipboard attack mitigations can be bypassed
+3. Learn secure ways of interacting with our clipboard
+
+** CSS Attack Ex
+   :PROPERTIES:
+   :CUSTOM_ID: h-2925C23B-AAD6-42D6-A7EF-A5D9A2BBF8A5
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Env Setup
+  + ~docker run -it ubuntu bash~
+  + ~apt-get update && apt-get install -y git~
+  + Will give you a safe terminal prompt
++ [[https://sts.tools/clipboard-attacks-css]]
++ Paste in Version #1 and Version #2 into the terminal
++ What differences do you notice?
+
+** CSS Attack Ex (CONT.)
+   :PROPERTIES:
+   :CUSTOM_ID: h-2461EC89-6955-48B6-8DD6-75D81C09B7E2
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Phishing
+  + Attacker puts link in ~<div>~
+    + ~Check out this new bitcoin exchange at https://exchange.example.com~
+    + User can't click the link, so they copy/paste
+  + Attacker places ~https://evil-exchange.example.com~ into the clipboard
++ Further obfuscation
+  + Could remove itself from ~$HOME/.bash_history~
++ How does the CSS Vector compare with the Javascript Vector?
+
+** Clipboard APIs: document.execCommand()
+   :PROPERTIES:
+   :CUSTOM_ID: h-5A0E8A03-62B7-4B04-AC7E-12AE8D6D5110
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ [[https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand][document.execCommand()]]
++ Cross-Browser Clipboard Access
+  #+BEGIN_SRC js :noweb yes :export code
+  document.execCommand('cut');
+  document.execCommand('copy');
+  document.execCommand('paste');
+  #+END_SRC
++ You can use the ~cut~ and ~copy~ commands without any special permission if
+  you are using them in a short-lived event handler for a user action (for
+  example, a click handler) - [[https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Interact_with_the_clipboard][Mozilla]]
+  #+ATTR_REVEAL: :frag (default)
+  + ~onclick~ within ~<body>~
+    + Much more invasive compared to CSS Vector
+
+** Javascript Attack Ex
+   :PROPERTIES:
+   :CUSTOM_ID: h-ACDE2BD1-EE0F-48E7-850A-9085C00E9BCC
+   :END:
++ https://sts.tools/clipboard-attacks-js
++ Ad networks that allow Javascript execution
+  #+ATTR_REVEAL: :frag (default)
+  + On all bitcoin sites, copy malicious bitcoin address to clipboard
+  + "How to Buy X Cryptocurrency" Article
+    + Override clipboard to contain attacker controlled bitcoin address
+
+** Clipboard APIs: Clipboard Api
+   :PROPERTIES:
+   :CUSTOM_ID: h-F9BEC0B5-CE10-4B14-A0B3-6739D95251C7
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Experimental technology
++ Meant to give more granular permissions
++ Replacing ~execCommand~
++ Additional Resources
++ Chrome Dev Fiddle
+  + https://sts.tools/chrome-team-fiddle
+
+** Future JS Clipboard Attacks?
+   :PROPERTIES:
+   :CUSTOM_ID: h-BA9F5016-B0DC-494C-9C9E-C4DBDDBD5D26
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Potential future attacks as clipboard apis advance
++ What if Javascript could easily copy an image to the clipboard?
+  #+ATTR_REVEAL: :frag (default)
+  + Image Compression Bombs
+    + DoS attack
+  + To calculate how much memory an image will require to render, simply
+    multiply the pixel ratio by the bit-depth –– a 50Kx50K pixel, 8-bit (RGB)
+    image will require about 2.5GB (50,000 x 50,000 x 1 byte = 250,000,000
+    bytes) - https://bomb.codes/bombs
++ Other Javascript considerations?
+  + Clipboard Fingerprinting
+
+** Clipboard Fingerprinting
+   :PROPERTIES:
+   :CUSTOM_ID: h-BAB35CDE-C049-4401-BC8F-6B6D88678491
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Example: https://umpox.github.io/zero-width-detection/
++ Zero-width characters
+  + Invisible characters that are not usually displayed
++ How does this work?
+  #+ATTR_REVEAL: :frag (default)
+  1. Username is converted to binary
+  2. Binary username is converted to zero-width characters
+  3. Inserted zero-width username into the text
++ More info within link above
+
+** Mitigations: Zero-width Characters
+   :PROPERTIES:
+   :CUSTOM_ID: h-675CE99A-A8F1-4B97-9B1F-E82D42CACBCE
+   :END:
+ + https://github.com/chpmrc/zero-width-chrome-extension
+
+** Mitigations: Terminal Attacks
+   :PROPERTIES:
+   :CUSTOM_ID: h-336B9DC4-EEA4-4292-AAA6-918C2F9D0A90
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ "Paste Into Vim"
+  + [[https://unix.stackexchange.com/questions/355610/is-vim-immune-to-copy-paste-attack][Can have issues]]
++ Paste into CLI utility
+  + Pasting ~^Z~ will return to the shell
++ Bracketed Paste Mode
+  + When set, pasted text is delimited with control sequences so that the
+    program can differentiate pasted text from typed-in text
+  + What if the attack string contains the closing delimiter?
+
+** Mitigations: Terminal Attacks (CONT.)
+   :PROPERTIES:
+   :CUSTOM_ID: h-AA600304-2E71-4E9D-A462-5F8DEAB509AF
+   :END:
++ Takeaway
+  #+ATTR_REVEAL: :frag (default)
+  + Just inspect the text outside of an execution context :)
+  + Chrome address bar doesn't respect newlines
+  + iterm ~Advanced Paste Mode~
+
+* Other Vectors/Issues
+  :PROPERTIES:
+  :CUSTOM_ID: h-FAF23498-E67F-4C39-B40E-7FB0FBB7356D
+  :END:
+#+ATTR_REVEAL: :frag (default)
++ Copy Pest
+  + https://www.youtube.com/watch?v=t7sUajttbDM
+  + https://www.slideshare.net/x00mario/copypest
++ Facebook iOS app reading information from clipboard
+  + https://news.ycombinator.com/item?id=16034854
+
+* Additional Resources
+  :PROPERTIES:
+  :CUSTOM_ID: h-269EC506-6D6C-46D4-8EFC-077CFEED9EC0
+  :END:
++ Clipboard API
+  + https://w3c.github.io/clipboard-apis
+  + https://developers.google.com/web/updates/2018/03/clipboardapi
+  + https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API
