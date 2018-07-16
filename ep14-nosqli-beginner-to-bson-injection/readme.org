@@ -1,0 +1,249 @@
+#+TITLE: NoSQLi
+#+DATE: From Beginner To BSON Injection
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:nil
+#+OPTIONS: tags:nil
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
+#+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:nil
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+OPTIONS: auto-id:t
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: .
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: sts
+#+REVEAL_EXTRA_CSS: css/local.css
+#+REVEAL_INIT_SCRIPT: previewLinks: false
+#+REVEAL_PLUGINS: (classList highlight)
+#+REVEAL_HIGHLIGHT_CSS:%r/lib/highlight.js/src/styles/monokai-sublime.css
+#+REVEAL_HLEVEL: 2
+* NoSQLi: From Beginner To BSON Injection
+  :PROPERTIES:
+  :CUSTOM_ID: h-6C0AE174-9CC6-48AF-9C2D-61D94246BF20
+  :END:
+  # :PROPERTIES:
+  # :header-args: :tangle (src_path :tutorial 'injection-fundamentals-4) :mkdirp yes :noweb yes :exports code :src_dir (src_parse :tutorial 'injection-fundamentals-4) :filename (src_path :tutorial 'injection-fundamentals-4)
+  # :CUSTOM_ID: h-CF80E32A-A437-49F9-B392-7CDA7A51D79A
+  # :END:
+** Table Of Contents                                               :toc_3_gh:
+   :PROPERTIES:
+   :CUSTOM_ID: h-E2FCBD6C-BE30-4131-A6AE-844E0BE39093
+   :END:
+- [[#nosqli-from-beginner-to-bson-injection][NoSQLi: From Beginner To BSON Injection]]
+  - [[#talk-scope][Talk Scope]]
+  - [[#what-is-nosql-injection-nosqli][What is NoSQL Injection (NoSQLi)?]]
+  - [[#sql-injection-foundational-thinking][SQL Injection: Foundational Thinking]]
+  - [[#sql-vs-nosql-injection-cont][SQL Vs NoSQL Injection (CONT.)]]
+  - [[#sql-vs-nosql-injection-cont-1][SQL Vs NoSQL Injection (CONT.)]]
+  - [[#mongos-nosqli-response][Mongos NoSQLi Response]]
+  - [[#mongos-nosqli-response-cont][Mongos NoSQLi Response (CONT)]]
+  - [[#mongos-nosqli-response-cont-1][Mongos NoSQLi Response (CONT)]]
+  - [[#bson-injection][BSON Injection]]
+  - [[#bson-ruby-injection-background][BSON-RUBY Injection: Background]]
+  - [[#bson-ruby-injection-cont][BSON-RUBY Injection (CONT)]]
+  - [[#takeaways][Takeaways]]
+
+** Talk Scope
+   :PROPERTIES:
+   :CUSTOM_ID: h-853FB39F-D352-437D-BFA7-1B19A6A40BC7
+   :END:
+#+ATTR_REVEAL: :frag (default)
+1. What is NoSQL injection (NoSQLi)?
+2. How does NoSQLi compare to SQLi?
+3. Evaluate MongoDb's claim that "traditional SQL injection attacks are not a
+   problem" in MongoDb
+4. Evaluate how MongoDb can be exploited through BSON injection
+5. Understand the execution contexts that queries are evaluated in (and how
+   they can be exploited)
+
+** What is NoSQL Injection (NoSQLi)?
+   :PROPERTIES:
+   :CUSTOM_ID: h-F25B40DC-874D-4063-808C-B412389842B4
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Introduced when developers create dynamic database queries that include user supplied input
+  #+ATTR_REVEAL: :frag (default)
+  + Untrusted input
+  + Can contain the typical types: strings (code), ints (numbers), etc.
+    + NoSQLi can also contain query objects
++ noSQLi MongoDB examples
+  + Focus due to popularity
+    + https://db-engines.com/en/ranking
+
+** SQL Injection: Foundational Thinking
+   :PROPERTIES:
+   :CUSTOM_ID: h-070E604B-E488-4EEB-92A8-FD770A5E2451
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ Understanding the thought process behind SQLi will help us understand NoSQLi
+  #+BEGIN_SRC js
+    let sqlStatement = `SELECT * FROM accounts WHERE username = '${username_value}'\
+    AND password = '${password_value}'`
+
+    models.sequelize.query(sqlStatement)
+  #+END_SRC
+
++ When ~sqlStatement~ is passed to ~query()~ as a string, what functionality does this inhibit?
+  #+ATTR_REVEAL: :frag (default)
+  + ~query()~ has no way to scope ~username_value~ to ~username~
+  + Problems?
+    #+ATTR_REVEAL: :frag (default)
+    + As ~username_value~ isn't scoped to ~username~ it can affect the meaning
+      of other items that come after it
+
+** SQL Vs NoSQL Injection (CONT.)
+   :PROPERTIES:
+   :CUSTOM_ID: h-7295938C-40D9-4A12-A0CF-A057F1EF28FD
+   :END:
+#+ATTR_REVEAL: :frag (default)
++
+  #+BEGIN_SRC js
+  let username_value = "admin' -- "
+  let password_value = "i dont matter"
+  let sqlStatement = `SELECT * FROM accounts WHERE username = '${username_value}'\
+  AND password = '${password_value}'`
+  models.sequelize.query(sqlStatement)
+  #+END_SRC
++ Resulting SQL
+  #+BEGIN_SRC sql :noweb yes :export code
+  SELECT * FROM accounts WHERE username = 'admin' -- ' AND password = 'i dont matter'
+  #+END_SRC
++ Typical MongoDb Equivalent
+  #+BEGIN_SRC mongo :noweb yes :export code
+  db.accounts.find({username: username_value, password: password_value});
+  #+END_SRC
+
+** SQL Vs NoSQL Injection (CONT.)
+   :PROPERTIES:
+   :CUSTOM_ID: h-4F0BFBC6-8660-48E0-A32E-451AADBB8ADC
+   :END:
++ ~username_value~ is scoped to ~username~
+  + Is this injectable?
+  + Mongo has a statement on this
+
+** Mongos NoSQLi Response
+   :PROPERTIES:
+   :CUSTOM_ID: h-7B39046F-5941-4DC5-9437-12D6E11EF5A2
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ MongoDB represents queries as BSON objects (Binary JSON)
++ "Typically client libraries provide a convenient, injection free, process to
+  build these objects. Consider the following C++ example:"
+  #+BEGIN_SRC c++ :noweb yes
+  // db.accounts.find({username: username_value});
+  BSONObj my_query = BSON( "username" << username_value );
+  auto_ptr<DBClientCursor> cursor = c.query("accounts", my_query);
+  #+END_SRC
++ "As a client program assembles a query in MongoDB, it builds a BSON object, not
+  a string. Thus /traditional/ SQL injection attacks are not a problem"
+  + client program = client library
+
+** Mongos NoSQLi Response (CONT)
+   :PROPERTIES:
+   :CUSTOM_ID: h-003C69CA-A102-4278-9540-41885780A515
+   :END:
+#+ATTR_REVEAL: :frag (default)
++
+   #+BEGIN_SRC c++ :noweb yes :export code
+   // db.accounts.find({username: username_value});
+   BSONObj my_query = BSON( "username" << username_value );
+   auto_ptr<DBClientCursor> cursor = c.query("accounts", my_query);
+   #+END_SRC
++ "If ~my_query~ contained special characters, for example ~,~, ~:~, and ~{~, the
+  query wouldn’t match any documents. For example, users cannot hijack a query
+  and convert it to a delete."
+  + ~let username_value = "admin' -- "~
+    + Special characters were used to alter the meaning of the SQL query
+
+** Mongos NoSQLi Response (CONT)
+   :PROPERTIES:
+   :CUSTOM_ID: h-6BA7C44D-1E2E-4AEE-ABC9-BCF36294F324
+   :END:
+#+ATTR_REVEAL: :frag (default)
++
+  #+BEGIN_SRC mongo :noweb yes :export code
+  db.accounts.find({username: username_value, password: password_value});
+  #+END_SRC
++ Mongo's statement about the lack of injection vulnerabilities assumes the input
+  will be passed in a certain way
+  #+ATTR_REVEAL: :frag (default)
+  + What is the input assumption?
+    #+ATTR_REVEAL: :frag (default)
+    + String
+
+** BSON Injection
+   :PROPERTIES:
+   :CUSTOM_ID: h-91DF0288-EDD3-4401-A7CA-610D1FF3DDD9
+   :END:
+#+ATTR_REVEAL: :frag (default)
+     #+BEGIN_SRC json :noweb yes :export code
+     {"username": "admin"}
+     ..snip..
+     \x02                               // 0x02 = type String
+     username\x00                       // field name
+     \x06\x00\x00\x00admin\x00          // field value
+     \x00                               // 0x00 = type EOO ('end of object')
+     #+END_SRC
+#+ATTR_REVEAL: :frag (default)
++ How could a string /potentially/ exploit this BSON object?
+  #+ATTR_REVEAL: :frag (default)
+  - Insert a BSON special character/delimiter: ~0x00~
+    + Similar idea to the ~'~ within ~'${username_value}'~
+  - Insert BSON directly
+    + Nested BSON object
+  - Insert hex/binary directly
+  - Insert garbage that isn't BSON and cause a DoS
+** BSON-RUBY Injection: Background
+   :PROPERTIES:
+   :CUSTOM_ID: h-0F46AAA7-C2D4-466F-B85B-9A3FE9EE90FB
+   :END:
+#+ATTR_REVEAL: :frag (default)
++ BSON-Ruby Background
+  + [[https://github.com/mongodb/mongoid][Mongoid]] is an Ruby ODM (Object-Document-Mapper) for MongoDB
+    #+ATTR_REVEAL: :frag (default)
+    + Leveraged a lower-level adapter called Moped
+      #+ATTR_REVEAL: :frag (default)
+      + Moped leveraged the BSON-Ruby library
++ Ruby Regex Background
+  #+ATTR_REVEAL: :frag (default)
+  + ~\A~ and ~\z~ match the start and end of the string
+  + ~^~ and ~$~ match the start/end of a line
+    #+ATTR_REVEAL: :frag (default)
+    + ~$~ matches a ~/n~
+      #+ATTR_REVEAL: :frag (default)
+      + Other languages this matches the end of a string
++ [[https://github.com/mongodb/bson-ruby/commit/21141c78d99f23d5f34d32010557ef19d0f77203#diff-8c8558c185bbb548ccb5a6d6ac4bfee5L219][Issue in the wild]] with [[https://github.com/mongodb/bson-ruby/commit/21141c78d99f23d5f34d32010557ef19d0f77203#diff-8c8558c185bbb548ccb5a6d6ac4bfee5L219][bson-ruby]]
+
+** BSON-RUBY Injection (CONT)
+   :PROPERTIES:
+   :CUSTOM_ID: h-561CB1A8-F9C6-4657-A699-2C3E042F8FB9
+   :END:
+#+ATTR_REVEAL: :frag (default)
+  #+BEGIN_SRC ruby :noweb yes :export code
+        # Determine if the provided string is a legal object id (hex string)
+        def legal?(string)
+          string.to_s =~ /^[0-9a-f]{24}$/i ? true : false
+        end
+      end
+  #+END_SRC
+#+ATTR_REVEAL: :frag (default)
++ How can this hex check be exploited?
+  #+BEGIN_SRC ruby :noweb yes :export code
+  b=((defined?(Moped::BSON) ? Moped::BSON : BSON)::ObjectId)
+  raise "DoS!" if b.legal? "a"*24+"\n"
+  raise "Injection!" if b.legal? "aaaaaaaaaaaaaaaaaaaaaaaa\na"
+  #+END_SRC
++ Wonderful [[https://sakurity.com/blog/2015/06/04/mongo_ruby_regexp.html][research]] from Egor Homakov
+
+** Takeaways
+   :PROPERTIES:
+   :CUSTOM_ID: h-6B101571-BAF6-4F92-98F0-F4D5203EBE63
+   :END:
++ Contrary to what organizations say, injection is always a risk when you take
+  into account all contexts that a query is evaluated in
++ Next module: "Hands On" NoSQLi exercise where you inject a query object
