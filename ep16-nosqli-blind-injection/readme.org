@@ -1,4 +1,4 @@
-# Created 2018-07-30 Mon 06:20
+# Created 2018-07-30 Mon 06:43
 #+OPTIONS: num:nil toc:nil
 #+OPTIONS: tags:nil
 #+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
@@ -7,7 +7,7 @@
 #+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
 #+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
 #+OPTIONS: auto-id:t
-# #+TITLE: NoSQL Injection
+#+TITLE: NoSQL Injection
 #+DATE: Blind Injection Fundamentals
 #+AUTHOR: Zach Roof
 #+REVEAL_HLEVEL: 1
@@ -25,22 +25,24 @@
 #+REVEAL_HLEVEL: 2
 * NoSQL Injection: Blind Injection Fundamentals
 ** Table Of Contents
-- [[#nosql-injection-mongodb-query-object-injection][NoSQL Injection: MongoDb Query Object Injection]]
+- [[#nosql-injection-blind-injection-fundamentals][NoSQL Injection: Blind Injection Fundamentals]]
   - [[#talk-scope][Talk Scope]]
   - [[#recap-what-is-nosql-injection-nosqli][Recap: What is NoSQL Injection (NoSQLi)?]]
-  - [[#query-objects][Query Objects]]
-  - [[#exercise-evaluating-injection-risks][Exercise: Evaluating Injection Risks]]
-  - [[#example-query-object-injection][Example: Query Object Injection]]
-  - [[#query-operator-attack-vector][Query Operator Attack Vector]]
-  - [[#query-operators][Query Operators]]
-  - [[#exercise-overview][Exercise Overview]]
-  - [[#exercise-setup][Exercise Setup]]
-  - [[#exercise-assignment][Exercise Assignment]]
-  - [[#solution-find-patch-data][Solution: Find Patch Data]]
-  - [[#solution-construct-payload][Solution: Construct Payload]]
-  - [[#solution-find-api-endpoint-url][Solution: Find API endpoint URL]]
-  - [[#solution-construct-curl-command][Solution: Construct cURL command]]
+  - [[#where-query-operator][$where: Query Operator]]
+  - [[#exercise-where-whitelisted-functions][Exercise: $Where Whitelisted Functions]]
+  - [[#exercise-where-whitelisted-functions-answer][Exercise: $Where Whitelisted Functions (Answer)]]
+  - [[#exercise-crafting-the-payload-setup][Exercise: Crafting The Payload (Setup)]]
+  - [[#exercise-crafting-the-payload-setup-cont][Exercise: Crafting The Payload (Setup) CONT.]]
+  - [[#exercise-crafting-the-payload-question][Exercise: Crafting The Payload (Question)]]
+  - [[#exercise-crafting-the-payload-answer][Exercise: Crafting The Payload (Answer)]]
+  - [[#exercise-unguessable-identifiers-question][Exercise: "Unguessable" Identifiers (Question)]]
+  - [[#exercise-unguessable-identifiers-hint][Exercise: "Unguessable" Identifiers (Hint)]]
+  - [[#exercise-unguessable-identifiers-answer][Exercise: "Unguessable" Identifiers (Answer)]]
   - [[#takeaways][Takeaways]]
+  - [[#exercise-bypassing-wafs-hint][Exercise: Bypassing WAFs (HINT)]]
+  - [[#finding-unguessable-identifiers-answer][Finding Unguessable Identifiers (Answer)]]
+  - [[#takeaways-1][Takeaways]]
+  - [[#takeaways-2][Takeaways]]
 
 ** Talk Scope
 1. Exercise: Learn about Blind Injection and leverage it to find vulnerable
@@ -145,3 +147,21 @@
   public client-side code
 - When possible, never whitelist any characters that can be leveraged to create a logical operator
   - ~|~, ~&~, etc.
+** Exercise: Bypassing WAFs (HINT)
+- ~http://localhost:3000/rest/product/inject_me/reviews~
+  #+BEGIN_SRC javascript
+    db.reviews.find({ '$where': 'this.SOME_PROPERTY == this.SOME_PROPERTY'})
+  #+END_SRC
+  - Given the url, what could ~SOME_PROPERTY~ be?
+
+** Finding Unguessable Identifiers (Answer)
+- http://localhost:3000/rest/product/this.product/reviews
+- Takeaway
+  - Attackers leverage the URL to deduce information about the database schema
+** Takeaways
+
+** Takeaways
+- Attackers profile Javascript to deduce admin functionality (or functionality
+  that isn't immediately available within the application)
+- Input Validation
+  - Regular Expressions aren't enough, we must also validate type
