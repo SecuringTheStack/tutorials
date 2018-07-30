@@ -7,7 +7,7 @@
 #+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
 #+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
 #+OPTIONS: auto-id:t
-#+TITLE: NoSQL Injection
+# #+TITLE: NoSQL Injection
 #+DATE: Blind Injection Fundamentals
 #+AUTHOR: Zach Roof
 #+REVEAL_HLEVEL: 1
