@@ -39,10 +39,6 @@
   - [[#exercise-unguessable-identifiers-hint][Exercise: "Unguessable" Identifiers (Hint)]]
   - [[#exercise-unguessable-identifiers-answer][Exercise: "Unguessable" Identifiers (Answer)]]
   - [[#takeaways][Takeaways]]
-  - [[#exercise-bypassing-wafs-hint][Exercise: Bypassing WAFs (HINT)]]
-  - [[#finding-unguessable-identifiers-answer][Finding Unguessable Identifiers (Answer)]]
-  - [[#takeaways-1][Takeaways]]
-  - [[#takeaways-2][Takeaways]]
 
 ** Talk Scope
 1. Exercise: Learn about Blind Injection and leverage it to find vulnerable
@@ -147,21 +143,3 @@
   public client-side code
 - When possible, never whitelist any characters that can be leveraged to create a logical operator
   - ~|~, ~&~, etc.
-** Exercise: Bypassing WAFs (HINT)
-- ~http://localhost:3000/rest/product/inject_me/reviews~
-  #+BEGIN_SRC javascript
-    db.reviews.find({ '$where': 'this.SOME_PROPERTY == this.SOME_PROPERTY'})
-  #+END_SRC
-  - Given the url, what could ~SOME_PROPERTY~ be?
-
-** Finding Unguessable Identifiers (Answer)
-- http://localhost:3000/rest/product/this.product/reviews
-- Takeaway
-  - Attackers leverage the URL to deduce information about the database schema
-** Takeaways
-
-** Takeaways
-- Attackers profile Javascript to deduce admin functionality (or functionality
-  that isn't immediately available within the application)
-- Input Validation
-  - Regular Expressions aren't enough, we must also validate type
