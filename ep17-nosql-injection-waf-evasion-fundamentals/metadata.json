@@ -1,0 +1,11 @@
+{
+  "course-image-url": "https://www.filepicker.io/api/file/nHOn0sQ0SvxjiSRXTuhA",
+  "course-hero-url": "https://www.filepicker.io/api/file/ZdICCO5KSn6dKXcwFphd",
+  "title": "Ep. 17 - NoSQL Injection: WAF Evasion Fundamentals",
+  "subtitle": "How do attackers circumvent WAF rules?",
+  "description-meta": "Learn How Attackers Circumvent WAF Rules Through Simple Reconissance",
+  "description-html": "<ol> <li>Exercise: Evaluate WAF attack vectors by looking at a Modsecurity WAF Rule</li> <li>Exercise: Deduce backend logic through URL structure to bypass potential WAF rules and dump all documents within a MongoDb collection</li><li>Extension of NoSqi Series <ul> <li><a href='https://sts.tools/nosql'class='uri'>https://sts.tools/nosql</a></li> </ul></li> </ol>",
+  "tags": "NoSQLi,noSQL Injection,AppSec,Application Security,OWASP TOP TEN,OWASP TOP 10,WAF Evasion,WAF,Modsecurity,MongoDb",
+  "playlist": "noSQL Injection For Beginners",
+  "social-intro": "Hey guys! Another week... another tutorial :D Join me to learn how attackers evade Firewalls by doing simple api reconnisance"
+}

@@ -1,0 +1,133 @@
+# Created 2018-08-06 Mon 18:51
+#+OPTIONS: num:nil toc:nil
+#+OPTIONS: tags:nil
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
+#+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:nil
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+OPTIONS: auto-id:t
+#+TITLE: NoSQL Injection
+#+DATE: WAF Evasion Fundamentals
+#+AUTHOR: Zach Roof
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: .
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: sts
+#+REVEAL_EXTRA_CSS: css/local.css
+#+REVEAL_INIT_SCRIPT: previewLinks: false
+#+REVEAL_PLUGINS: (classList highlight)
+#+REVEAL_HIGHLIGHT_CSS: %r/lib/highlight.js/src/styles/monokai-sublime.css
+#+REVEAL_HLEVEL: 2
+#+NAME: CURRENT_TUTORIAL
+* NoSQL Injection: WAF Evasion Fundamentals
+** Talk Scope
+1. Exercise: Evaluate WAF attack vectors by looking at a Modsecurity WAF Rule
+2. Exercise: Deduce backend logic through URL structure to bypass potential WAF
+   rules and dump all documents within a MongoDb collection
+3. Extension of NoSqi Series
+   - https://sts.tools/nosql
+** WAF (Web Application Firewall) Review
+- A firewall is a network security system that monitors and controls incoming
+  and outgoing network traffic based on predetermined security rules --
+  Wikipedia
+- WAF Ex: [[https://github.com/SpiderLabs/ModSecurity][Modsecurity]]
+  - ModSecurity is an open source, WAF engine for Apache, IIS and Nginx that is
+    developed by Trustwave's SpiderLabs. -- ModSecurity Github
+- [[https://github.com/SpiderLabs/owasp-modsecurity-crs][OWASP ModSecurity Core Rule Set (CRS)]]
+  - Rules that can be loaded into ModSecurity
+  - The CRS aims to protect web applications from a wide range of attacks,
+    including the OWASP Top Ten, with a minimum of false alerts. -- CRS Github
+
+** Exercise: Bypassing WAF Rules (Question)
+- Review https://sts.tools/nosqli-blind-injection-fundamentals
+  - http://localhost:3000/rest/product/1||true/reviews
+  - Leveraged a logical operator to force an "always true" condition
+- Logical operators are often blocked by WAFs (Ex: ~||~, ~&&~, etc.)
+  - [[https://github.com/SpiderLabs/owasp-modsecurity-crs/issues/797#issuecomment-320531331][Ex: Owasp Modsecurity SQLi Rule]] that blocks:
+    #+BEGIN_SRC text
+      ' || 1=1#
+      ' && 1=1#
+      ' /*!||*/ 1=1#
+      ' /*!&&*/ 1=1#
+    #+END_SRC
+- Given the above rule, how should an attacker try to fetch all documents within a MongoDb collection?
+
+** Exercise: Bypassing WAF Rules (Answer)
+- They should target functionality that is unique to the victim application
+  - No generic rule that will block it
+- ~http://localhost:3000/rest/product/1||true/reviews~
+  - Replace ~1||true~ with a value that's unique to Juice Shop
+  - Main tutorial assignment
+    - First we must do a few thought exercises
+
+** Exercise: Deducing Backend Logic (Question)
+- ~http://localhost:3000/rest/product/INJECT_ME/reviews~
+- Different values of ~INJECT_ME~ create different responses
+  - ~1~ or ~1||true~
+  - ~docker run -p 3000:3000 securingthestack/juice-shop:nosqli-waf-evasion-fundamentals~
+- Q: Given this, what action is the backend doing with the user's input?
+
+** Exercise: Deducing Backend Logic (Answer)
+- ~USER_INPUT~ is being compared to some ~UNKNOWN_VALUE~
+- If an attacker finds ~UNKNOWN_VALUE~, they can force an always true condition
+  while evading the WAF
+  - Backend assumption: ~USER_INPUT~ == ~UNKNOWN_VALUE~
+    - Q: Why is ~==~ a valid assumption? Why not ~>~, etc. (Hint: Substitute a
+      few integer values in ~INJECT_ME~)
+      - ~http://localhost:3000/rest/product/INJECT_ME/reviews~
+    - A: Given the 1 object response, the backend logic is probably making an ~==~
+      comparison
+
+** Exercise: Finding the ~UNKNOWN_VALUE~ object (Question)
+- In the last tutorial, the following injection worked...
+  - ~http://localhost:3000/rest/product/sleep(2000)/reviews~
+- Q: What did this tell us about where ~sleep(2000)~ was being evaluated?
+  - ~http://localhost:3000/rest/product/INJECT_ME/reviews~
+  - A: ~INJECT_ME~ is being evaluated within a Javascript expression that's
+    passed into ~$where~
+- Attacker Goal: Find ~UNKNOWN_VALUE~, so they can force an always true condition
+  - ~USER_INPUT~ == ~UNKNOWN_VALUE~
+  - Given the ~$where~ context, what object is ~UNKNOWN_VALUE~?
+
+** Exercise: Finding the ~UNKNOWN_VALUE~ object (Answer)
+- ~this~ or ~obj~
+  - ~$where~ iterates over all documents within a MongoDb collection
+  - The current document is assigned to ~this~
+  - ~this.address~
+    - Properties of the document can then be referenced
+- Ex: http://localhost:3000/rest/product/this/reviews
+  - Doesn't work
+  - The backend logic is probably leveraging a property of ~this~ in the comparison
+
+** Exercise: Finding ~this.UNKNOWN_VALUE~ (Question)
+- ~http://localhost:3000/rest/product/INJECT_ME/reviews~
+- Given the backend logic is probably comparing ~INJECT_ME~ to ~this.UNKNOWN_PROPERTY~
+- Leverage the URL to deduce the database schema and find ~UNKNOWN_PROPERTY~
+
+** Exercise: Finding ~this.UNKNOWN_VALUE~ (Answer)
+- ~http://localhost:3000/rest/product/INJECT_ME/reviews~
+- A: ~http://localhost:3000/rest/product/this.product/reviews~
+  - This could dump sensitive information
+  - Imagine ~INJECT_ME~ is a random number that's given to each client
+- Backend Code
+  #+BEGIN_SRC javascript
+    db.reviews.find({ '$where': 'this.product == ' + id }).then(reviews => {
+  #+END_SRC
+
+** Takeaways
+- You cant rely on WAFs for protection
+  - Attackers will find unique identifiers within your application to bypass
+    generic WAF rules
+    - ~this.product~
+- When developing an application, think about what information are you exposing
+  through public information
+  - An attacker views EVERYTHING as an information source
+    - URL structure
+    - Version numbers
+    - Job postings
+    - Everything is being leveraged against you
