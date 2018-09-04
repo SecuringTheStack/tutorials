@@ -1,0 +1,193 @@
+#+OPTIONS: num:nil toc:nil
+#+OPTIONS: tags:nil
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
+#+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:nil
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+OPTIONS: auto-id:t ^:nil
+#+TITLE: Joi.js Input Validation (Part 1)
+#+DATE: Input Validation Defenses/Attacks
+#+AUTHOR: Zach Roof
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: .
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: slow
+#+REVEAL_THEME: sts
+#+REVEAL_EXTRA_CSS: css/local.css
+#+REVEAL_INIT_SCRIPT: previewLinks: false
+#+REVEAL_PLUGINS: (classList highlight)
+#+REVEAL_HIGHLIGHT_CSS: %r/lib/highlight.js/src/styles/monokai-sublime.css
+#+REVEAL_HLEVEL: 2
+#+NAME: CURRENT_TUTORIAL
+* Joi.js Input Validation (Part 1)
+** Table Of Contents
+- [[#joijs-input-validation-part-1][Joi.js Input Validation (Part 1)]]
+  - [[#scope][Scope]]
+  - [[#what-is-joi][What is Joi?]]
+  - [[#why-leverage-joi][Why Leverage Joi?]]
+  - [[#types-of-input-validation-question][Types Of Input Validation (Question)]]
+  - [[#types-of-input-validation-answer][Types Of Input Validation (Answer)]]
+  - [[#joi-advantages][Joi Advantages]]
+  - [[#joi-advantages-cont][Joi Advantages (CONT.)]]
+  - [[#joi-schemas][Joi Schemas]]
+  - [[#joi-schemas-cont][Joi Schemas (CONT.)]]
+  - [[#additional-joi-types][Additional Joi Types]]
+  - [[#ex-joi-bypass-question][Ex: Joi Bypass (Question)]]
+  - [[#ex-joi-schemapayload][Ex: Joi Schema/Payload]]
+  - [[#ex-joi-schemapayload-result][Ex: Joi Schema/Payload (Result)]]
+
+** Scope
+1. Understand how to approach input validation (useful for any input validation library)
+2. Learn how to create json validation schemas within Joi.js
+
+** What is Joi?
+- Javascript input validation library
+- Create JSON schemas that validate JSON payloads entering an API (or leaving
+  a browser)
+** Why Leverage Joi?
+- Very granular whitelisting functionality
+  - Define what you will accept from the user
+    - Everything else is denied by default
+** Types Of Input Validation (Question)
+- In general, when user input is sent to the api, what /types/ of input
+  validation should we preform?
+  - HINT
+    - Think about the different types of coding errors
+    - There are two primary types
+** Types Of Input Validation (Answer)
+- 2 primary checks need to occur when untrusted input (user input) comes to
+  the API
+  - If these checks aren't completed, the server might act in unintended ways
+- Types of input validation checks
+  1. "Syntactic" Checks (Checking the /form/ of the input)
+     - Ex: Is the input a string with length ~X~?
+       - Regular Express Denial Of Service (ReDoS) mitigation
+     - Usecase for Joi
+  2. "Semantic" Checks (Logic Checks)
+     - Ex: Does the user have appropriate permissions to do action ~X~?
+     - Not what Joi is intended for
+** Joi Advantages
+- If you aren't leveraging Javascript/Node.js, look for these features in a framework
+- Share JSON schema between frontend/backend
+  - Frontend
+    - https://github.com/jeffbski/joi-browser
+  - Backend
+    - https://github.com/hapijs/joi
+      - Installation instructions
+- Validated at entrypoint
+  - Much safer than validating through database library
+** Joi Advantages (CONT.)
+- [[https://github.com/arb/celebrate][Celebrate]]
+  - A Joi validation middleware for Express.js
+** Joi Schemas
+- Joi leverages schemas to define validations
+- Within a schema, you define ~types~ and ~constraints~
+  - ~username: Joi.string().alphanum().min(3).max(30).required()~
+    1. Type Ex: ~Joi.string()~
+       - ~Joi.string()~ generates a schema object that matches a string data type
+       - Inherits from ~Joi.any()~
+         - Generates a schema object that matches any data type
+    2. Constraint Ex: ~.min(3)~
+       - Each constraint returns a new schema object
+       - Method chaining is available
+** Joi Schemas (CONT.)
+- ~username: Joi.string().alphanum().min(3).max(30).required()~
+  - Values (or keys in case of objects) are optional by default
+
+** Additional Joi Types
+- Ex: ~username: Joi.string().alphanum().min(3).max(30).required()~
+  - Besides ~string()~, what other types can we validate?
+- Joi Types
+  - [[https://github.com/hapijs/joi/blob/v13.6.0/api.md#array---inherits-from-any][Array]]
+  - [[https://github.com/hapijs/joi/blob/v13.6.0/API.md#boolean---inherits-from-any][Boolean]]
+  - [[https://github.com/hapijs/joi/blob/v13.6.0/API.md#binary---inherits-from-any][Binary]]
+  - [[https://github.com/hapijs/joi/blob/v13.6.0/API.md#date---inherits-from-any][Date]]
+  - [[https://github.com/hapijs/joi/blob/v13.6.0/API.md#func---inherits-from-any][Func]]
+  - [[https://github.com/hapijs/joi/blob/v13.6.0/API.md#number---inherits-from-any][Number]]
+  - [[https://github.com/hapijs/joi/blob/v13.6.0/API.md#object---inherits-from-any][Object]]
+
+** Ex: Joi Bypass (Question)
+- While viewing the following schema object (and payload) on the next slide,
+  think about how it could be exploited/bypassed
+- Further assumptions
+  1. JSON payload is submitted to the API
+  2. Joi doesn't throw a validation error
+  3. The JSON is directly saved to the database
+     - Payload key/value pairs are directly mapped to database fields/values
+- Try to figure out how the following schema could be exploited
+  - https://sts.tools/joi-schema
+
+** Ex: Joi Schema/Payload
+#+BEGIN_SRC js
+  const Joi = require('joi');
+
+  const schema = Joi.object()
+    .keys({
+      // Requires a given string value
+      username: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+      // Define password complexity requirements through regex (consider more complex regex)
+      password: Joi.string()
+        .regex(/^[a-zA-Z0-9]{3,30}$/)
+        .required(),
+      // Force passwords to match
+      password_confirmation: Joi.any()
+        .equal(Joi.ref('password'))
+        .required(),
+      // Accept different Joi types.  Optional, unconstrained string or number
+      access_token: [Joi.string(), Joi.number()],
+      // Required birthyear to be an int between range
+      birthyear: Joi.number()
+        .integer()
+        .min(1900)
+        .max(2013)
+        .required(),
+      // Validate email address from example.com (remember spoofing considerations)
+      email: Joi.string()
+        .email()
+        .regex(/example\.com$/),
+      marketing_opt_out: Joi.boolean(),
+      csrf_token: Joi.string()
+        .guid({
+          version: 'uuidv4',
+        })
+        .required(),
+      sex: Joi.string()
+        .equal(['M', 'F', 'MALE', 'FEMALE', 'DECLINE'])
+        .required(),
+      time: Joi.date()
+        .timestamp('javascript'),
+      roles: Joi.object()
+        .keys(),
+    })
+    // email must be accompanied by marketing_opt_out
+    .with('email', 'marketing_opt_out');
+
+  const result = Joi.validate({
+    username: 'Ronald',
+    password: 'McDonald',
+    password_confirmation: 'McDonald',
+    birthyear: 2010,
+    email: 'bigron@example.com',
+    marketing_opt_out: true,
+    csrf_token: '6d4d8c14-ef12-45d9-ab3c-5dddf941fb76',
+    sex: 'F',
+    time: 1534942475121,
+    roles: {},
+  }, schema);
+
+  // If result.error === null, payload is valid
+  console.log(`The validation error is: ${result.error}`);
+#+END_SRC
+
+** Ex: Joi Schema/Payload (Result)
+#+BEGIN_SRC text
+  The validation error is: null
+#+END_SRC
