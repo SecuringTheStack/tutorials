@@ -1,0 +1,217 @@
+# Created 2018-09-09 Sun 16:07
+#+OPTIONS: num:nil toc:nil
+#+OPTIONS: tags:nil
+#+OPTIONS: reveal_center:nil reveal_control:nil width:100% height:100% prop:nil
+#+OPTIONS: reveal_history:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_slide_number:nil
+#+OPTIONS: reveal_title_slide:"<h2>%t</h2><h3>%d<h3>"
+#+OPTIONS: reveal_progress:t reveal_rolling_links:nil reveal_single_file:nil
+#+OPTIONS: auto-id:t ^:nil
+#+TITLE: Joi.js Input Validation (Part 2)
+#+AUTHOR: Zach Roof
+#+REVEAL_HLEVEL: 1
+#+REVEAL_MARGIN: 0
+#+REVEAL_MIN_SCALE: 1
+#+REVEAL_MAX_SCALE: 1
+#+REVEAL_ROOT: .
+#+REVEAL_TRANS: default
+#+REVEAL_SPEED: slow
+#+REVEAL_THEME: sts
+#+REVEAL_EXTRA_CSS: css/local.css
+#+REVEAL_INIT_SCRIPT: previewLinks: false
+#+REVEAL_PLUGINS: (classList highlight)
+#+REVEAL_HIGHLIGHT_CSS: %r/lib/highlight.js/src/styles/monokai-sublime.css
+#+REVEAL_HLEVEL: 2
+#+NAME: CURRENT_TUTORIAL
+* Joi.js Input Validation (Part 2)
+** Scope
+1. Exercise: Try to bypass a Joi.js schema
+2. Understand how to approach input validation (useful for any input validation library)
+
+** Ex: Joi Bypass (Hint 1)
+- How can the schema be bypassed?
+  - Hint 1
+    - JSON input (with keys/values) is directly assigned into keys/values
+      in the database
+      - What could this /potentially/ override?
+
+** Ex: Joi Bypass (Hint 1 Answer)
+- It could override sensitive fields in the database
+  - Ex: ~isAdmin: false~ (set by backend logic) could be overridden with ~isAdmin: true~
+  - Type of Mass Assignment vulnerability
+
+** Ex: Joi Bypass (Hint 2)
+- In the json that's fed into ~Joi.validate()~, find where ~isAdmin: true~ could be injected
+
+** Ex: Joi Bypass (Hint 2 Answer)
+- Add ~isAdmin: true~ to root level
+#+BEGIN_SRC js
+  const Joi = require('joi');
+
+  const schema = Joi.object()
+    .keys({
+      // Requires a given string value
+      username: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+      // Define password complexity requirements through regex (consider more complex regex)
+      password: Joi.string()
+        .regex(/^[a-zA-Z0-9]{3,30}$/)
+        .required(),
+      // Force passwords to match
+      password_confirmation: Joi.any()
+        .equal(Joi.ref('password'))
+        .required(),
+      // Accept different Joi types.  Optional, unconstrained string or number
+      access_token: [Joi.string(), Joi.number()],
+      // Required birthyear to be an int between range
+      birthyear: Joi.number()
+        .integer()
+        .min(1900)
+        .max(2013)
+        .required(),
+      // Validate email adress from example.com (remember spoofing considerations)
+      email: Joi.string()
+        .email()
+        .regex(/example\.com$/),
+      marketing_opt_out: Joi.boolean(),
+      csrf_token: Joi.string()
+        .guid({
+          version: 'uuidv4',
+        })
+        .required(),
+      sex: Joi.string()
+        .equal(['M', 'F', 'MALE', 'FEMALE', 'DECLINE'])
+        .required(),
+      time: Joi.date()
+        .timestamp('javascript'),
+      roles: Joi.object()
+        .keys(),
+    })
+    // email must be accompanied by marketing_opt_out
+    .with('email', 'marketing_opt_out');
+
+  const result = Joi.validate({
+    username: 'Ronald',
+    password: 'ZZZ',
+    password_confirmation: 'ZZZ',
+    birthyear: 2010,
+    email: 'foo@example.com',
+    marketing_opt_out: true,
+    csrf_token: '6d4d8c14-ef12-45d9-ab3c-5dddf941fb76',
+    sex: 'F',
+    time: 1534942475121,
+    roles: {},
+    isAdmin: true,
+  }, schema);
+
+  // If result.error === null, payload is valid
+  console.log(`The validation error is: ${result.error}`);
+#+END_SRC
+
+** Ex: Joi Bypass (Hint 2 Answer CONT.)
+#+BEGIN_SRC json
+  The validation error is: ValidationError: "isAdmin" is not allowed
+#+END_SRC
+** Ex: Joi Bypass (Hint 3)
+- Where else could ~isAdmin: true~ be inserted?
+- Review https://github.com/hapijs/joi/blob/master/API.md#objectkeysschema
+  - How could this confuse a developer?
+
+** Ex: Joi Bypass (Hint 3 Answer)
+#+BEGIN_SRC json
+  roles: Joi.object()
+    .keys()
+#+END_SRC
+- No keys are whitelisted
+  - Appears that only an empty object would pass validation
+    - Backend leverages this object to populate ACLs
+- https://github.com/hapijs/joi/blob/master/API.md#objectkeysschema
+  - ~object.keys([schema])~
+    - If schema is ~{}~ no keys are allowed. If schema is ~null~ or ~undefined~,
+      any key is allowed
+
+** Ex: Joi Bypass (Answer)
+#+BEGIN_SRC js
+  const Joi = require('joi');
+
+  const schema = Joi.object()
+    .keys({
+      // Requires a given string value
+      username: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+      // Define password complexity requirements through regex (consider more complex regex)
+      password: Joi.string()
+        .regex(/^[a-zA-Z0-9]{3,30}$/)
+        .required(),
+      // Force passwords to match
+      password_confirmation: Joi.any()
+        .equal(Joi.ref('password'))
+        .required(),
+      // Accept different Joi types.  Optional, unconstrained string or number
+      access_token: [Joi.string(), Joi.number()],
+      // Required birthyear to be an int between range
+      birthyear: Joi.number()
+        .integer()
+        .min(1900)
+        .max(2013)
+        .required(),
+      // Validate email adress from example.com (remember spoofing considerations)
+      email: Joi.string()
+        .email()
+        .regex(/example\.com$/),
+      marketing_opt_out: Joi.boolean(),
+      csrf_token: Joi.string()
+        .guid({
+          version: 'uuidv4',
+        })
+        .required(),
+      sex: Joi.string()
+        .equal(['M', 'F', 'MALE', 'FEMALE', 'DECLINE'])
+        .required(),
+      time: Joi.date()
+        .timestamp('javascript'),
+      roles: Joi.object()
+        .keys(),
+    })
+    // email must be accompanied by marketing_opt_out
+    .with('email', 'marketing_opt_out');
+
+  const result = Joi.validate({
+    username: 'Ronald',
+    password: 'ZZZ',
+    password_confirmation: 'ZZZ',
+    // access_token: 1234,
+    birthyear: 2010,
+    email: 'foo@example.com',
+    marketing_opt_out: true,
+    csrf_token: '6d4d8c14-ef12-45d9-ab3c-5dddf941fb76',
+    sex: 'F',
+    time: 1534942475121,
+    roles: {
+      isAdmin: true,
+    },
+  }, schema);
+
+  // If result.error === null, payload is valid
+  console.log(`The validation error is: ${result.error}`);
+#+END_SRC
+
+** Ex: Joi Bypass (Answer) CONT
+#+BEGIN_SRC text
+  The validation error is: null
+#+END_SRC
+
+** Takeaways
+- Be very careful with library defaults when leveraging input validation
+  - Easy for hackers to look for edge cases in validation
+
+** Additional Resources
+- https://github.com/topics/joi
+- https://www.npmjs.com/package/joi-password-complexity
+- https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a?rq=1
